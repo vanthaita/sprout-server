@@ -10,6 +10,7 @@ import {
 import { ResponseInterceptor } from './core/interceptor/response.interceptor';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
+import { ClassSerializerInterceptor } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
@@ -32,8 +33,8 @@ async function bootstrap() {
   app.use(cookieParser(COOKIE_SECRET));
 
   const reflector = app.get(Reflector);
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
   app.useGlobalInterceptors(new ResponseInterceptor(reflector));
-
   const PORT = configService.get<string>('PORT') || 8386;
   const HOST = configService.get<string>('HOST') || '0.0.0.0';
 
