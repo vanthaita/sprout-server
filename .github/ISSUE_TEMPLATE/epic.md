@@ -4,7 +4,6 @@ about: Template for creating an epic
 title: ''
 labels: epic
 assignees: ''
-
 ---
 
 ## Summary

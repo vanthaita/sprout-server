@@ -4,7 +4,6 @@ about: Template for reporting bug
 title: ''
 labels: Bugfixing, Development
 assignees: ''
-
 ---
 
 ## Summary

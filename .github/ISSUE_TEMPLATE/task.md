@@ -4,7 +4,6 @@ about: Template for creating new task backend
 title: ''
 labels: Task,Backend,Development
 assignees: ''
-
 ---
 
 ## Summary

@@ -1,0 +1,608 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Loại người dùng (Ứng viên, Nhà tuyển dụng, Quản trị viên)
+enum UserType {
+  CANDIDATE
+  EMPLOYER
+  ADMIN
+}
+
+/// Giới tính
+enum GenderType {
+  MALE
+  FEMALE
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
+/// Quy mô công ty
+enum CompanySizeType {
+  SIZE_1_10 @map("1-10")
+  SIZE_11_50 @map("11-50")
+  SIZE_51_200 @map("51-200")
+  SIZE_201_500 @map("201-500")
+  SIZE_501_1000 @map("501-1000")
+  SIZE_1000_PLUS @map("1000+")
+}
+
+/// Loại lương (Khoảng, Từ, Đến, Thỏa thuận)
+enum SalaryType {
+  range
+  starting_from
+  up_to
+  negotiable
+}
+
+/// Trạng thái công việc (Chờ duyệt, Đã duyệt, Bị từ chối, Đã đóng, Nháp)
+enum JobStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CLOSED
+  DRAFT
+}
+
+/// Trạng thái ứng tuyển
+enum ApplicationStatus {
+  submitted
+  under_review
+  screening
+  interviewing
+  offer_made
+  offer_accepted
+  offer_rejected
+  rejected
+  withdrawn
+}
+
+/// Mức độ thành thạo kỹ năng/ngôn ngữ
+enum ProficiencyLevel {
+  beginner // Sơ cấp / Mới bắt đầu
+  intermediate // Trung cấp / Có kinh nghiệm
+  advanced // Cao cấp / Thành thạo
+  expert // Chuyên gia / Rất thành thạo
+  native // Bản xứ (cho ngôn ngữ)
+}
+
+/// Trình độ tiếng Nhật (JLPT hoặc tương đương)
+enum JapaneseProficiencyLevel {
+  N1
+  N2
+  N3
+  N4
+  N5
+  BUSINESS_LEVEL // Trình độ thương mại (không có N)
+  DAILY_CONVERSATION // Giao tiếp hàng ngày
+  NATIVE // Bản xứ
+  NONE // Không yêu cầu / Không có
+}
+
+
+/// Loại hình công việc (Toàn thời gian, Bán thời gian, v.v.)
+enum JobTypeEnum {
+  full_time // 正社員 (Nhân viên chính thức)
+  part_time // アルバイト・パート (Làm thêm)
+  contract // 契約社員 (Nhân viên hợp đồng)
+  temporary // 派遣社員 (Nhân viên phái cử)
+  internship // インターンシップ (Thực tập)
+  volunteer // ボランティア (Tình nguyện)
+  freelance // 業務委託 (Ủy thác nghiệp vụ / Freelance)
+}
+
+/// Loại tệp (PDF, DOC, Hình ảnh, v.v.)
+enum FileTypeEnum {
+  pdf
+  doc
+  docx
+  image
+  other
+}
+
+/// Danh mục kỹ năng (Chung chung hơn)
+enum SkillCategory {
+  PROFESSIONAL // Kỹ năng chuyên môn (theo ngành)
+  TECHNICAL // Kỹ năng kỹ thuật (có thể là IT hoặc ngành khác)
+  LANGUAGE // Ngôn ngữ
+  SOFTWARE_TOOLS // Phần mềm / Công cụ
+  INDUSTRY_SPECIFIC // Đặc thù ngành (Ví dụ: Y tế, Giáo dục, Xây dựng)
+  SOFT_SKILL // Kỹ năng mềm
+  CERTIFICATION // Chứng chỉ
+  OTHER // Khác
+}
+
+/// Loại tài liệu liên quan đến công việc
+enum DocumentType {
+  COMPANY_OVERVIEW
+  JOB_DESCRIPTION
+  BENEFITS_INFO
+  PRESENTATION
+  VIDEO
+  OTHER
+}
+
+/// Loại phương tiện của ứng viên (Slide, Video, v.v.)
+enum MediaType {
+  SLIDE
+  VIDEO
+  PORTFOLIO_ITEM
+  OTHER
+}
+
+
+// -----------------------------------------------------------------------------
+// Định nghĩa bảng (Models)
+// -----------------------------------------------------------------------------
+
+/// Bảng Industries: Danh mục ngành nghề (Cần có dữ liệu đa dạng: Sản xuất, Dịch vụ, Nhà hàng, Khách sạn, IT, Y tế, Giáo dục, Xây dựng...)
+model Industry {
+  id          Int      @id @default(autoincrement()) @map("industry_id") /// ID ngành nghề
+  name        String   @unique @map("industry_name") @db.VarChar(100) /// Tên ngành nghề (Tiếng Anh/Việt)
+  nameJp      String?  @map("name_jp") @db.VarChar(100) /// Tên ngành nghề (Tiếng Nhật)
+  description String?  @db.Text /// Mô tả ngành nghề
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(6) /// Thời gian tạo
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp(6) /// Thời gian cập nhật
+
+  jobs Job[] // Quan hệ một-nhiều với Jobs
+
+  @@map("Industries")
+}
+
+/// Bảng Skills: Danh mục kỹ năng (Cần có dữ liệu đa dạng)
+model Skill {
+  id          Int           @id @default(autoincrement()) @map("skill_id") /// ID kỹ năng
+  name        String        @unique @map("skill_name") @db.VarChar(100) /// Tên kỹ năng (Tiếng Anh/Việt)
+  nameJp      String?       @map("name_jp") @db.VarChar(100) /// Tên kỹ năng (Tiếng Nhật)
+  category    SkillCategory? /// Danh mục kỹ năng (Tùy chọn, sử dụng Enum chung chung hơn)
+  description String?       @db.Text /// Mô tả kỹ năng
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamp(6) /// Thời gian tạo
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamp(6) /// Thời gian cập nhật
+
+  jobSkills       JobSkill[]
+  candidateSkills CandidateSkill[]
+
+  @@map("Skills")
+}
+
+/// Bảng Users: Thông tin tài khoản người dùng
+model User {
+  id                   Int        @id @default(autoincrement()) @map("user_id")
+  email                String     @unique @db.VarChar(255)
+  passwordHash         String     @map("password_hash") @db.VarChar(255)
+  fullName             String     @map("full_name") @db.VarChar(100)
+  phoneNumber          String?    @unique @map("phone_number") @db.VarChar(20)
+  userType             UserType   @map("user_type")
+  avatarUrl            String?    @map("avatar_url") @db.VarChar(255)
+  isActive             Boolean    @default(true) @map("is_active")
+  isEmailVerified      Boolean    @default(false) @map("is_email_verified")
+  emailVerifyToken     String?    @unique @map("email_verify_token") @db.VarChar(100)
+  passwordResetToken   String?    @unique @map("password_reset_token") @db.VarChar(100)
+  passwordResetExpires DateTime?  @map("password_reset_expires") @db.Timestamp(6)
+  lastLogin            DateTime?  @map("last_login") @db.Timestamp(6)
+  createdAt            DateTime   @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt            DateTime   @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  employer    Employer?
+  candidate   Candidate?
+  applicationsUpdated Application[] @relation("LastUpdatedByRelation")
+
+  sessions            Session[] // Quan hệ một-nhiều với các phiên đăng nhập
+  @@map("Users")
+}
+
+/// Bảng Sessions: Quản lý phiên đăng nhập người dùng
+model Session {
+  id           String   @id @default(cuid()) // ID nội bộ, duy nhất cho mỗi session
+  sessionToken String   @unique // Token thực tế gửi cho client và dùng để xác thực
+  userId       Int      @map("user_id") // Khóa ngoại liên kết đến User
+  expiresAt    DateTime @map("expires_at") // Thời điểm session hết hạn
+  createdAt    DateTime @default(now()) @map("created_at") // Thời điểm tạo session
+  ipAddress    String?  @map("ip_address") // (Tùy chọn) Địa chỉ IP của client
+  userAgent    String?  @map("user_agent") @db.Text // (Tùy chọn) User agent của client
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade) // Liên kết với User, xóa session nếu user bị xóa
+
+  @@index([userId]) // Index để tìm session theo user nhanh hơn
+  @@map("Sessions") // Ánh xạ tên bảng trong DB
+}
+
+/// Bảng Employers: Thông tin nhà tuyển dụng (công ty)
+model Employer {
+  id                  Int               @id @default(autoincrement()) @map("employer_id")
+  userId              Int               @unique @map("user_id")
+  companyName         String            @map("company_name") @db.VarChar(150) /// Tên công ty (Romaji/English)
+  companyNameKana     String?           @map("company_name_kana") @db.VarChar(150) /// Tên công ty (Furigana/Katakana)
+  companyNameJp       String?           @map("company_name_jp") @db.VarChar(150) /// Tên công ty (Kanji - nếu có)
+  companyLogoUrl      String?           @map("company_logo_url") @db.VarChar(255)
+  companyWebsite      String?           @map("company_website") @db.VarChar(255)
+  companyDescription  String?           @map("company_description") @db.Text /// Mô tả chung (có thể dùng tiếng Anh/Việt)
+  companyDescriptionJp String?          @map("company_description_jp") @db.Text /// Mô tả bằng tiếng Nhật
+  businessOverview    String?           @map("business_overview") @db.Text
+  businessOverviewJp  String?           @map("business_overview_jp") @db.Text /// Tổng quan kinh doanh (tiếng Nhật)
+  companyAddress      String?           @map("company_address") @db.Text /// Địa chỉ (có thể là Romaji)
+  companyAddressJp    String?           @map("company_address_jp") @db.Text /// Địa chỉ (tiếng Nhật)
+  companyPhone        String?           @map("company_phone") @db.VarChar(30)
+  establishmentDate   DateTime?         @map("establishment_date") @db.Date
+  representativeName  String?           @map("representative_name") @db.VarChar(100)
+  representativeTitle String?           @map("representative_title") @db.VarChar(100)
+  vietnamBranchExists Boolean?          @map("vietnam_branch_exists") /// Có chi nhánh tại VN không (thông tin thêm)
+  companySize         CompanySizeType?  @map("company_size")
+  createdAt           DateTime          @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt           DateTime          @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobs Job[]
+
+  @@index([companyName], map: "idx_employers_company_name")
+  @@map("Employers")
+}
+
+/// Bảng Candidates: Thông tin hồ sơ ứng viên (người tìm việc nước ngoài)
+model Candidate {
+  id                            Int              @id @default(autoincrement()) @map("candidate_id")
+  userId                        Int              @unique @map("user_id")
+  nameKana                      String?          @map("name_kana") @db.VarChar(100) /// Họ và tên (Katakana/Furigana - nếu có)
+  dateOfBirth                   DateTime?        @map("date_of_birth") @db.Date
+  gender                        GenderType?
+  nationality                   String?          @db.VarChar(100) /// Quốc tịch
+  currentAddressJp              String?          @map("current_address_jp") @db.Text /// Địa chỉ hiện tại ở Nhật (nếu có)
+  homeCountryAddress            String?          @map("home_country_address") @db.Text /// Địa chỉ ở quê nhà
+  country                       String?          @db.VarChar(100) /// Quốc gia đang ở (ví dụ: Vietnam, Japan)
+  headline                      String?          @db.VarChar(255) /// Tiêu đề hồ sơ (có thể tiếng Anh)
+  headlineJp                    String?          @map("headline_jp") @db.VarChar(255) /// Tiêu đề hồ sơ (tiếng Nhật)
+  professionalSummary           String?          @map("professional_summary") @db.Text /// Tóm tắt kinh nghiệm (tiếng Anh/Việt)
+  professionalSummaryJp         String?          @map("professional_summary_jp") @db.Text /// Tóm tắt kinh nghiệm (tiếng Nhật)
+  appealStatement               String?          @map("appeal_statement") @db.Text /// Điểm mạnh/mong muốn (tiếng Anh/Việt)
+  appealStatementJp             String?          @map("appeal_statement_jp") @db.Text /// Điểm mạnh/mong muốn (tiếng Nhật)
+  keyStrengths                  String[]         @map("key_strengths") @db.Text /// Các điểm mạnh chính (mảng)
+  motivationStatement           String?          @map("motivation_statement") @db.Text /// Động lực ứng tuyển
+  careerGoals                   String?          @map("career_goals") @db.Text
+  linkedinUrl                   String?          @map("linkedin_url") @db.VarChar(255)
+  githubUrl                     String?          @map("github_url") @db.VarChar(255) // Giữ lại vì vẫn có thể hữu ích
+  portfolioUrl                  String?          @map("portfolio_url") @db.VarChar(255)
+  otherSocialProfiles           Json?            @map("other_social_profiles") @db.JsonB /// Các trang mạng xã hội/profile khác { platform: string, url: string }[]
+  desiredSalaryMin              Decimal?         @map("desired_salary_min") @db.Decimal(12, 2) /// Lương mong muốn (JPY)
+  desiredSalaryMax              Decimal?         @map("desired_salary_max") @db.Decimal(12, 2) /// Lương mong muốn (JPY)
+  desiredSalaryType             SalaryType?      @map("desired_salary_type")
+  preferredJobTypes             JobTypeEnum[]    @map("preferred_job_types") /// Loại hình công việc ưa thích
+  preferredWorkLocations        String[]         @map("preferred_work_locations") @db.Text /// Địa điểm làm việc ưa thích tại Nhật (Ví dụ: ["Tokyo", "Osaka", "Remote"])
+  jobExpectations               String[]         @map("job_expectations") @db.Text /// Mong đợi trong công việc
+  interestsTags                 String[]         @map("interests_tags") @db.Text /// Sở thích
+  // Các trường liên quan đến người nước ngoài / Nhật Bản
+  currentVisaStatusJp           String?          @map("current_visa_status_jp") @db.VarChar(100) /// Tình trạng visa hiện tại ở Nhật (nếu có)
+  visaExpiryDateJp              DateTime?        @map("visa_expiry_date_jp") @db.Date /// Ngày hết hạn visa Nhật (nếu có)
+  desiredVisaSupport            Boolean?         @map("desired_visa_support") /// Mong muốn hỗ trợ xin visa?
+  japaneseProficiency           JapaneseProficiencyLevel? @map("japanese_proficiency") /// Trình độ tiếng Nhật
+  englishProficiency            ProficiencyLevel? @map("english_proficiency") /// Trình độ tiếng Anh
+  otherLanguages                Json?            @map("other_languages") @db.JsonB /// Các ngôn ngữ khác { language: string, proficiency: ProficiencyLevel }[]
+  willingToRelocateInJapan      Boolean?         @map("willing_to_relocate_in_japan") /// Sẵn sàng chuyển chỗ ở trong Nhật Bản?
+  arrivalInJapanDate            DateTime?        @map("arrival_in_japan_date") @db.Date /// Ngày đến Nhật (dự kiến hoặc thực tế)
+
+  // Thông tin học sinh (giữ lại nếu cần)
+  expectedGraduationDate        DateTime?        @map("expected_graduation_date") @db.Date
+  currentYearOfStudy            Int?             @map("current_year_of_study")
+  studentId                     String?          @map("student_id") @db.VarChar(50)
+
+  isSearchable                  Boolean          @default(true) @map("is_searchable")
+  profileCompleteness           Float?           @map("profile_completeness") @db.DoublePrecision
+  createdAt                     DateTime         @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                     DateTime         @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skills         CandidateSkill[]
+  cvs            CV[]
+  applications   Application[]
+  education      Education[]
+  workExperience WorkExperience[]
+  projects       Project[]        // Có thể dùng cho các dự án phi IT
+  qualifications Qualification[]  // Chứng chỉ đa dạng
+  awards         Award[]          // Giải thưởng đa dạng
+  media          CandidateMedia[]
+
+  @@index([isSearchable], map: "idx_candidates_is_searchable")
+  @@map("Candidates")
+}
+
+/// Bảng Jobs: Thông tin tuyển dụng (Đa ngành nghề, cho người nước ngoài)
+model Job {
+  id                         Int             @id @default(autoincrement()) @map("job_id")
+  employerId                 Int             @map("employer_id")
+  industryId                 Int?            @map("industry_id") /// ID ngành nghề (từ bảng Industry)
+  title                      String          @db.VarChar(255) /// Tiêu đề công việc (Tiếng Anh/Việt)
+  titleJp                    String?         @map("title_jp") @db.VarChar(255) /// Tiêu đề công việc (Tiếng Nhật)
+  description                String          @db.Text /// Mô tả công việc (Tiếng Anh/Việt)
+  descriptionJp              String?         @map("description_jp") @db.Text /// Mô tả công việc (Tiếng Nhật)
+  requirements               String          @db.Text /// Yêu cầu (Tiếng Anh/Việt)
+  requirementsJp             String?         @map("requirements_jp") @db.Text /// Yêu cầu (Tiếng Nhật)
+  benefits                   String?         @db.Text /// Phúc lợi (Tiếng Anh/Việt)
+  benefitsJp                 String?         @map("benefits_jp") @db.Text /// Phúc lợi (Tiếng Nhật)
+  appealPoints               String[]        @map("appeal_points") @db.Text /// Điểm hấp dẫn (mảng)
+  salaryMin                  Decimal?        @map("salary_min") @db.Decimal(12, 2) /// Lương (JPY)
+  salaryMax                  Decimal?        @map("salary_max") @db.Decimal(12, 2) /// Lương (JPY)
+  salaryType                 SalaryType      @default(range) @map("salary_type")
+  salaryDetails              String?         @map("salary_details") @db.Text /// Chi tiết lương thưởng khác (Tiếng Anh/Nhật)
+  country                    String          @default("Japan") @db.VarChar(100) /// Quốc gia (Mặc định là Nhật)
+  prefecture                 String?         @db.VarChar(100) /// Tỉnh/Thành phố (Tokyo, Osaka, etc.)
+  city                       String?         @db.VarChar(100) /// Thành phố/Quận
+  addressDetail              String?         @map("address_detail") @db.Text /// Địa chỉ chi tiết (Tiếng Nhật/Romaji)
+  nearestStation             String?         @map("nearest_station") @db.VarChar(150) /// Ga tàu gần nhất
+  isRemote                   Boolean         @default(false) @map("is_remote")
+  remoteDetails              String?         @map("remote_details") @db.Text /// Chi tiết về làm việc từ xa (nếu có)
+  jobType                    JobTypeEnum     @map("job_type") /// Loại hình công việc
+  status                     JobStatus       @default(PENDING)
+  postedDate                 DateTime        @default(now()) @map("posted_date") @db.Timestamp(6)
+  expiryDate                 DateTime?       @map("expiry_date") @db.Timestamp(6)
+  externalApplicationUrl     String?         @map("external_application_url") @db.VarChar(255)
+  hiringStages               String[]        @map("hiring_stages") @db.Text /// Các giai đoạn tuyển dụng
+  workingHoursDescription    String?         @map("working_hours_description") @db.VarChar(255) /// Mô tả giờ làm việc (Ví dụ: "09:00 ~ 18:00")
+  isFlexTime                 Boolean?        @map("is_flex_time")
+  coreTimeDescription        String?         @map("core_time_description") @db.VarChar(100) /// Giờ làm việc cốt lõi
+  actualWorkingHoursPerDay   Decimal?        @map("actual_working_hours_per_day") @db.Decimal(4, 2)
+  avgOvertimeHoursPerMonth   Decimal?        @map("avg_overtime_hours_per_month") @db.Decimal(5, 1)
+  // Yêu cầu về ngôn ngữ và hỗ trợ người nước ngoài
+  requiredJapaneseLevel      JapaneseProficiencyLevel? @map("required_japanese_level") /// Yêu cầu trình độ tiếng Nhật
+  requiredEnglishLevel       ProficiencyLevel? @map("required_english_level") /// Yêu cầu trình độ tiếng Anh
+  otherLanguageRequirements  String?         @map("other_language_requirements") @db.Text /// Yêu cầu ngôn ngữ khác
+  visaSupportAvailable       Boolean?        @map("visa_support_available") /// Có hỗ trợ visa không?
+  relocationSupportAvailable Boolean?        @map("relocation_support_available") /// Có hỗ trợ chuyển chỗ ở không?
+  housingSupportDetails      String?         @map("housing_support_details") @db.Text /// Chi tiết hỗ trợ nhà ở (nếu có)
+  foreignFriendlyEnvironment Boolean?        @map("foreign_friendly_environment") /// Môi trường thân thiện với người nước ngoài?
+  targetCandidateDescription String?         @map("target_candidate_description") @db.Text /// Mô tả ứng viên mục tiêu (đặc biệt là người nước ngoài)
+  numberOfHires              Int?            @map("number_of_hires") /// Số lượng cần tuyển
+
+  createdAt                  DateTime        @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt                  DateTime        @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  employer   Employer      @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  industry   Industry?     @relation(fields: [industryId], references: [id], onDelete: SetNull)
+  skills     JobSkill[]
+  applications Application[]
+  documents  JobDocument[]
+
+  @@index([employerId], map: "idx_jobs_employer")
+  @@index([industryId], map: "idx_jobs_industry")
+  @@index([status], map: "idx_jobs_status")
+  @@index([jobType], map: "idx_jobs_job_type")
+  @@index([prefecture], map: "idx_jobs_prefecture") // Index theo tỉnh/thành phố
+  @@index([requiredJapaneseLevel], map: "idx_jobs_japanese_level")
+  @@map("Jobs")
+}
+
+/// Bảng JobSkills: Liên kết giữa công việc và kỹ năng
+model JobSkill {
+  id               Int      @id @default(autoincrement()) @map("job_skill_id")
+  jobId            Int      @map("job_id")
+  skillId          Int      @map("skill_id")
+  importanceLevel  Int?     @map("importance_level") @db.SmallInt /// Mức độ quan trọng (1: Có thì tốt ~ 5: Bắt buộc)
+  requiredYears    Int?     @map("required_years") @db.SmallInt /// Số năm kinh nghiệm yêu cầu (tùy chọn)
+
+  job   Job   @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, skillId])
+  @@map("JobSkills")
+}
+
+/// Bảng CandidateSkills: Liên kết giữa ứng viên và kỹ năng
+model CandidateSkill {
+  id                Int               @id @default(autoincrement()) @map("candidate_skill_id")
+  candidateId       Int               @map("candidate_id")
+  skillId           Int               @map("skill_id")
+  proficiencyLevel  ProficiencyLevel? @map("proficiency_level") /// Mức độ thành thạo
+  experienceMonths  Int?              @map("experience_months") @db.SmallInt /// Số tháng kinh nghiệm
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  skill     Skill     @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@unique([candidateId, skillId])
+  @@index([skillId], map: "idx_candidateskills_skill_id")
+  @@map("CandidateSkills")
+}
+
+/// Bảng CVs: Tệp CV/sơ yếu lý lịch của ứng viên (Có thể có CV tiếng Nhật và tiếng Anh/Việt)
+model CV {
+  id          Int           @id @default(autoincrement()) @map("cv_id")
+  candidateId Int           @map("candidate_id")
+  fileName    String        @map("file_name") @db.VarChar(255) /// Tên tệp (nên có định dạng rõ ràng, vd: NguyenVanA_CV_JP.pdf)
+  fileUrl     String        @map("file_url") @db.VarChar(255)
+  fileType    FileTypeEnum? @map("file_type")
+  language    String?       @db.VarChar(10) /// Ngôn ngữ của CV (e.g., 'ja', 'en', 'vi')
+  isPrimary   Boolean       @default(false) @map("is_primary") /// Cờ CV chính (nên cho phép set 1 primary cho mỗi ngôn ngữ)
+  uploadedAt  DateTime      @default(now()) @map("uploaded_at") @db.Timestamp(6)
+
+  candidate    Candidate     @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  applications Application[]
+
+  @@index([candidateId], map: "idx_cvs_candidate_id")
+  @@map("CVs")
+}
+
+/// Bảng Applications: Thông tin ứng tuyển
+model Application {
+  id                Int               @id @default(autoincrement()) @map("application_id")
+  candidateId       Int               @map("candidate_id")
+  jobId             Int               @map("job_id")
+  cvId              Int               @map("cv_id") /// ID của CV đã sử dụng
+  coverLetter       String?           @map("cover_letter") @db.Text /// Thư xin việc (có thể theo ngôn ngữ CV)
+  applicationDate   DateTime          @default(now()) @map("application_date") @db.Timestamp(6)
+  status            ApplicationStatus @default(submitted)
+  statusMessage     String?           @map("status_message") @db.Text
+  currentStageIndex Int?              @map("current_stage_index")
+  internalNotes     String?           @map("internal_notes") @db.Text
+  candidateNotes    String?           @map("candidate_notes") @db.Text
+  processLog        Json?             @map("process_log") @db.JsonB
+  isBookmarked      Boolean?          @default(false) @map("is_bookmarked")
+  matchScore        Decimal?          @map("match_score") @db.Decimal(5, 2)
+  manualScore       Decimal?          @map("manual_score") @db.Decimal(5, 2)
+  offerDetails      Json?             @map("offer_details") @db.JsonB
+  lastUpdatedById   Int?              @map("last_updated_by")
+
+  candidate     Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job           Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  cv            CV        @relation(fields: [cvId], references: [id], onDelete: Restrict)
+  lastUpdatedBy User?     @relation("LastUpdatedByRelation", fields: [lastUpdatedById], references: [id], onDelete: SetNull)
+
+  @@unique([candidateId, jobId])
+  @@index([jobId], map: "idx_applications_job")
+  @@index([candidateId], map: "idx_applications_candidate")
+  @@index([status], map: "idx_applications_status")
+  @@map("Applications")
+}
+
+/// Bảng Education: Thông tin học vấn của ứng viên
+model Education {
+  id                     Int       @id @default(autoincrement()) @map("education_id")
+  candidateId            Int       @map("candidate_id")
+  universityName         String    @map("university_name") @db.VarChar(255)
+  facultyDepartment      String?   @map("faculty_department") @db.VarChar(150)
+  degree                 String?   @db.VarChar(100)
+  major                  String?   @db.VarChar(100)
+  startDate              DateTime? @map("start_date") @db.Date
+  endDate                DateTime? @map("end_date") @db.Date
+  expectedGraduationDate DateTime? @map("expected_graduation_date") @db.Date
+  gpa                    Decimal?  @db.Decimal(3, 2)
+  description            String?   @db.Text /// Mô tả/Thành tích (có thể tiếng Anh/Việt)
+  descriptionJp          String?   @map("description_jp") @db.Text /// Mô tả/Thành tích (tiếng Nhật)
+  country                String?   @db.VarChar(100) /// Quốc gia học tập
+  createdAt              DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt              DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId], map: "idx_education_candidate_id")
+  @@map("Education")
+}
+
+/// Bảng WorkExperience: Thông tin kinh nghiệm làm việc (đa ngành)
+model WorkExperience {
+  id                     Int          @id @default(autoincrement()) @map("experience_id")
+  candidateId            Int          @map("candidate_id")
+  companyName            String       @map("company_name") @db.VarChar(150)
+  jobTitle               String       @map("job_title") @db.VarChar(150)
+  employmentType         JobTypeEnum? @map("employment_type")
+  startDate              DateTime     @map("start_date") @db.Date
+  endDate                DateTime?    @map("end_date") @db.Date
+  isCurrent              Boolean      @default(false) @map("is_current")
+  location               String?      @db.VarChar(150) /// Địa điểm làm việc (Thành phố, Quốc gia)
+  description            String?      @db.Text /// Mô tả công việc/Tổng quan công ty (tiếng Anh/Việt)
+  descriptionJp          String?      @map("description_jp") @db.Text /// Mô tả công việc/Tổng quan công ty (tiếng Nhật)
+  responsibilities       String[]     @db.Text /// Nhiệm vụ/Thành tích (mảng)
+  keyToolsTechnologies   String[]     @map("key_tools_technologies") @db.Text /// Công cụ/Công nghệ chính đã sử dụng (chung chung hơn)
+  createdAt              DateTime     @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt              DateTime     @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId], map: "idx_workexperience_candidate_id")
+  @@map("WorkExperience")
+}
+
+/// Bảng Projects: Kinh nghiệm dự án (đa ngành)
+model Project {
+  id                Int       @id @default(autoincrement()) @map("project_id")
+  candidateId       Int       @map("candidate_id")
+  title             String    @db.VarChar(255) /// Tên dự án (tiếng Anh/Việt)
+  titleJp           String?   @map("title_jp") @db.VarChar(255) /// Tên dự án (tiếng Nhật)
+  url               String?   @db.VarChar(255) /// URL dự án/repository/demo
+  purpose           String?   @db.Text /// Mục đích (tiếng Anh/Việt)
+  purposeJp         String?   @map("purpose_jp") @db.Text /// Mục đích (tiếng Nhật)
+  description       String?   @db.Text /// Mô tả (tiếng Anh/Việt)
+  descriptionJp     String?   @map("description_jp") @db.Text /// Mô tả (tiếng Nhật)
+  bulletPoints      String[]  @map("bullet_points") @db.Text /// Chức năng chính/Kết quả (mảng)
+  technologiesUsed  String[]  @map("technologies_used") @db.Text /// Công nghệ/Công cụ/Kỹ thuật đã sử dụng (mảng)
+  teamDetails       String?   @map("team_details") @db.VarChar(255)
+  duration          String?   @db.VarChar(50)
+  startDate         DateTime? @map("start_date") @db.Date
+  endDate           DateTime? @map("end_date") @db.Date
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId], map: "idx_projects_candidate_id")
+  @@map("Projects")
+}
+
+/// Bảng Qualifications: Thông tin chứng chỉ/bằng cấp (đa ngành)
+model Qualification {
+  id                   Int       @id @default(autoincrement()) @map("qualification_id")
+  candidateId          Int       @map("candidate_id")
+  name                 String    @db.VarChar(255) /// Tên chứng chỉ/bằng cấp
+  issuingOrganization  String?   @map("issuing_organization") @db.VarChar(150)
+  issueDate            DateTime? @map("issue_date") @db.Date
+  expiryDate           DateTime? @map("expiry_date") @db.Date
+  credentialId         String?   @map("credential_id") @db.VarChar(100)
+  credentialUrl        String?   @map("credential_url") @db.VarChar(255)
+  description          String?   @db.Text /// Mô tả thêm về chứng chỉ (nếu cần)
+  createdAt            DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt            DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId], map: "idx_qualifications_candidate_id")
+  @@map("Qualifications")
+}
+
+/// Bảng Awards: Thông tin giải thưởng/thành tích
+model Award {
+  id          Int       @id @default(autoincrement()) @map("award_id")
+  candidateId Int       @map("candidate_id")
+  title       String    @db.VarChar(255)
+  issuer      String?   @db.VarChar(150)
+  date        DateTime? @db.Date
+  description String?   @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId], map: "idx_awards_candidate_id")
+  @@map("Awards")
+}
+
+/// Bảng CandidateMedia: Phương tiện portfolio của ứng viên
+model CandidateMedia {
+  id            Int       @id @default(autoincrement()) @map("media_id")
+  candidateId   Int       @map("candidate_id")
+  mediaType     MediaType @map("media_type")
+  title         String?   @db.VarChar(255)
+  url           String    @db.VarChar(255)
+  thumbnailUrl  String?   @map("thumbnail_url") @db.VarChar(255)
+  description   String?   @db.Text
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt     DateTime  @updatedAt @map("updated_at") @db.Timestamp(6)
+
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId], map: "idx_candidatemedia_candidate_id")
+  @@map("CandidateMedia")
+}
+
+/// Bảng JobDocuments: Tài liệu liên quan đến công việc
+model JobDocument {
+  id            Int          @id @default(autoincrement()) @map("job_document_id")
+  jobId         Int          @map("job_id")
+  documentName  String       @map("document_name") @db.VarChar(255)
+  documentUrl   String       @map("document_url") @db.VarChar(255)
+  documentType  DocumentType @map("document_type")
+  thumbnailUrl  String?      @map("thumbnail_url") @db.VarChar(255)
+  uploadedAt    DateTime     @default(now()) @map("uploaded_at") @db.Timestamp(6)
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([jobId], map: "idx_jobdocuments_job_id")
+  @@map("JobDocuments")
+}

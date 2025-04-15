@@ -4,7 +4,6 @@ about: Template for creating new task Frontend
 title: ''
 labels: Task,Frontend,Development
 assignees: ''
-
 ---
 
 ## Summary
