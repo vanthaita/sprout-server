@@ -1,48 +1,47 @@
-import { PartialType, OmitType } from '@nestjs/mapped-types';
 import {
-  IsInt, IsOptional, IsString, MaxLength, IsEnum, IsDate, IsEmail, MinLength, IsBoolean, IsUrl, 
+  IsBoolean,
+  IsEmail,
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 import { Expose, Exclude, Type } from 'class-transformer';
 import { UserType } from 'generated/prisma';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 
 export class CreateUserDto {
-  @IsEmail()
+  @IsEmail({}, { message: 'Please provide a valid email address.' })
   @MaxLength(255)
   email: string;
 
   @IsString()
-  @MinLength(8) 
-  @MaxLength(255)
-  password: string; 
+  @IsOptional()
+  @MinLength(8, { message: 'Password must be at least 8 characters long.' })
+  @MaxLength(255) 
+  passwordHash?: string;
+
   @IsString()
   @MaxLength(100)
   fullName: string;
 
-  @IsOptional()
-  // @IsPhoneNumber(null) // Specify region if needed, e.g., 'VN'
-  @MaxLength(20)
-  phoneNumber?: string;
-
   @IsEnum(UserType)
-  userType: UserType;
-
-  @IsOptional()
-  @IsUrl()
-  @MaxLength(255)
-  avatarUrl?: string;
+  userType: UserType; 
 }
 
 export class UpdateUserDto extends PartialType(
-    OmitType(CreateUserDto, ['password', 'email', 'userType'] as const)
-) {
-    @IsOptional()
-    @IsBoolean()
-    isActive?: boolean; 
-}
+  OmitType(CreateUserDto, ['passwordHash', 'email', 'userType'] as const)
+  ) {
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+  }
 
 export class UserDto {
   @Expose()
-  @IsInt()
+  @IsInt() 
   id: number;
 
   @Expose()
@@ -54,59 +53,29 @@ export class UserDto {
   fullName: string;
 
   @Expose()
-  phoneNumber?: string | null;
-
-  @Expose()
   @IsEnum(UserType)
   userType: UserType;
-
-  @Expose()
-  avatarUrl?: string | null;
 
   @Expose()
   @IsBoolean()
   isActive: boolean;
 
-  @Expose()
-  @IsBoolean()
-  isEmailVerified: boolean;
+  @Exclude() 
+  passwordHash?: string | null;
 
-  @Exclude() // Exclude sensitive data
-  passwordHash: string;
-
-  @Exclude()
-  emailVerifyToken?: string | null;
-
-  @Exclude()
-  passwordResetToken?: string | null;
-
-  @Exclude()
-  passwordResetExpires?: Date | null;
 
   @Expose()
-  @Type(() => Date)
-  @IsDate()
-  @IsOptional()
-  lastLogin?: Date | null;
-
-  @Expose()
-  @Type(() => Date)
-  @IsDate()
+  @Type(() => Date) 
   createdAt: Date;
 
   @Expose()
-  @Type(() => Date)
-  @IsDate()
+  @Type(() => Date) 
+  // @IsDate() // Optional validation on response
   updatedAt: Date;
 
-  // Optionally include nested DTOs (can cause circular dependencies if not handled carefully)
-  // @Expose()
-  // @Type(() => EmployerDto)
-  // @IsOptional()
-  // employer?: EmployerDto | null;
+  @Exclude()
+  employer?: any; 
 
-  // @Expose()
-  // @Type(() => CandidateDto)
-  // @IsOptional()
-  // candidate?: CandidateDto | null;
+  @Exclude()
+  candidate?: any;
 }

@@ -23,6 +23,10 @@ export class SocialProfileDto {
 
     @IsUrl()
     url: string;
+
+    @IsOptional()
+    @IsString()
+    username?: string;
 }
 
 export class OtherLanguageDto {
@@ -31,4 +35,25 @@ export class OtherLanguageDto {
 
     @IsEnum(ProficiencyLevel)
     proficiency: ProficiencyLevel;
+}
+
+export class TimestampDto {
+  @Type(() => Date)
+  createdAt: Date;
+
+  @Type(() => Date)
+  updatedAt: Date;
+}
+
+export class PaginationDto {
+  page?: number;
+  limit?: number;
+}
+
+export class PaginatedResponseDto<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
 }

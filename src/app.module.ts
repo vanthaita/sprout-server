@@ -4,6 +4,8 @@ import { PrismaService } from './modules/prisma/prisma.service';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CandidateModule } from './modules/candidate/candidate.module';
+import { EmployeeModule } from './modules/employee/employer.module';
 
 @Module({
   imports: [
@@ -12,11 +14,15 @@ import { AuthModule } from './modules/auth/auth.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
-    // 
     AuthModule,
     UsersModule,
+    CandidateModule,
+    EmployeeModule,
   ],
   controllers: [],
-  providers: [PrismaService],
+  providers: [
+    PrismaService
+    
+  ],
 })
 export class AppModule {}
