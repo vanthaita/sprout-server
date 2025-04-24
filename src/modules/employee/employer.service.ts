@@ -71,9 +71,8 @@ export class EmployerService {
         })
     }
 
-
-    // job
-    async createjob(createJobDto: CreateJobDto, email: string) {
+    // Job methods
+    async createJob(createJobDto: CreateJobDto, email: string) {
         const existingUser = await this.prismaService.user.findUnique({
             where: { email },
             include: {
@@ -92,11 +91,12 @@ export class EmployerService {
             data: {
                 ...createJobDto,
                 employer: {
-                    connect: existingUser.employer
+                    connect: { id: existingUser.employer.id }
                 }
             }
         })
     }
+
     async getEmployerJobs(filter: JobFilterDto, email: string) {
         const existingUser = await this.prismaService.user.findUnique({
             where: { email },
@@ -118,15 +118,11 @@ export class EmployerService {
         if (filter.search) {
             whereConditions.OR = [
               { title: { contains: filter.search, mode: 'insensitive' } },
-              { titleJp: { contains: filter.search, mode: 'insensitive' } },
               { description: { contains: filter.search, mode: 'insensitive' } }
             ];
         }
         if (filter.jobTypes && filter.jobTypes.length > 0) {
             whereConditions.jobType = { in: filter.jobTypes };
-        }
-        if (filter.japaneseLevel) {
-            whereConditions.requiredJapaneseLevel = filter.japaneseLevel;
         }
         if (filter.status) {
             whereConditions.status = filter.status;
@@ -156,10 +152,7 @@ export class EmployerService {
         };
     }
 
-    async getJobDetails(
-        jobId: number,
-        email: string
-      ) {
+    async getJobDetails(jobId: number, email: string) {
         const existingUser = await this.prismaService.user.findUnique({
           where: { email },
           include: { employer: true }
@@ -185,9 +178,13 @@ export class EmployerService {
                 candidate: {
                   select: {
                     id: true,
-                    fullNameKanji: true,
-                    fullNameKana: true,
-                    japaneseProficiency: true
+                    fullName: true,
+                    profilePhotoUrl: true
+                  }
+                },
+                cv: {
+                  select: {
+                    fileUrl: true
                   }
                 }
               },
@@ -209,13 +206,13 @@ export class EmployerService {
               applicationDate: app.applicationDate,
               candidate: {
                 id: app.candidate.id,
-                name: app.candidate.fullNameKana || app.candidate.fullNameKanji || 'Unknown', 
-                japaneseLevel: app.candidate.japaneseProficiency
-              }
+                name: app.candidate.fullName || 'Unknown',
+                photoUrl: app.candidate.profilePhotoUrl
+              },
+              cvUrl: app.cv.fileUrl
             }))
         });
     }
-
 
     async updateJob(jobId: number, updateJob: UpdateJobDto, email: string) {
         const existingUser = await this.prismaService.user.findUnique({
@@ -288,11 +285,8 @@ export class EmployerService {
         return new JobResponseDto(updatedJob);
     }
 
-    // Applicantion
-    async getApplications(
-        filter: ApplicationFilterDto,
-        email: string
-      ) {
+    // Application methods
+    async getApplications(filter: ApplicationFilterDto, email: string) {
         const existingUser = await this.prismaService.user.findUnique({
           where: { email },
           include: { employer: true }
@@ -329,9 +323,8 @@ export class EmployerService {
               candidate: {
                 select: {
                   id: true,
-                  fullNameKanji: true,
-                  fullNameKana: true,
-                  japaneseProficiency: true
+                  fullName: true,
+                  profilePhotoUrl: true
                 }
               },
               cv: {
@@ -349,15 +342,14 @@ export class EmployerService {
           id: app.id,
           status: app.status,
           applicationDate: app.applicationDate,
-          coverLetter: app.coverLetter,
           job: {
             id: app.job.id,
             title: app.job.title
           },
           candidate: {
             id: app.candidate.id,
-            name: app.candidate.fullNameKanji || app.candidate.fullNameKana || 'Unknown',
-            japaneseLevel: app.candidate.japaneseProficiency
+            name: app.candidate.fullName || 'Unknown',
+            photoUrl: app.candidate.profilePhotoUrl
           },
           cvUrl: app.cv.fileUrl
         }));
@@ -369,12 +361,9 @@ export class EmployerService {
           limit,
           totalPages: Math.ceil(total / limit)
         };
-      }
+    }
 
-      async getApplicationDetails(
-        applicationId: number,
-        email: string
-      ) {
+    async getApplicationDetails(applicationId: number, email: string) {
         const existingUser = await this.prismaService.user.findUnique({
           where: { email },
           include: { employer: true }
@@ -401,11 +390,14 @@ export class EmployerService {
             candidate: {
               select: {
                 id: true,
-                fullNameKanji: true,
-                fullNameKana: true,
-                japaneseProficiency: true,
+                fullName: true,
                 phoneNumber: true,
-                email: true
+                profilePhotoUrl: true,
+                user: {
+                  select: {
+                    email: true
+                  }
+                }
               }
             },
             cv: {
@@ -426,7 +418,6 @@ export class EmployerService {
             id: application.id,
             status: application.status,
             applicationDate: application.applicationDate,
-            coverLetter: application.coverLetter,
             job: {
                 id: application.job.id,
                 title: application.job.title,
@@ -434,11 +425,11 @@ export class EmployerService {
             },
             candidate: {
                 id: application.candidate.id,
-                name: application.candidate.fullNameKanji || application.candidate.fullNameKana || 'Unknown',
-                japaneseLevel: application.candidate.japaneseProficiency,
+                name: application.candidate.fullName || 'Unknown',
+                photoUrl: application.candidate.profilePhotoUrl,
                 contact: {
-                email: application.candidate.email,
-                phone: application.candidate.phoneNumber
+                    email: application.candidate.user.email,
+                    phone: application.candidate.phoneNumber
                 }
             },
             cv: {
@@ -449,11 +440,7 @@ export class EmployerService {
         };
     }
 
-    async updateApplicationStatus(
-        applicationId: number,
-        status: ApplicationStatus,
-        email: string
-      ) {
+    async updateApplicationStatus(applicationId: number, status: ApplicationStatus, email: string) {
         const existingUser = await this.prismaService.user.findUnique({
           where: { email },
           include: { employer: true }
@@ -480,7 +467,7 @@ export class EmployerService {
           data: { status },
           include: {
             job: { select: { id: true, title: true } },
-            candidate: { select: { id: true, fullNameKanji: true, fullNameKana: true } }
+            candidate: { select: { id: true, fullName: true } }
           }
         });
       
@@ -493,8 +480,8 @@ export class EmployerService {
           },
           candidate: {
             id: updated.candidate.id,
-            name: updated.candidate.fullNameKanji || updated.candidate.fullNameKana || 'Unknown'
+            name: updated.candidate.fullName || 'Unknown'
           }
         };
-      }
+    }
 }

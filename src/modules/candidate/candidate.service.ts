@@ -4,7 +4,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateEducationDto, UpdateEducationDto } from './dto/education';
 import { Prisma } from 'generated/prisma';
 import { CreateWorkExperienceDto, UpdateWorkExperienceDto } from './dto/work-experience';
-import { CreateQualificationDto, UpdateQualificationDto } from './dto/qualification';
 import { CreateCVDto, UpdateCVDto } from './dto/cv';
 
 @Injectable()
@@ -25,6 +24,7 @@ export class CandidateService {
         }
         return user.candidate.id;
     }
+
     async createCandidateProfile(email: string, candidateProfileCreateDto: CreateCandidateDto) {
         const existingUser = await this.prismaService.user.findUnique({
             where: { email },
@@ -33,22 +33,18 @@ export class CandidateService {
             throw new NotFoundException('User not found');
         }
         
-        const { otherLanguages, ...rest } = candidateProfileCreateDto;
-    
         return await this.prismaService.candidate.create({
             data: {
-                ...rest,
+                ...candidateProfileCreateDto,
                 user: {
                     connect: {
                         id: existingUser.id
                     }
                 },
-                otherLanguages: otherLanguages
-                    ? JSON.parse(JSON.stringify(otherLanguages))
-                    : undefined
             }
         });
     }
+
     async updateCandidateProfile(email: string, candidateProfileUpdateDto: UpdateCandidateDto) {
         const existingUser = await this.prismaService.user.findUnique({
             where: { email },
@@ -63,24 +59,14 @@ export class CandidateService {
             throw new NotFoundException('Candidate profile not found');
         }
 
-        const { otherLanguages, ...rest } = candidateProfileUpdateDto;
-        
-        const updateData: any = { ...rest };
-        
-        if (otherLanguages !== undefined) {
-            updateData.otherLanguages = otherLanguages
-                ? JSON.parse(JSON.stringify(otherLanguages))
-                : null;
-        }
-        const processedData = {
-            ...rest,
-            dateOfBirth: rest.dateOfBirth ? new Date(rest.dateOfBirth).toISOString() : null,
-            otherLanguages: otherLanguages ? JSON.parse(JSON.stringify(otherLanguages)) : null,
-            userId: existingUser.id
-        };
         return await this.prismaService.candidate.update({
             where: { userId: existingUser.id },
-            data: processedData
+            data: {
+                ...candidateProfileUpdateDto,
+                dateOfBirth: candidateProfileUpdateDto.dateOfBirth 
+                    ? new Date(candidateProfileUpdateDto.dateOfBirth).toISOString() 
+                    : undefined
+            }
         });
     }
     
@@ -88,8 +74,25 @@ export class CandidateService {
         const existingUser = await this.prismaService.user.findUnique({
             where: { email },
             include: { 
-                candidate: true, 
-             } 
+                candidate: {
+                    include: {
+                        workExperience: true,
+                        education: true,
+                        CV: true,
+                        applications: {
+                            include: {
+                                job: {
+                                    select: {
+                                        id: true,
+                                        title: true,
+                                        status: true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } 
+            }
         });
                 
         if (!existingUser) {
@@ -100,24 +103,14 @@ export class CandidateService {
             throw new NotFoundException('Candidate profile not found');
         }
 
-        const candidateData = await this.prismaService.candidate.findUnique({
-            where: {
-                userId: existingUser.id
-            },
-            include: {
-                workExperience: true,
-                education: true,
-                qualifications: true,
-                cvs           : true,
-                applications  : true
-            }
-        })
-
         return {
-            ...candidateData
-        }
+            ...existingUser.candidate,
+            user: {
+                email: existingUser.email,
+                fullName: existingUser.fullName
+            }
+        };
     }
-
 
     async addEducation(email: string, dto: CreateEducationDto) {
         const candidateId = await this.findCandidateByEmail(email);
@@ -131,7 +124,6 @@ export class CandidateService {
         });
     }
 
-
     async updateEducation(email: string, educationId: number, dto: UpdateEducationDto) {
         const candidateId = await this.findCandidateByEmail(email);
         const education = await this.prismaService.education.findFirst({
@@ -144,7 +136,6 @@ export class CandidateService {
         const dataToUpdate: Prisma.EducationUpdateInput = { ...dto };
         if (dto.startDate) dataToUpdate.startDate = new Date(dto.startDate);
         if (dto.endDate !== undefined) dataToUpdate.endDate = dto.endDate ? new Date(dto.endDate) : null;
-
 
         return this.prismaService.education.update({
             where: { id: educationId },
@@ -192,7 +183,6 @@ export class CandidateService {
         if (dto.startDate) dataToUpdate.startDate = new Date(dto.startDate);
         if (dto.endDate !== undefined) dataToUpdate.endDate = dto.endDate ? new Date(dto.endDate) : null;
 
-
         return this.prismaService.workExperience.update({
             where: { id: experienceId },
             data: dataToUpdate,
@@ -213,52 +203,22 @@ export class CandidateService {
         });
     }
 
-    async addQualification(email: string, dto: CreateQualificationDto) {
-        const candidateId = await this.findCandidateByEmail(email);
-        return this.prismaService.qualification.create({
-            data: {
-                ...dto,
-                issueDate: new Date(dto.issueDate),
-                candidate: { connect: { id: candidateId } },
-            },
-        });
-    }
-
-    async updateQualification(email: string, qualificationId: number, dto: UpdateQualificationDto) {
-        const candidateId = await this.findCandidateByEmail(email);
-        const qualification = await this.prismaService.qualification.findFirst({
-            where: { id: qualificationId, candidateId: candidateId },
-        });
-        if (!qualification) {
-            throw new NotFoundException(`Qualification record with ID ${qualificationId} not found or does not belong to the user.`);
-        }
-
-         const dataToUpdate: Prisma.QualificationUpdateInput = { ...dto };
-         if (dto.issueDate) dataToUpdate.issueDate = new Date(dto.issueDate);
-
-        return this.prismaService.qualification.update({
-            where: { id: qualificationId },
-            data: dataToUpdate,
-        });
-    }
-
-    async deleteQualification(email: string, qualificationId: number) {
-        const candidateId = await this.findCandidateByEmail(email);
-        const qualification = await this.prismaService.qualification.findFirst({
-            where: { id: qualificationId, candidateId: candidateId },
-             select: { id: true }
-        });
-        if (!qualification) {
-            throw new NotFoundException(`Qualification record with ID ${qualificationId} not found or does not belong to the user.`);
-        }
-        return this.prismaService.qualification.delete({
-            where: { id: qualificationId },
-        });
-    }
-
-
     async addCV(email: string, dto: CreateCVDto) {
         const candidateId = await this.findCandidateByEmail(email);
+        
+        // If setting as primary, first unset any existing primary CV
+        if (dto.isPrimary) {
+            await this.prismaService.cV.updateMany({
+                where: { 
+                    candidateId: candidateId,
+                    isPrimary: true 
+                },
+                data: { 
+                    isPrimary: false 
+                }
+            });
+        }
+
         return this.prismaService.cV.create({
             data: {
                 ...dto,
@@ -276,6 +236,20 @@ export class CandidateService {
             throw new NotFoundException(`CV record with ID ${cvId} not found or does not belong to the user.`);
         }
 
+        // If setting as primary, first unset any existing primary CV
+        if (dto.isPrimary) {
+            await this.prismaService.cV.updateMany({
+                where: { 
+                    candidateId: candidateId,
+                    isPrimary: true,
+                    NOT: { id: cvId }
+                },
+                data: { 
+                    isPrimary: false 
+                }
+            });
+        }
+
         return this.prismaService.cV.update({
             where: { id: cvId },
             data: dto,
@@ -286,10 +260,18 @@ export class CandidateService {
         const candidateId = await this.findCandidateByEmail(email);
         const cv = await this.prismaService.cV.findFirst({
             where: { id: cvId, candidateId: candidateId },
-             select: { id: true }
         });
         if (!cv) {
             throw new NotFoundException(`CV record with ID ${cvId} not found or does not belong to the user.`);
+        }
+
+        // Check if CV is used in any applications
+        const applications = await this.prismaService.application.findFirst({
+            where: { cvId: cvId }
+        });
+
+        if (applications) {
+            throw new ForbiddenException(`Cannot delete CV with ID ${cvId} because it is linked to one or more applications.`);
         }
 
         try {
@@ -297,13 +279,18 @@ export class CandidateService {
                 where: { id: cvId },
             });
         } catch (error) {
-             if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                if (error.code === 'P2003' || error.code === 'P2014' || error.code === 'P2025') {
-                     throw new ForbiddenException(`Cannot delete CV with ID ${cvId} because it is currently linked to one or more applications.`);
-                 }
-             }
-             console.error("Error deleting CV:", error);
-             throw new InternalServerErrorException("Failed to delete CV.");
+            console.error("Error deleting CV:", error);
+            throw new InternalServerErrorException("Failed to delete CV.");
         }
+    }
+
+    async getPrimaryCV(email: string) {
+        const candidateId = await this.findCandidateByEmail(email);
+        return this.prismaService.cV.findFirst({
+            where: {
+                candidateId: candidateId,
+                isPrimary: true
+            }
+        });
     }
 }

@@ -18,7 +18,7 @@ import { AuthenticatedRequest } from '../../core/type/interface';
 import { CreateCandidateDto, UpdateCandidateDto } from './dto/candidate';
 import { CreateEducationDto, UpdateEducationDto } from './dto/education';
 import { CreateWorkExperienceDto, UpdateWorkExperienceDto } from './dto/work-experience';
-import { CreateQualificationDto, UpdateQualificationDto } from './dto/qualification';
+// import { CreateQualificationDto, UpdateQualificationDto } from './dto/qualification';
 import { CreateCVDto, UpdateCVDto } from './dto/cv';
 
 @Controller('candidate')
@@ -105,31 +105,31 @@ export class CandidateController {
   }
 
 
-  @Post('qualification')
-  addQualification(
-      @Request() req: AuthenticatedRequest,
-      @Body() createQualificationDto: CreateQualificationDto
-  ) {
-      return this.candidateService.addQualification(req.user.email, createQualificationDto);
-  }
+//   @Post('qualification')
+//   addQualification(
+//       @Request() req: AuthenticatedRequest,
+//       @Body() createQualificationDto: CreateQualificationDto
+//   ) {
+//       return this.candidateService.addQualification(req.user.email, createQualificationDto);
+//   }
 
-  @Patch('qualification/:id')
-  updateQualification(
-      @Request() req: AuthenticatedRequest,
-      @Param('id', ParseIntPipe) qualificationId: number,
-      @Body() updateQualificationDto: UpdateQualificationDto
-  ) {
-      return this.candidateService.updateQualification(req.user.email, qualificationId, updateQualificationDto);
-  }
+//   @Patch('qualification/:id')
+//   updateQualification(
+//       @Request() req: AuthenticatedRequest,
+//       @Param('id', ParseIntPipe) qualificationId: number,
+//       @Body() updateQualificationDto: UpdateQualificationDto
+//   ) {
+//       return this.candidateService.updateQualification(req.user.email, qualificationId, updateQualificationDto);
+//   }
 
-  @Delete('qualification/:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  deleteQualification(
-      @Request() req: AuthenticatedRequest,
-      @Param('id', ParseIntPipe) qualificationId: number,
-  ) {
-      return this.candidateService.deleteQualification(req.user.email, qualificationId);
-  }
+//   @Delete('qualification/:id')
+//   @HttpCode(HttpStatus.NO_CONTENT)
+//   deleteQualification(
+//       @Request() req: AuthenticatedRequest,
+//       @Param('id', ParseIntPipe) qualificationId: number,
+//   ) {
+//       return this.candidateService.deleteQualification(req.user.email, qualificationId);
+//   }
 
 
 

@@ -133,7 +133,6 @@ exports.Prisma.EmployerScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   companyName: 'companyName',
-  companyNameJp: 'companyNameJp',
   companyLogoUrl: 'companyLogoUrl',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -142,21 +141,14 @@ exports.Prisma.EmployerScalarFieldEnum = {
 exports.Prisma.CandidateScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  fullNameKanji: 'fullNameKanji',
-  fullNameKana: 'fullNameKana',
+  fullName: 'fullName',
   dateOfBirth: 'dateOfBirth',
   gender: 'gender',
-  currentAddressJp: 'currentAddressJp',
+  address: 'address',
   phoneNumber: 'phoneNumber',
-  email: 'email',
   profilePhotoUrl: 'profilePhotoUrl',
   motivation: 'motivation',
-  selfPromotion: 'selfPromotion',
-  hobbies: 'hobbies',
-  candidateRequests: 'candidateRequests',
-  preferredJobTypes: 'preferredJobTypes',
-  japaneseProficiency: 'japaneseProficiency',
-  otherLanguages: 'otherLanguages',
+  skills: 'skills',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -167,9 +159,8 @@ exports.Prisma.EducationScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   schoolName: 'schoolName',
-  faculty: 'faculty',
-  department: 'department',
-  degreeOrStatus: 'degreeOrStatus',
+  degree: 'degree',
+  fieldOfStudy: 'fieldOfStudy',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -181,20 +172,8 @@ exports.Prisma.WorkExperienceScalarFieldEnum = {
   endDate: 'endDate',
   isCurrent: 'isCurrent',
   companyName: 'companyName',
-  department: 'department',
-  jobTitle: 'jobTitle',
+  position: 'position',
   description: 'description',
-  employmentType: 'employmentType',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.QualificationScalarFieldEnum = {
-  id: 'id',
-  candidateId: 'candidateId',
-  issueDate: 'issueDate',
-  name: 'name',
-  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -203,17 +182,13 @@ exports.Prisma.JobScalarFieldEnum = {
   id: 'id',
   employerId: 'employerId',
   title: 'title',
-  titleJp: 'titleJp',
   description: 'description',
   requirements: 'requirements',
-  salaryDetails: 'salaryDetails',
-  workLocation: 'workLocation',
-  workingHours: 'workingHours',
+  salaryRange: 'salaryRange',
+  location: 'location',
   jobType: 'jobType',
-  requiredJapaneseLevel: 'requiredJapaneseLevel',
   status: 'status',
   postedDate: 'postedDate',
-  expiryDate: 'expiryDate',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -224,7 +199,6 @@ exports.Prisma.CVScalarFieldEnum = {
   fileName: 'fileName',
   fileUrl: 'fileUrl',
   fileType: 'fileType',
-  language: 'language',
   isPrimary: 'isPrimary',
   uploadedAt: 'uploadedAt'
 };
@@ -236,7 +210,6 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   cvId: 'cvId',
   applicationDate: 'applicationDate',
   status: 'status',
-  coverLetter: 'coverLetter',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -244,11 +217,6 @@ exports.Prisma.ApplicationScalarFieldEnum = {
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
-};
-
-exports.Prisma.NullableJsonNullValueInput = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -259,12 +227,6 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
-};
-
-exports.Prisma.JsonNullValueFilter = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull
 };
 exports.UserType = exports.$Enums.UserType = {
   CANDIDATE: 'CANDIDATE',
@@ -279,25 +241,13 @@ exports.GenderType = exports.$Enums.GenderType = {
   PREFER_NOT_TO_SAY: 'PREFER_NOT_TO_SAY'
 };
 
-exports.JapaneseProficiencyLevel = exports.$Enums.JapaneseProficiencyLevel = {
-  N1: 'N1',
-  N2: 'N2',
-  N3: 'N3',
-  N4: 'N4',
-  N5: 'N5',
-  BUSINESS_LEVEL: 'BUSINESS_LEVEL',
-  DAILY_CONVERSATION: 'DAILY_CONVERSATION',
-  NATIVE: 'NATIVE',
-  NONE: 'NONE'
-};
-
 exports.JobTypeEnum = exports.$Enums.JobTypeEnum = {
-  full_time: 'full_time',
-  part_time: 'part_time',
-  contract: 'contract',
-  temporary: 'temporary',
-  internship: 'internship',
-  freelance: 'freelance'
+  FULL_TIME: 'FULL_TIME',
+  PART_TIME: 'PART_TIME',
+  CONTRACT: 'CONTRACT',
+  TEMPORARY: 'TEMPORARY',
+  INTERNSHIP: 'INTERNSHIP',
+  FREELANCE: 'FREELANCE'
 };
 
 exports.JobStatus = exports.$Enums.JobStatus = {
@@ -309,19 +259,19 @@ exports.JobStatus = exports.$Enums.JobStatus = {
 };
 
 exports.FileTypeEnum = exports.$Enums.FileTypeEnum = {
-  pdf: 'pdf',
-  doc: 'doc',
-  docx: 'docx',
-  other: 'other'
+  PDF: 'PDF',
+  DOC: 'DOC',
+  DOCX: 'DOCX',
+  OTHER: 'OTHER'
 };
 
 exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
-  submitted: 'submitted',
-  under_review: 'under_review',
-  interviewing: 'interviewing',
-  offer_made: 'offer_made',
-  rejected: 'rejected',
-  withdrawn: 'withdrawn'
+  SUBMITTED: 'SUBMITTED',
+  UNDER_REVIEW: 'UNDER_REVIEW',
+  INTERVIEWING: 'INTERVIEWING',
+  OFFER_MADE: 'OFFER_MADE',
+  REJECTED: 'REJECTED',
+  WITHDRAWN: 'WITHDRAWN'
 };
 
 exports.Prisma.ModelName = {
@@ -330,7 +280,6 @@ exports.Prisma.ModelName = {
   Candidate: 'Candidate',
   Education: 'Education',
   WorkExperience: 'WorkExperience',
-  Qualification: 'Qualification',
   Job: 'Job',
   CV: 'CV',
   Application: 'Application'
