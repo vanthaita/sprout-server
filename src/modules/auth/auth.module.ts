@@ -7,6 +7,7 @@ import { PrismaModule } from '../prisma/prisma.module';
 import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { GoogleStrategy } from 'src/core/strategy/google.strategy';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { GoogleStrategy } from 'src/core/strategy/google.strategy';
     PrismaService, 
     UsersService, 
     GoogleStrategy,
+    CloudinaryService
   ],
 })
 export class AuthModule {}

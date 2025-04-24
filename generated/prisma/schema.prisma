@@ -89,17 +89,17 @@ enum FileTypeEnum {
 
 /// Bảng Users: Thông tin tài khoản cơ bản
 model User {
-  id           Int      @id @default(autoincrement()) @map("user_id")
-  email        String   @unique @db.VarChar(255)
-  passwordHash String?  @map("password_hash") @db.VarChar(255)
-  fullName     String   @map("full_name") @db.VarChar(100) /// Tên hiển thị chung (Có thể là Romaji)
-  userType     UserType @map("user_type")
-  isActive     Boolean  @default(true) @map("is_active")
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamp(6)
-
-  employer  Employer?
-  candidate Candidate?
+  id           Int        @id @default(autoincrement()) @map("user_id")
+  email        String     @unique @db.VarChar(255)
+  passwordHash String?    @map("password_hash") @db.VarChar(255)
+  fullName     String     @map("full_name") @db.VarChar(100) /// Tên hiển thị chung (Có thể là Romaji)
+  userType     UserType   @map("user_type")
+  isActive     Boolean    @default(true) @map("is_active")
+  createdAt    DateTime   @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime   @updatedAt @map("updated_at") @db.Timestamp(6)
+  avatar       String?
+  employer     Employer?
+  candidate    Candidate?
 
   @@map("Users")
 }

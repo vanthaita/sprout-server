@@ -1912,6 +1912,7 @@ export namespace Prisma {
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    avatar: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1923,6 +1924,7 @@ export namespace Prisma {
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
+    avatar: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1934,6 +1936,7 @@ export namespace Prisma {
     isActive: number
     createdAt: number
     updatedAt: number
+    avatar: number
     _all: number
   }
 
@@ -1955,6 +1958,7 @@ export namespace Prisma {
     isActive?: true
     createdAt?: true
     updatedAt?: true
+    avatar?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1966,6 +1970,7 @@ export namespace Prisma {
     isActive?: true
     createdAt?: true
     updatedAt?: true
+    avatar?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1977,6 +1982,7 @@ export namespace Prisma {
     isActive?: true
     createdAt?: true
     updatedAt?: true
+    avatar?: true
     _all?: true
   }
 
@@ -2075,6 +2081,7 @@ export namespace Prisma {
     isActive: boolean
     createdAt: Date
     updatedAt: Date
+    avatar: string | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -2105,6 +2112,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    avatar?: boolean
     employer?: boolean | User$employerArgs<ExtArgs>
     candidate?: boolean | User$candidateArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -2118,6 +2126,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    avatar?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2129,6 +2138,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    avatar?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2140,9 +2150,10 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    avatar?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "fullName" | "userType" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "fullName" | "userType" | "isActive" | "createdAt" | "updatedAt" | "avatar", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employer?: boolean | User$employerArgs<ExtArgs>
     candidate?: boolean | User$candidateArgs<ExtArgs>
@@ -2168,6 +2179,7 @@ export namespace Prisma {
       isActive: boolean
       createdAt: Date
       updatedAt: Date
+      avatar: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2601,6 +2613,7 @@ export namespace Prisma {
     readonly isActive: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly avatar: FieldRef<"User", 'String'>
   }
     
 
@@ -12872,7 +12885,8 @@ export namespace Prisma {
     userType: 'userType',
     isActive: 'isActive',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    avatar: 'avatar'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -13250,6 +13264,7 @@ export namespace Prisma {
     isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    avatar?: StringNullableFilter<"User"> | string | null
     employer?: XOR<EmployerNullableScalarRelationFilter, EmployerWhereInput> | null
     candidate?: XOR<CandidateNullableScalarRelationFilter, CandidateWhereInput> | null
   }
@@ -13263,6 +13278,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    avatar?: SortOrderInput | SortOrder
     employer?: EmployerOrderByWithRelationInput
     candidate?: CandidateOrderByWithRelationInput
   }
@@ -13279,6 +13295,7 @@ export namespace Prisma {
     isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    avatar?: StringNullableFilter<"User"> | string | null
     employer?: XOR<EmployerNullableScalarRelationFilter, EmployerWhereInput> | null
     candidate?: XOR<CandidateNullableScalarRelationFilter, CandidateWhereInput> | null
   }, "id" | "email">
@@ -13292,6 +13309,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    avatar?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -13311,6 +13329,7 @@ export namespace Prisma {
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type EmployerWhereInput = {
@@ -14048,6 +14067,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    avatar?: string | null
     employer?: EmployerCreateNestedOneWithoutUserInput
     candidate?: CandidateCreateNestedOneWithoutUserInput
   }
@@ -14061,6 +14081,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    avatar?: string | null
     employer?: EmployerUncheckedCreateNestedOneWithoutUserInput
     candidate?: CandidateUncheckedCreateNestedOneWithoutUserInput
   }
@@ -14073,6 +14094,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     employer?: EmployerUpdateOneWithoutUserNestedInput
     candidate?: CandidateUpdateOneWithoutUserNestedInput
   }
@@ -14086,6 +14108,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     employer?: EmployerUncheckedUpdateOneWithoutUserNestedInput
     candidate?: CandidateUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -14099,6 +14122,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    avatar?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -14109,6 +14133,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -14120,6 +14145,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EmployerCreateInput = {
@@ -14992,6 +15018,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    avatar?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -15007,6 +15034,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    avatar?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -15018,6 +15046,7 @@ export namespace Prisma {
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    avatar?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -16937,6 +16966,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    avatar?: string | null
     candidate?: CandidateCreateNestedOneWithoutUserInput
   }
 
@@ -16949,6 +16979,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    avatar?: string | null
     candidate?: CandidateUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -17023,6 +17054,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     candidate?: CandidateUpdateOneWithoutUserNestedInput
   }
 
@@ -17035,6 +17067,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     candidate?: CandidateUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -17084,6 +17117,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    avatar?: string | null
     employer?: EmployerCreateNestedOneWithoutUserInput
   }
 
@@ -17096,6 +17130,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    avatar?: string | null
     employer?: EmployerUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -17282,6 +17317,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     employer?: EmployerUpdateOneWithoutUserNestedInput
   }
 
@@ -17294,6 +17330,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
     employer?: EmployerUncheckedUpdateOneWithoutUserNestedInput
   }
 
