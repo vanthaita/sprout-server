@@ -13,7 +13,7 @@ import {
   HttpStatus 
 } from '@nestjs/common';
 import { CandidateService } from './candidate.service';
-import { AuthGuard as JWTAuthGuard } from '../../core/guard/authenticated.guard'; 
+import { AuthGuard as JWTAuthGuard } from '../../modules/auth/authenticated.guard';
 import { AuthenticatedRequest } from '../../core/type/interface'; 
 import { CreateCandidateDto, UpdateCandidateDto } from './dto/candidate';
 import { CreateEducationDto, UpdateEducationDto } from './dto/education';

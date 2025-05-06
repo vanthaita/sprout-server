@@ -21,7 +21,7 @@ export class CreateUserDto {
   @IsOptional()
   @MinLength(8, { message: 'Password must be at least 8 characters long.' })
   @MaxLength(255) 
-  passwordHash?: string;
+  password?: string;
 
   @IsString()
   @MaxLength(100)
@@ -32,12 +32,12 @@ export class CreateUserDto {
 }
 
 export class UpdateUserDto extends PartialType(
-  OmitType(CreateUserDto, ['passwordHash', 'email', 'userType'] as const)
-  ) {
+  OmitType(CreateUserDto, ['password', 'email', 'userType'] as const)
+) {
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
-  }
+}
 
 export class UserDto {
   @Expose()
@@ -63,14 +63,12 @@ export class UserDto {
   @Exclude() 
   passwordHash?: string | null;
 
-
   @Expose()
   @Type(() => Date) 
   createdAt: Date;
 
   @Expose()
   @Type(() => Date) 
-  // @IsDate() // Optional validation on response
   updatedAt: Date;
 
   @Exclude()

@@ -16,7 +16,7 @@ import {
 } from '@nestjs/common';
 import { EmployerService } from './employer.service';
 import { CreateEmployerDto, UpdateEmployerDto, EmployerResponseDto } from './dto/employer.dto';
-import { AuthGuard as JWTAuthGuard } from '../../core/guard/authenticated.guard'; 
+import { AuthGuard as JWTAuthGuard } from '../../modules/auth/authenticated.guard';
 import { AuthenticatedRequest } from '../../core/type/interface'; 
 import { CreateJobDto, JobFilterDto, UpdateJobDto } from './dto/job.dto';
 import { ApplicationFilterDto, UpdateApplicationStatusDto } from './dto/application.dto';

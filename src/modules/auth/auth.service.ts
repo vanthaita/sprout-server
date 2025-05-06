@@ -7,6 +7,7 @@ import { CreateUserDto } from 'src/core/dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
+import UserType from '../../core/enums/user.type';
 
 @Injectable()
 export class AuthService {
@@ -24,7 +25,7 @@ export class AuthService {
       const createUserDto: CreateUserDto = {
         email: profile?.data.email,
         fullName: profile?.data.name,
-        userType: 'CANDIDATE',
+        userType: UserType.CANDIDATE,
       };
       user = await this.usersService.createUser(createUserDto);
     }
@@ -45,7 +46,7 @@ export class AuthService {
 
   async validateUser(email: string, password: string) {
     const user = await this.prismaService.user.findUnique({ where: { email } });
-    if (user && await bcrypt.compare(password, user.passwordHash)) {
+    if (user && user.passwordHash && await bcrypt.compare(password, user.passwordHash)) {
       const { passwordHash, ...result } = user;
       return result;
     }
@@ -53,7 +54,6 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { sub: user.id, email: user.email, userType: user.userType };
     return { user, message: 'Login successful' };
   }
 
