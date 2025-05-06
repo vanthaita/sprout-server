@@ -8,6 +8,10 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from '../users/users.service';
 import { GoogleStrategy } from 'src/core/strategy/google.strategy';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { SessionModule } from 'nestjs-session';
+import RedisStore from 'connect-redis';
+import { redisClient } from 'src/core/config/redis.config';
+import { LocalStrategy } from './local.strategy';
 
 @Module({
   imports: [
@@ -20,6 +24,14 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
       },
     }),
     PrismaModule,
+    SessionModule.forRoot({
+      session: {
+        secret: process.env.SESSION_SECRET || 'secret',
+        resave: false,
+        saveUninitialized: false,
+        store: new RedisStore({ client: redisClient }),
+      },
+    }),
   ],
   controllers: [AuthController],
   providers: [
@@ -27,7 +39,8 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
     PrismaService, 
     UsersService, 
     GoogleStrategy,
-    CloudinaryService
+    CloudinaryService,
+    LocalStrategy,
   ],
 })
-export class AuthModule {}
+export class AuthModule {} 
