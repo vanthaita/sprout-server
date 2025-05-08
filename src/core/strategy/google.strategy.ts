@@ -1,32 +1,38 @@
-/* eslint-disable @typescript-eslint/require-await */
-import { Injectable } from '@nestjs/common';
+import { Strategy, StrategyOptionsWithRequest } from 'passport-google-oauth20';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-google-oauth20';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
-    super({
-      clientID: process.env.GOOGLE_CLIENT,
-      clientSecret: process.env.GOOGLE_SECRET,
-      callbackURL: `${process.env.WEB_URL}/api/v1/auth/google/callback`,
-      scope: ['email', 'profile'],
-    });
-  }
+    const clientID = process.env.GOOGLE_CLIENT;
+    const clientSecret = process.env.GOOGLE_SECRET;
 
-  authorizationParams(): { [key: string]: string } {
-    return {
-      access_type: 'offline',
-      prompt: 'consent',
-    };
-  }
-
-  async validate(access_token: string) {
-    console.log(access_token)
-    const user = {
-      accessToken: access_token
+    if (!clientID || !clientSecret) {
+      throw new UnauthorizedException('Google Client ID or Secret is not configured');
     }
-    return user || null
+
+    super({
+      clientID,
+      clientSecret,
+      callbackURL: 'http://localhost:3002/api/v1/auth/google/callback',
+      scope: ['email', 'profile'],
+      passReqToCallback: true,
+    } as StrategyOptionsWithRequest);
   }
 
+  async validate(
+    request: any,
+    accessToken: string,
+    refreshToken: string,
+    profile: any,
+    done: (err: any, user: any, info?: any) => void,
+  ) {
+    const user = {
+      email: profile.emails[0].value,
+      fullName: profile.displayName,
+      accessToken,
+    };
+    done(null, user);
+  }
 }

@@ -3,7 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateEmployerDto, EmployerResponseDto, UpdateEmployerDto } from './dto/employer.dto';
 import { CreateJobDto, JobFilterDto, JobResponseDto, UpdateJobDto } from './dto/job.dto';
 import { ApplicationFilterDto } from './dto/application.dto';
-import { ApplicationStatus } from 'generated/prisma';
+import { ApplicationStatus } from '../../../generated/prisma/client';
 
 @Injectable()
 export class EmployerService {

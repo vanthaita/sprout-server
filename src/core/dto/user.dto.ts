@@ -9,7 +9,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { Expose, Exclude, Type } from 'class-transformer';
-import { UserType } from 'generated/prisma';
+import { UserType } from '../../../generated/prisma/client';
 import { OmitType, PartialType } from '@nestjs/mapped-types';
 
 export class CreateUserDto {

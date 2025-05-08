@@ -1,6 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { IsString, IsNotEmpty, IsOptional, IsUrl } from 'class-validator';
-import { UserType } from 'generated/prisma';
+import { UserType } from '../../../../generated/prisma/client';
 import { Exclude } from 'class-transformer';
 
 export class CreateEmployerDto {

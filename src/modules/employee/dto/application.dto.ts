@@ -1,4 +1,4 @@
-import { ApplicationStatus } from "generated/prisma";
+import { ApplicationStatus } from '../../../../generated/prisma/client';
 import { IsOptional, IsEnum, IsNumber } from 'class-validator';
 export class ApplicationResponseDto {
     id: number;

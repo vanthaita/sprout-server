@@ -1,39 +1,39 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { IsString, IsOptional, IsDateString, IsNotEmpty, IsBoolean, IsEnum } from 'class-validator';
-import { JobTypeEnum } from 'generated/prisma';
+import { JobTypeEnum } from '../../../../generated/prisma/client';
 
 export class CreateWorkExperienceDto {
-    @IsNotEmpty()
-    @IsDateString()
-    startDate: string;
+  @IsNotEmpty()
+  @IsDateString()
+  startDate: string;
 
-    @IsOptional()
-    @IsDateString()
-    endDate?: string;
+  @IsOptional()
+  @IsDateString()
+  endDate?: string;
 
-    @IsOptional()
-    @IsBoolean()
-    isCurrent?: boolean = false;
+  @IsOptional()
+  @IsBoolean()
+  isCurrent?: boolean = false;
 
-    @IsNotEmpty()
-    @IsString()
-    companyName: string;
+  @IsNotEmpty()
+  @IsString()
+  companyName: string;
 
-    @IsOptional()
-    @IsString()
-    department?: string;
+  @IsOptional()
+  @IsString()
+  department?: string;
 
-    @IsOptional()
-    @IsString()
-    jobTitle?: string;
+  @IsOptional()
+  @IsString()
+  jobTitle?: string;
 
-    @IsOptional()
-    @IsString()
-    description?: string;
+  @IsOptional()
+  @IsString()
+  description?: string;
 
-    @IsOptional()
-    @IsEnum(JobTypeEnum) 
-    employmentType?: JobTypeEnum;
+  @IsOptional()
+  @IsEnum(JobTypeEnum) 
+  employmentType?: JobTypeEnum;
 }
 
 export class UpdateWorkExperienceDto extends PartialType(CreateWorkExperienceDto) {}

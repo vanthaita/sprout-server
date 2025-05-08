@@ -1,6 +1,6 @@
 import { Controller, Get, UnauthorizedException, UseGuards, Request, Patch, Body, Post, UploadedFile, UseInterceptors } from '@nestjs/common'; 
 import { UsersService } from './users.service';
-import { AuthGuard as JWTAuthGuard } from '../../modules/auth/authenticated.guard';
+import { AuthGuard as JWTAuthGuard } from '../../core/guard/authenticated.guard';
 
 import { UpdateUserDto, UserDto } from '../../core/dto/user.dto';
 import { AuthenticatedRequest } from '../../core/type/interface';

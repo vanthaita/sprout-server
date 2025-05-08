@@ -1,18 +1,10 @@
-import {
-  IsString, IsOptional, MaxLength, IsEnum, IsUrl,IsISO8601
-} from 'class-validator';
-import { Type, Exclude, Expose } from 'class-transformer';
-import { GenderType  } from 'generated/prisma'; 
 import { PartialType } from '@nestjs/mapped-types';
+import { IsString, IsOptional, IsDateString, IsNotEmpty, IsEnum, IsBoolean } from 'class-validator';
+import { GenderType } from '../../../../generated/prisma/client';
 
 export class CreateCandidateDto {
   @IsOptional()
-  @IsString()
-  @MaxLength(100)
-  fullName?: string;
-
-  @IsOptional()
-  @IsISO8601({ strict: true }, { message: 'dateOfBirth must be a valid ISO 8601 date string (YYYY-MM-DD)' })
+  @IsDateString()
   dateOfBirth?: string;
 
   @IsOptional()
@@ -25,12 +17,10 @@ export class CreateCandidateDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(20)
   phoneNumber?: string;
 
   @IsOptional()
-  @IsUrl()
-  @MaxLength(255)
+  @IsString()
   profilePhotoUrl?: string;
 
   @IsOptional()
@@ -42,55 +32,32 @@ export class CreateCandidateDto {
   skills?: string;
 }
 
-export class UpdateCandidateDto extends PartialType(CreateCandidateDto) {}
+export class UpdateCandidateDto extends PartialType(CreateCandidateDto) {
+  @IsOptional()
+  @IsDateString()
+  dateOfBirth?: string;
 
-export class CandidateDto {
-  @Expose()
-  id: number;
+  @IsOptional()
+  @IsEnum(GenderType)
+  gender?: GenderType;
 
-  @Expose()
-  userId: number;
+  @IsOptional()
+  @IsString()
+  address?: string;
 
-  @Expose()
-  fullName?: string | null;
+  @IsOptional()
+  @IsString()
+  phoneNumber?: string;
 
-  @Expose()
-  dateOfBirth?: string | null;
+  @IsOptional()
+  @IsString()
+  profilePhotoUrl?: string;
 
-  @Expose()
-  gender?: GenderType | null;
+  @IsOptional()
+  @IsString()
+  motivation?: string;
 
-  @Expose()
-  address?: string | null;
-
-  @Expose()
-  phoneNumber?: string | null;
-
-  @Expose()
-  profilePhotoUrl?: string | null;
-
-  @Expose()
-  motivation?: string | null;
-
-  @Expose()
-  skills?: string | null;
-
-  @Expose()
-  @Type(() => Date)
-  createdAt: Date;
-
-  @Expose()
-  @Type(() => Date)
-  updatedAt: Date;
-
-  @Exclude()
-  user?: any;
-  @Exclude()
-  education?: any[];
-  @Exclude()
-  workExperience?: any[];
-  @Exclude()
-  applications?: any[];
-  @Exclude()
-  CV?: any[];
+  @IsOptional()
+  @IsString()
+  skills?: string;
 }

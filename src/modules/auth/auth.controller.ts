@@ -2,17 +2,17 @@ import { Controller, Get, Res, UseGuards, Request, Post, Body } from '@nestjs/co
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
-import { AuthenticatedRequest } from 'src/core/type/interface';
+import { AuthenticatedRequest } from '../../core/type/interface';
 import { LocalAuthGuard } from './local-auth.guard';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { AuthenticatedGuard } from './authenticated.guard';
+import { AuthenticatedGuard } from '../../core/guard/authenticated.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('Google')
+  @Get('google')
   @UseGuards(AuthGuard('google'))
   googleLogin() {}
 
@@ -36,20 +36,22 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Request() req: AuthenticatedRequest, @Res() res: Response) {
+    const loginRes = await this.authService.login(req.user);
+    return res.json(loginRes);
   }
 
   @Post('logout')
-  async logout(@Request() req) {
-    req.logout();
-    req.session.destroy();
-    return { message: 'Logged out successfully' };
+  async logout(@Request() req: AuthenticatedRequest, @Res() res: Response) {
+    await this.authService.logout(req.session);
+    res.clearCookie('connect.sid');
+    res.clearCookie('access_token');
+    return res.json({ message: 'Logged out successfully' });
   }
 
   @UseGuards(AuthenticatedGuard)
   @Get('me')
-  async me(@Request() req) {
+  async me(@Request() req: AuthenticatedRequest) {
     return req.user;
   }
 }

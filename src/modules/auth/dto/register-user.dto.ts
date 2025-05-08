@@ -1,17 +1,23 @@
-import { IsEmail, IsString, IsEnum, MinLength } from 'class-validator';
-import UserType from '../../../core/enums/user.type';
+import { IsEmail, IsString, IsNotEmpty, Matches, IsEnum } from 'class-validator';
+import { UserType } from '../../../../generated/prisma/client';
 
 export class RegisterUserDto {
   @IsEmail()
+  @IsNotEmpty()
   email: string;
 
   @IsString()
-  @MinLength(6)
+  @IsNotEmpty()
+  @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/, {
+    message: 'Password must be at least 8 characters with letters and numbers',
+  })
   password: string;
 
   @IsString()
+  @IsNotEmpty()
   fullName: string;
 
   @IsEnum(UserType)
+  @IsNotEmpty()
   userType: UserType;
 }

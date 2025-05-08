@@ -16,6 +16,14 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
-  }
+    "noFallthroughCasesInSwitch": false,
+    "moduleResolution": "node", // Thêm để hỗ trợ resolve module Node.js
+    "esModuleInterop": true, // Thêm để hỗ trợ import default
+    "typeRoots": ["./node_modules/@types", "./types"], // Chỉ định thư mục type definitions
+    "paths": {
+      "*": ["node_modules/*", "src/types/*"] // Giúp resolve module tùy chỉnh
+    }
+  },
+  "include": ["src/**/*"], // Chỉ định các file trong thư mục src để compile
+  "exclude": ["node_modules", "dist"] // Loại trừ node_modules và dist
 }

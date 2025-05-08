@@ -6,6 +6,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CandidateModule } from './modules/candidate/candidate.module';
 import { EmployeeModule } from './modules/employee/employer.module';
+import { RedisModule } from './core/redis/redis.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { EmployeeModule } from './modules/employee/employer.module';
       envFilePath: '.env',
     }),
     AuthModule,
+    RedisModule,
     UsersModule,
     CandidateModule,
     EmployeeModule,

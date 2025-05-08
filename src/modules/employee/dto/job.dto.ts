@@ -2,7 +2,7 @@ import {
   IsString, IsNotEmpty, IsOptional, IsEnum, 
   IsNumber
 } from 'class-validator';
-import { ApplicationStatus, JobStatus, JobTypeEnum } from 'generated/prisma';
+import { ApplicationStatus, JobStatus, JobTypeEnum } from '../../../../generated/prisma/client';
 
 export class CreateJobDto {
   @IsString()
