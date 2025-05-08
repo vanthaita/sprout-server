@@ -34,6 +34,11 @@ export type Candidate = $Result.DefaultSelection<Prisma.$CandidatePayload>
  */
 export type Education = $Result.DefaultSelection<Prisma.$EducationPayload>
 /**
+ * Model Links
+ * 
+ */
+export type Links = $Result.DefaultSelection<Prisma.$LinksPayload>
+/**
  * Model WorkExperience
  * 
  */
@@ -132,6 +137,14 @@ export const FileTypeEnum: {
 
 export type FileTypeEnum = (typeof FileTypeEnum)[keyof typeof FileTypeEnum]
 
+
+export const Visibility: {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE'
+};
+
+export type Visibility = (typeof Visibility)[keyof typeof Visibility]
+
 }
 
 export type UserType = $Enums.UserType
@@ -161,6 +174,10 @@ export const ApplicationStatus: typeof $Enums.ApplicationStatus
 export type FileTypeEnum = $Enums.FileTypeEnum
 
 export const FileTypeEnum: typeof $Enums.FileTypeEnum
+
+export type Visibility = $Enums.Visibility
+
+export const Visibility: typeof $Enums.Visibility
 
 /**
  * ##  Prisma Client ʲˢ
@@ -326,6 +343,16 @@ export class PrismaClient<
     * ```
     */
   get education(): Prisma.EducationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.links`: Exposes CRUD operations for the **Links** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Links
+    * const links = await prisma.links.findMany()
+    * ```
+    */
+  get links(): Prisma.LinksDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.workExperience`: Exposes CRUD operations for the **WorkExperience** model.
@@ -810,6 +837,7 @@ export namespace Prisma {
     Employer: 'Employer',
     Candidate: 'Candidate',
     Education: 'Education',
+    Links: 'Links',
     WorkExperience: 'WorkExperience',
     Job: 'Job',
     CV: 'CV',
@@ -832,7 +860,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "employer" | "candidate" | "education" | "workExperience" | "job" | "cV" | "application"
+      modelProps: "user" | "employer" | "candidate" | "education" | "links" | "workExperience" | "job" | "cV" | "application"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1129,6 +1157,80 @@ export namespace Prisma {
           count: {
             args: Prisma.EducationCountArgs<ExtArgs>
             result: $Utils.Optional<EducationCountAggregateOutputType> | number
+          }
+        }
+      }
+      Links: {
+        payload: Prisma.$LinksPayload<ExtArgs>
+        fields: Prisma.LinksFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.LinksFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LinksPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.LinksFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LinksPayload>
+          }
+          findFirst: {
+            args: Prisma.LinksFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LinksPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.LinksFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LinksPayload>
+          }
+          findMany: {
+            args: Prisma.LinksFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LinksPayload>[]
+          }
+          create: {
+            args: Prisma.LinksCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LinksPayload>
+          }
+          createMany: {
+            args: Prisma.LinksCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.LinksCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LinksPayload>[]
+          }
+          delete: {
+            args: Prisma.LinksDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LinksPayload>
+          }
+          update: {
+            args: Prisma.LinksUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LinksPayload>
+          }
+          deleteMany: {
+            args: Prisma.LinksDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.LinksUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.LinksUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LinksPayload>[]
+          }
+          upsert: {
+            args: Prisma.LinksUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$LinksPayload>
+          }
+          aggregate: {
+            args: Prisma.LinksAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateLinks>
+          }
+          groupBy: {
+            args: Prisma.LinksGroupByArgs<ExtArgs>
+            result: $Utils.Optional<LinksGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.LinksCountArgs<ExtArgs>
+            result: $Utils.Optional<LinksCountAggregateOutputType> | number
           }
         }
       }
@@ -1516,6 +1618,7 @@ export namespace Prisma {
     employer?: EmployerOmit
     candidate?: CandidateOmit
     education?: EducationOmit
+    links?: LinksOmit
     workExperience?: WorkExperienceOmit
     job?: JobOmit
     cV?: CVOmit
@@ -1794,6 +1897,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     avatar: string | null
+    isOnboarded: boolean | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1806,6 +1910,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     avatar: string | null
+    isOnboarded: boolean | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1818,6 +1923,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     avatar: number
+    isOnboarded: number
     _all: number
   }
 
@@ -1840,6 +1946,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     avatar?: true
+    isOnboarded?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1852,6 +1959,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     avatar?: true
+    isOnboarded?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1864,6 +1972,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     avatar?: true
+    isOnboarded?: true
     _all?: true
   }
 
@@ -1963,6 +2072,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     avatar: string | null
+    isOnboarded: boolean
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -1994,6 +2104,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     avatar?: boolean
+    isOnboarded?: boolean
     employer?: boolean | User$employerArgs<ExtArgs>
     candidate?: boolean | User$candidateArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -2008,6 +2119,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     avatar?: boolean
+    isOnboarded?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2020,6 +2132,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     avatar?: boolean
+    isOnboarded?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2032,9 +2145,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     avatar?: boolean
+    isOnboarded?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "fullName" | "userType" | "isActive" | "createdAt" | "updatedAt" | "avatar", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "fullName" | "userType" | "isActive" | "createdAt" | "updatedAt" | "avatar" | "isOnboarded", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employer?: boolean | User$employerArgs<ExtArgs>
     candidate?: boolean | User$candidateArgs<ExtArgs>
@@ -2058,6 +2172,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       avatar: string | null
+      isOnboarded: boolean
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2492,6 +2607,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly avatar: FieldRef<"User", 'String'>
+    readonly isOnboarded: FieldRef<"User", 'Boolean'>
   }
     
 
@@ -2963,6 +3079,12 @@ export namespace Prisma {
     userId: number | null
     companyName: string | null
     companyLogoUrl: string | null
+    companySize: string | null
+    address: string | null
+    industry: string | null
+    foundedYear: string | null
+    CompanyUrl: string | null
+    CompanyDesc: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2972,6 +3094,12 @@ export namespace Prisma {
     userId: number | null
     companyName: string | null
     companyLogoUrl: string | null
+    companySize: string | null
+    address: string | null
+    industry: string | null
+    foundedYear: string | null
+    CompanyUrl: string | null
+    CompanyDesc: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2981,6 +3109,12 @@ export namespace Prisma {
     userId: number
     companyName: number
     companyLogoUrl: number
+    companySize: number
+    address: number
+    industry: number
+    foundedYear: number
+    CompanyUrl: number
+    CompanyDesc: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3002,6 +3136,12 @@ export namespace Prisma {
     userId?: true
     companyName?: true
     companyLogoUrl?: true
+    companySize?: true
+    address?: true
+    industry?: true
+    foundedYear?: true
+    CompanyUrl?: true
+    CompanyDesc?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3011,6 +3151,12 @@ export namespace Prisma {
     userId?: true
     companyName?: true
     companyLogoUrl?: true
+    companySize?: true
+    address?: true
+    industry?: true
+    foundedYear?: true
+    CompanyUrl?: true
+    CompanyDesc?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3020,6 +3166,12 @@ export namespace Prisma {
     userId?: true
     companyName?: true
     companyLogoUrl?: true
+    companySize?: true
+    address?: true
+    industry?: true
+    foundedYear?: true
+    CompanyUrl?: true
+    CompanyDesc?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3116,6 +3268,12 @@ export namespace Prisma {
     userId: number
     companyName: string
     companyLogoUrl: string | null
+    companySize: string | null
+    address: string | null
+    industry: string | null
+    foundedYear: string | null
+    CompanyUrl: string | null
+    CompanyDesc: string | null
     createdAt: Date
     updatedAt: Date
     _count: EmployerCountAggregateOutputType | null
@@ -3144,6 +3302,12 @@ export namespace Prisma {
     userId?: boolean
     companyName?: boolean
     companyLogoUrl?: boolean
+    companySize?: boolean
+    address?: boolean
+    industry?: boolean
+    foundedYear?: boolean
+    CompanyUrl?: boolean
+    CompanyDesc?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3156,6 +3320,12 @@ export namespace Prisma {
     userId?: boolean
     companyName?: boolean
     companyLogoUrl?: boolean
+    companySize?: boolean
+    address?: boolean
+    industry?: boolean
+    foundedYear?: boolean
+    CompanyUrl?: boolean
+    CompanyDesc?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3166,6 +3336,12 @@ export namespace Prisma {
     userId?: boolean
     companyName?: boolean
     companyLogoUrl?: boolean
+    companySize?: boolean
+    address?: boolean
+    industry?: boolean
+    foundedYear?: boolean
+    CompanyUrl?: boolean
+    CompanyDesc?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -3176,11 +3352,17 @@ export namespace Prisma {
     userId?: boolean
     companyName?: boolean
     companyLogoUrl?: boolean
+    companySize?: boolean
+    address?: boolean
+    industry?: boolean
+    foundedYear?: boolean
+    CompanyUrl?: boolean
+    CompanyDesc?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EmployerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "companyName" | "companyLogoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["employer"]>
+  export type EmployerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "companyName" | "companyLogoUrl" | "companySize" | "address" | "industry" | "foundedYear" | "CompanyUrl" | "CompanyDesc" | "createdAt" | "updatedAt", ExtArgs["result"]["employer"]>
   export type EmployerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     jobs?: boolean | Employer$jobsArgs<ExtArgs>
@@ -3204,6 +3386,12 @@ export namespace Prisma {
       userId: number
       companyName: string
       companyLogoUrl: string | null
+      companySize: string | null
+      address: string | null
+      industry: string | null
+      foundedYear: string | null
+      CompanyUrl: string | null
+      CompanyDesc: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["employer"]>
@@ -3635,6 +3823,12 @@ export namespace Prisma {
     readonly userId: FieldRef<"Employer", 'Int'>
     readonly companyName: FieldRef<"Employer", 'String'>
     readonly companyLogoUrl: FieldRef<"Employer", 'String'>
+    readonly companySize: FieldRef<"Employer", 'String'>
+    readonly address: FieldRef<"Employer", 'String'>
+    readonly industry: FieldRef<"Employer", 'String'>
+    readonly foundedYear: FieldRef<"Employer", 'String'>
+    readonly CompanyUrl: FieldRef<"Employer", 'String'>
+    readonly CompanyDesc: FieldRef<"Employer", 'String'>
     readonly createdAt: FieldRef<"Employer", 'DateTime'>
     readonly updatedAt: FieldRef<"Employer", 'DateTime'>
   }
@@ -5401,8 +5595,8 @@ export namespace Prisma {
   export type EducationMinAggregateOutputType = {
     id: number | null
     candidateId: number | null
-    startDate: Date | null
-    endDate: Date | null
+    startDate: string | null
+    endDate: string | null
     schoolName: string | null
     degree: string | null
     fieldOfStudy: string | null
@@ -5413,8 +5607,8 @@ export namespace Prisma {
   export type EducationMaxAggregateOutputType = {
     id: number | null
     candidateId: number | null
-    startDate: Date | null
-    endDate: Date | null
+    startDate: string | null
+    endDate: string | null
     schoolName: string | null
     degree: string | null
     fieldOfStudy: string | null
@@ -5572,8 +5766,8 @@ export namespace Prisma {
   export type EducationGroupByOutputType = {
     id: number
     candidateId: number
-    startDate: Date
-    endDate: Date | null
+    startDate: string | null
+    endDate: string | null
     schoolName: string
     degree: string | null
     fieldOfStudy: string | null
@@ -5670,8 +5864,8 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: number
       candidateId: number
-      startDate: Date
-      endDate: Date | null
+      startDate: string | null
+      endDate: string | null
       schoolName: string
       degree: string | null
       fieldOfStudy: string | null
@@ -6103,8 +6297,8 @@ export namespace Prisma {
   interface EducationFieldRefs {
     readonly id: FieldRef<"Education", 'Int'>
     readonly candidateId: FieldRef<"Education", 'Int'>
-    readonly startDate: FieldRef<"Education", 'DateTime'>
-    readonly endDate: FieldRef<"Education", 'DateTime'>
+    readonly startDate: FieldRef<"Education", 'String'>
+    readonly endDate: FieldRef<"Education", 'String'>
     readonly schoolName: FieldRef<"Education", 'String'>
     readonly degree: FieldRef<"Education", 'String'>
     readonly fieldOfStudy: FieldRef<"Education", 'String'>
@@ -6525,6 +6719,1035 @@ export namespace Prisma {
 
 
   /**
+   * Model Links
+   */
+
+  export type AggregateLinks = {
+    _count: LinksCountAggregateOutputType | null
+    _avg: LinksAvgAggregateOutputType | null
+    _sum: LinksSumAggregateOutputType | null
+    _min: LinksMinAggregateOutputType | null
+    _max: LinksMaxAggregateOutputType | null
+  }
+
+  export type LinksAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type LinksSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type LinksMinAggregateOutputType = {
+    id: number | null
+    linkedln: string | null
+    Github: string | null
+    Portfolio: string | null
+    otherLink: string | null
+  }
+
+  export type LinksMaxAggregateOutputType = {
+    id: number | null
+    linkedln: string | null
+    Github: string | null
+    Portfolio: string | null
+    otherLink: string | null
+  }
+
+  export type LinksCountAggregateOutputType = {
+    id: number
+    linkedln: number
+    Github: number
+    Portfolio: number
+    otherLink: number
+    _all: number
+  }
+
+
+  export type LinksAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type LinksSumAggregateInputType = {
+    id?: true
+  }
+
+  export type LinksMinAggregateInputType = {
+    id?: true
+    linkedln?: true
+    Github?: true
+    Portfolio?: true
+    otherLink?: true
+  }
+
+  export type LinksMaxAggregateInputType = {
+    id?: true
+    linkedln?: true
+    Github?: true
+    Portfolio?: true
+    otherLink?: true
+  }
+
+  export type LinksCountAggregateInputType = {
+    id?: true
+    linkedln?: true
+    Github?: true
+    Portfolio?: true
+    otherLink?: true
+    _all?: true
+  }
+
+  export type LinksAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Links to aggregate.
+     */
+    where?: LinksWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Links to fetch.
+     */
+    orderBy?: LinksOrderByWithRelationInput | LinksOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: LinksWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Links from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Links.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Links
+    **/
+    _count?: true | LinksCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: LinksAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: LinksSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: LinksMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: LinksMaxAggregateInputType
+  }
+
+  export type GetLinksAggregateType<T extends LinksAggregateArgs> = {
+        [P in keyof T & keyof AggregateLinks]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateLinks[P]>
+      : GetScalarType<T[P], AggregateLinks[P]>
+  }
+
+
+
+
+  export type LinksGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LinksWhereInput
+    orderBy?: LinksOrderByWithAggregationInput | LinksOrderByWithAggregationInput[]
+    by: LinksScalarFieldEnum[] | LinksScalarFieldEnum
+    having?: LinksScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: LinksCountAggregateInputType | true
+    _avg?: LinksAvgAggregateInputType
+    _sum?: LinksSumAggregateInputType
+    _min?: LinksMinAggregateInputType
+    _max?: LinksMaxAggregateInputType
+  }
+
+  export type LinksGroupByOutputType = {
+    id: number
+    linkedln: string | null
+    Github: string | null
+    Portfolio: string | null
+    otherLink: string | null
+    _count: LinksCountAggregateOutputType | null
+    _avg: LinksAvgAggregateOutputType | null
+    _sum: LinksSumAggregateOutputType | null
+    _min: LinksMinAggregateOutputType | null
+    _max: LinksMaxAggregateOutputType | null
+  }
+
+  type GetLinksGroupByPayload<T extends LinksGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<LinksGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof LinksGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], LinksGroupByOutputType[P]>
+            : GetScalarType<T[P], LinksGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type LinksSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    linkedln?: boolean
+    Github?: boolean
+    Portfolio?: boolean
+    otherLink?: boolean
+  }, ExtArgs["result"]["links"]>
+
+  export type LinksSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    linkedln?: boolean
+    Github?: boolean
+    Portfolio?: boolean
+    otherLink?: boolean
+  }, ExtArgs["result"]["links"]>
+
+  export type LinksSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    linkedln?: boolean
+    Github?: boolean
+    Portfolio?: boolean
+    otherLink?: boolean
+  }, ExtArgs["result"]["links"]>
+
+  export type LinksSelectScalar = {
+    id?: boolean
+    linkedln?: boolean
+    Github?: boolean
+    Portfolio?: boolean
+    otherLink?: boolean
+  }
+
+  export type LinksOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "linkedln" | "Github" | "Portfolio" | "otherLink", ExtArgs["result"]["links"]>
+
+  export type $LinksPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Links"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      linkedln: string | null
+      Github: string | null
+      Portfolio: string | null
+      otherLink: string | null
+    }, ExtArgs["result"]["links"]>
+    composites: {}
+  }
+
+  type LinksGetPayload<S extends boolean | null | undefined | LinksDefaultArgs> = $Result.GetResult<Prisma.$LinksPayload, S>
+
+  type LinksCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<LinksFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: LinksCountAggregateInputType | true
+    }
+
+  export interface LinksDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Links'], meta: { name: 'Links' } }
+    /**
+     * Find zero or one Links that matches the filter.
+     * @param {LinksFindUniqueArgs} args - Arguments to find a Links
+     * @example
+     * // Get one Links
+     * const links = await prisma.links.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends LinksFindUniqueArgs>(args: SelectSubset<T, LinksFindUniqueArgs<ExtArgs>>): Prisma__LinksClient<$Result.GetResult<Prisma.$LinksPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Links that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {LinksFindUniqueOrThrowArgs} args - Arguments to find a Links
+     * @example
+     * // Get one Links
+     * const links = await prisma.links.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends LinksFindUniqueOrThrowArgs>(args: SelectSubset<T, LinksFindUniqueOrThrowArgs<ExtArgs>>): Prisma__LinksClient<$Result.GetResult<Prisma.$LinksPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Links that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LinksFindFirstArgs} args - Arguments to find a Links
+     * @example
+     * // Get one Links
+     * const links = await prisma.links.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends LinksFindFirstArgs>(args?: SelectSubset<T, LinksFindFirstArgs<ExtArgs>>): Prisma__LinksClient<$Result.GetResult<Prisma.$LinksPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Links that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LinksFindFirstOrThrowArgs} args - Arguments to find a Links
+     * @example
+     * // Get one Links
+     * const links = await prisma.links.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends LinksFindFirstOrThrowArgs>(args?: SelectSubset<T, LinksFindFirstOrThrowArgs<ExtArgs>>): Prisma__LinksClient<$Result.GetResult<Prisma.$LinksPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Links that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LinksFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Links
+     * const links = await prisma.links.findMany()
+     * 
+     * // Get first 10 Links
+     * const links = await prisma.links.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const linksWithIdOnly = await prisma.links.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends LinksFindManyArgs>(args?: SelectSubset<T, LinksFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LinksPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Links.
+     * @param {LinksCreateArgs} args - Arguments to create a Links.
+     * @example
+     * // Create one Links
+     * const Links = await prisma.links.create({
+     *   data: {
+     *     // ... data to create a Links
+     *   }
+     * })
+     * 
+     */
+    create<T extends LinksCreateArgs>(args: SelectSubset<T, LinksCreateArgs<ExtArgs>>): Prisma__LinksClient<$Result.GetResult<Prisma.$LinksPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Links.
+     * @param {LinksCreateManyArgs} args - Arguments to create many Links.
+     * @example
+     * // Create many Links
+     * const links = await prisma.links.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends LinksCreateManyArgs>(args?: SelectSubset<T, LinksCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Links and returns the data saved in the database.
+     * @param {LinksCreateManyAndReturnArgs} args - Arguments to create many Links.
+     * @example
+     * // Create many Links
+     * const links = await prisma.links.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Links and only return the `id`
+     * const linksWithIdOnly = await prisma.links.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends LinksCreateManyAndReturnArgs>(args?: SelectSubset<T, LinksCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LinksPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Links.
+     * @param {LinksDeleteArgs} args - Arguments to delete one Links.
+     * @example
+     * // Delete one Links
+     * const Links = await prisma.links.delete({
+     *   where: {
+     *     // ... filter to delete one Links
+     *   }
+     * })
+     * 
+     */
+    delete<T extends LinksDeleteArgs>(args: SelectSubset<T, LinksDeleteArgs<ExtArgs>>): Prisma__LinksClient<$Result.GetResult<Prisma.$LinksPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Links.
+     * @param {LinksUpdateArgs} args - Arguments to update one Links.
+     * @example
+     * // Update one Links
+     * const links = await prisma.links.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends LinksUpdateArgs>(args: SelectSubset<T, LinksUpdateArgs<ExtArgs>>): Prisma__LinksClient<$Result.GetResult<Prisma.$LinksPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Links.
+     * @param {LinksDeleteManyArgs} args - Arguments to filter Links to delete.
+     * @example
+     * // Delete a few Links
+     * const { count } = await prisma.links.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends LinksDeleteManyArgs>(args?: SelectSubset<T, LinksDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Links.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LinksUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Links
+     * const links = await prisma.links.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends LinksUpdateManyArgs>(args: SelectSubset<T, LinksUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Links and returns the data updated in the database.
+     * @param {LinksUpdateManyAndReturnArgs} args - Arguments to update many Links.
+     * @example
+     * // Update many Links
+     * const links = await prisma.links.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Links and only return the `id`
+     * const linksWithIdOnly = await prisma.links.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends LinksUpdateManyAndReturnArgs>(args: SelectSubset<T, LinksUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LinksPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Links.
+     * @param {LinksUpsertArgs} args - Arguments to update or create a Links.
+     * @example
+     * // Update or create a Links
+     * const links = await prisma.links.upsert({
+     *   create: {
+     *     // ... data to create a Links
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Links we want to update
+     *   }
+     * })
+     */
+    upsert<T extends LinksUpsertArgs>(args: SelectSubset<T, LinksUpsertArgs<ExtArgs>>): Prisma__LinksClient<$Result.GetResult<Prisma.$LinksPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Links.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LinksCountArgs} args - Arguments to filter Links to count.
+     * @example
+     * // Count the number of Links
+     * const count = await prisma.links.count({
+     *   where: {
+     *     // ... the filter for the Links we want to count
+     *   }
+     * })
+    **/
+    count<T extends LinksCountArgs>(
+      args?: Subset<T, LinksCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], LinksCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Links.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LinksAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends LinksAggregateArgs>(args: Subset<T, LinksAggregateArgs>): Prisma.PrismaPromise<GetLinksAggregateType<T>>
+
+    /**
+     * Group by Links.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {LinksGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends LinksGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: LinksGroupByArgs['orderBy'] }
+        : { orderBy?: LinksGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, LinksGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetLinksGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Links model
+   */
+  readonly fields: LinksFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Links.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__LinksClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Links model
+   */
+  interface LinksFieldRefs {
+    readonly id: FieldRef<"Links", 'Int'>
+    readonly linkedln: FieldRef<"Links", 'String'>
+    readonly Github: FieldRef<"Links", 'String'>
+    readonly Portfolio: FieldRef<"Links", 'String'>
+    readonly otherLink: FieldRef<"Links", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Links findUnique
+   */
+  export type LinksFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Links
+     */
+    select?: LinksSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Links
+     */
+    omit?: LinksOmit<ExtArgs> | null
+    /**
+     * Filter, which Links to fetch.
+     */
+    where: LinksWhereUniqueInput
+  }
+
+  /**
+   * Links findUniqueOrThrow
+   */
+  export type LinksFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Links
+     */
+    select?: LinksSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Links
+     */
+    omit?: LinksOmit<ExtArgs> | null
+    /**
+     * Filter, which Links to fetch.
+     */
+    where: LinksWhereUniqueInput
+  }
+
+  /**
+   * Links findFirst
+   */
+  export type LinksFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Links
+     */
+    select?: LinksSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Links
+     */
+    omit?: LinksOmit<ExtArgs> | null
+    /**
+     * Filter, which Links to fetch.
+     */
+    where?: LinksWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Links to fetch.
+     */
+    orderBy?: LinksOrderByWithRelationInput | LinksOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Links.
+     */
+    cursor?: LinksWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Links from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Links.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Links.
+     */
+    distinct?: LinksScalarFieldEnum | LinksScalarFieldEnum[]
+  }
+
+  /**
+   * Links findFirstOrThrow
+   */
+  export type LinksFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Links
+     */
+    select?: LinksSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Links
+     */
+    omit?: LinksOmit<ExtArgs> | null
+    /**
+     * Filter, which Links to fetch.
+     */
+    where?: LinksWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Links to fetch.
+     */
+    orderBy?: LinksOrderByWithRelationInput | LinksOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Links.
+     */
+    cursor?: LinksWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Links from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Links.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Links.
+     */
+    distinct?: LinksScalarFieldEnum | LinksScalarFieldEnum[]
+  }
+
+  /**
+   * Links findMany
+   */
+  export type LinksFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Links
+     */
+    select?: LinksSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Links
+     */
+    omit?: LinksOmit<ExtArgs> | null
+    /**
+     * Filter, which Links to fetch.
+     */
+    where?: LinksWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Links to fetch.
+     */
+    orderBy?: LinksOrderByWithRelationInput | LinksOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Links.
+     */
+    cursor?: LinksWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Links from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Links.
+     */
+    skip?: number
+    distinct?: LinksScalarFieldEnum | LinksScalarFieldEnum[]
+  }
+
+  /**
+   * Links create
+   */
+  export type LinksCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Links
+     */
+    select?: LinksSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Links
+     */
+    omit?: LinksOmit<ExtArgs> | null
+    /**
+     * The data needed to create a Links.
+     */
+    data?: XOR<LinksCreateInput, LinksUncheckedCreateInput>
+  }
+
+  /**
+   * Links createMany
+   */
+  export type LinksCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Links.
+     */
+    data: LinksCreateManyInput | LinksCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Links createManyAndReturn
+   */
+  export type LinksCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Links
+     */
+    select?: LinksSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Links
+     */
+    omit?: LinksOmit<ExtArgs> | null
+    /**
+     * The data used to create many Links.
+     */
+    data: LinksCreateManyInput | LinksCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Links update
+   */
+  export type LinksUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Links
+     */
+    select?: LinksSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Links
+     */
+    omit?: LinksOmit<ExtArgs> | null
+    /**
+     * The data needed to update a Links.
+     */
+    data: XOR<LinksUpdateInput, LinksUncheckedUpdateInput>
+    /**
+     * Choose, which Links to update.
+     */
+    where: LinksWhereUniqueInput
+  }
+
+  /**
+   * Links updateMany
+   */
+  export type LinksUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Links.
+     */
+    data: XOR<LinksUpdateManyMutationInput, LinksUncheckedUpdateManyInput>
+    /**
+     * Filter which Links to update
+     */
+    where?: LinksWhereInput
+    /**
+     * Limit how many Links to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Links updateManyAndReturn
+   */
+  export type LinksUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Links
+     */
+    select?: LinksSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Links
+     */
+    omit?: LinksOmit<ExtArgs> | null
+    /**
+     * The data used to update Links.
+     */
+    data: XOR<LinksUpdateManyMutationInput, LinksUncheckedUpdateManyInput>
+    /**
+     * Filter which Links to update
+     */
+    where?: LinksWhereInput
+    /**
+     * Limit how many Links to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Links upsert
+   */
+  export type LinksUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Links
+     */
+    select?: LinksSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Links
+     */
+    omit?: LinksOmit<ExtArgs> | null
+    /**
+     * The filter to search for the Links to update in case it exists.
+     */
+    where: LinksWhereUniqueInput
+    /**
+     * In case the Links found by the `where` argument doesn't exist, create a new Links with this data.
+     */
+    create: XOR<LinksCreateInput, LinksUncheckedCreateInput>
+    /**
+     * In case the Links was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<LinksUpdateInput, LinksUncheckedUpdateInput>
+  }
+
+  /**
+   * Links delete
+   */
+  export type LinksDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Links
+     */
+    select?: LinksSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Links
+     */
+    omit?: LinksOmit<ExtArgs> | null
+    /**
+     * Filter which Links to delete.
+     */
+    where: LinksWhereUniqueInput
+  }
+
+  /**
+   * Links deleteMany
+   */
+  export type LinksDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Links to delete
+     */
+    where?: LinksWhereInput
+    /**
+     * Limit how many Links to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Links without action
+   */
+  export type LinksDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Links
+     */
+    select?: LinksSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Links
+     */
+    omit?: LinksOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model WorkExperience
    */
 
@@ -6554,7 +7777,7 @@ export namespace Prisma {
     isCurrent: boolean | null
     companyName: string | null
     position: string | null
-    description: string | null
+    jobTitle: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6567,7 +7790,7 @@ export namespace Prisma {
     isCurrent: boolean | null
     companyName: string | null
     position: string | null
-    description: string | null
+    jobTitle: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6580,7 +7803,7 @@ export namespace Prisma {
     isCurrent: number
     companyName: number
     position: number
-    description: number
+    jobTitle: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -6605,7 +7828,7 @@ export namespace Prisma {
     isCurrent?: true
     companyName?: true
     position?: true
-    description?: true
+    jobTitle?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6618,7 +7841,7 @@ export namespace Prisma {
     isCurrent?: true
     companyName?: true
     position?: true
-    description?: true
+    jobTitle?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6631,7 +7854,7 @@ export namespace Prisma {
     isCurrent?: true
     companyName?: true
     position?: true
-    description?: true
+    jobTitle?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -6731,7 +7954,7 @@ export namespace Prisma {
     isCurrent: boolean
     companyName: string
     position: string | null
-    description: string | null
+    jobTitle: string | null
     createdAt: Date
     updatedAt: Date
     _count: WorkExperienceCountAggregateOutputType | null
@@ -6763,7 +7986,7 @@ export namespace Prisma {
     isCurrent?: boolean
     companyName?: boolean
     position?: boolean
-    description?: boolean
+    jobTitle?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
@@ -6777,7 +8000,7 @@ export namespace Prisma {
     isCurrent?: boolean
     companyName?: boolean
     position?: boolean
-    description?: boolean
+    jobTitle?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
@@ -6791,7 +8014,7 @@ export namespace Prisma {
     isCurrent?: boolean
     companyName?: boolean
     position?: boolean
-    description?: boolean
+    jobTitle?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
@@ -6805,12 +8028,12 @@ export namespace Prisma {
     isCurrent?: boolean
     companyName?: boolean
     position?: boolean
-    description?: boolean
+    jobTitle?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type WorkExperienceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "candidateId" | "startDate" | "endDate" | "isCurrent" | "companyName" | "position" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["workExperience"]>
+  export type WorkExperienceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "candidateId" | "startDate" | "endDate" | "isCurrent" | "companyName" | "position" | "jobTitle" | "createdAt" | "updatedAt", ExtArgs["result"]["workExperience"]>
   export type WorkExperienceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
   }
@@ -6834,7 +8057,7 @@ export namespace Prisma {
       isCurrent: boolean
       companyName: string
       position: string | null
-      description: string | null
+      jobTitle: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["workExperience"]>
@@ -7268,7 +8491,7 @@ export namespace Prisma {
     readonly isCurrent: FieldRef<"WorkExperience", 'Boolean'>
     readonly companyName: FieldRef<"WorkExperience", 'String'>
     readonly position: FieldRef<"WorkExperience", 'String'>
-    readonly description: FieldRef<"WorkExperience", 'String'>
+    readonly jobTitle: FieldRef<"WorkExperience", 'String'>
     readonly createdAt: FieldRef<"WorkExperience", 'DateTime'>
     readonly updatedAt: FieldRef<"WorkExperience", 'DateTime'>
   }
@@ -7714,6 +8937,13 @@ export namespace Prisma {
     description: string | null
     requirements: string | null
     salaryRange: string | null
+    salaryMin: string | null
+    salaryMax: string | null
+    salaryCurrency: string | null
+    salaryPeriod: string | null
+    tags: string | null
+    visibility: $Enums.Visibility | null
+    primaryTag: string | null
     location: string | null
     jobType: $Enums.JobTypeEnum | null
     status: $Enums.JobStatus | null
@@ -7729,6 +8959,13 @@ export namespace Prisma {
     description: string | null
     requirements: string | null
     salaryRange: string | null
+    salaryMin: string | null
+    salaryMax: string | null
+    salaryCurrency: string | null
+    salaryPeriod: string | null
+    tags: string | null
+    visibility: $Enums.Visibility | null
+    primaryTag: string | null
     location: string | null
     jobType: $Enums.JobTypeEnum | null
     status: $Enums.JobStatus | null
@@ -7744,6 +8981,14 @@ export namespace Prisma {
     description: number
     requirements: number
     salaryRange: number
+    salaryMin: number
+    salaryMax: number
+    salaryCurrency: number
+    salaryPeriod: number
+    tags: number
+    benefits: number
+    visibility: number
+    primaryTag: number
     location: number
     jobType: number
     status: number
@@ -7771,6 +9016,13 @@ export namespace Prisma {
     description?: true
     requirements?: true
     salaryRange?: true
+    salaryMin?: true
+    salaryMax?: true
+    salaryCurrency?: true
+    salaryPeriod?: true
+    tags?: true
+    visibility?: true
+    primaryTag?: true
     location?: true
     jobType?: true
     status?: true
@@ -7786,6 +9038,13 @@ export namespace Prisma {
     description?: true
     requirements?: true
     salaryRange?: true
+    salaryMin?: true
+    salaryMax?: true
+    salaryCurrency?: true
+    salaryPeriod?: true
+    tags?: true
+    visibility?: true
+    primaryTag?: true
     location?: true
     jobType?: true
     status?: true
@@ -7801,6 +9060,14 @@ export namespace Prisma {
     description?: true
     requirements?: true
     salaryRange?: true
+    salaryMin?: true
+    salaryMax?: true
+    salaryCurrency?: true
+    salaryPeriod?: true
+    tags?: true
+    benefits?: true
+    visibility?: true
+    primaryTag?: true
     location?: true
     jobType?: true
     status?: true
@@ -7903,6 +9170,14 @@ export namespace Prisma {
     description: string
     requirements: string | null
     salaryRange: string | null
+    salaryMin: string | null
+    salaryMax: string | null
+    salaryCurrency: string | null
+    salaryPeriod: string | null
+    tags: string | null
+    benefits: string[]
+    visibility: $Enums.Visibility | null
+    primaryTag: string | null
     location: string | null
     jobType: $Enums.JobTypeEnum
     status: $Enums.JobStatus
@@ -7937,6 +9212,14 @@ export namespace Prisma {
     description?: boolean
     requirements?: boolean
     salaryRange?: boolean
+    salaryMin?: boolean
+    salaryMax?: boolean
+    salaryCurrency?: boolean
+    salaryPeriod?: boolean
+    tags?: boolean
+    benefits?: boolean
+    visibility?: boolean
+    primaryTag?: boolean
     location?: boolean
     jobType?: boolean
     status?: boolean
@@ -7955,6 +9238,14 @@ export namespace Prisma {
     description?: boolean
     requirements?: boolean
     salaryRange?: boolean
+    salaryMin?: boolean
+    salaryMax?: boolean
+    salaryCurrency?: boolean
+    salaryPeriod?: boolean
+    tags?: boolean
+    benefits?: boolean
+    visibility?: boolean
+    primaryTag?: boolean
     location?: boolean
     jobType?: boolean
     status?: boolean
@@ -7971,6 +9262,14 @@ export namespace Prisma {
     description?: boolean
     requirements?: boolean
     salaryRange?: boolean
+    salaryMin?: boolean
+    salaryMax?: boolean
+    salaryCurrency?: boolean
+    salaryPeriod?: boolean
+    tags?: boolean
+    benefits?: boolean
+    visibility?: boolean
+    primaryTag?: boolean
     location?: boolean
     jobType?: boolean
     status?: boolean
@@ -7987,6 +9286,14 @@ export namespace Prisma {
     description?: boolean
     requirements?: boolean
     salaryRange?: boolean
+    salaryMin?: boolean
+    salaryMax?: boolean
+    salaryCurrency?: boolean
+    salaryPeriod?: boolean
+    tags?: boolean
+    benefits?: boolean
+    visibility?: boolean
+    primaryTag?: boolean
     location?: boolean
     jobType?: boolean
     status?: boolean
@@ -7995,7 +9302,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type JobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employerId" | "title" | "description" | "requirements" | "salaryRange" | "location" | "jobType" | "status" | "postedDate" | "createdAt" | "updatedAt", ExtArgs["result"]["job"]>
+  export type JobOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employerId" | "title" | "description" | "requirements" | "salaryRange" | "salaryMin" | "salaryMax" | "salaryCurrency" | "salaryPeriod" | "tags" | "benefits" | "visibility" | "primaryTag" | "location" | "jobType" | "status" | "postedDate" | "createdAt" | "updatedAt", ExtArgs["result"]["job"]>
   export type JobInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employer?: boolean | EmployerDefaultArgs<ExtArgs>
     applications?: boolean | Job$applicationsArgs<ExtArgs>
@@ -8021,6 +9328,14 @@ export namespace Prisma {
       description: string
       requirements: string | null
       salaryRange: string | null
+      salaryMin: string | null
+      salaryMax: string | null
+      salaryCurrency: string | null
+      salaryPeriod: string | null
+      tags: string | null
+      benefits: string[]
+      visibility: $Enums.Visibility | null
+      primaryTag: string | null
       location: string | null
       jobType: $Enums.JobTypeEnum
       status: $Enums.JobStatus
@@ -8458,6 +9773,14 @@ export namespace Prisma {
     readonly description: FieldRef<"Job", 'String'>
     readonly requirements: FieldRef<"Job", 'String'>
     readonly salaryRange: FieldRef<"Job", 'String'>
+    readonly salaryMin: FieldRef<"Job", 'String'>
+    readonly salaryMax: FieldRef<"Job", 'String'>
+    readonly salaryCurrency: FieldRef<"Job", 'String'>
+    readonly salaryPeriod: FieldRef<"Job", 'String'>
+    readonly tags: FieldRef<"Job", 'String'>
+    readonly benefits: FieldRef<"Job", 'String[]'>
+    readonly visibility: FieldRef<"Job", 'Visibility'>
+    readonly primaryTag: FieldRef<"Job", 'String'>
     readonly location: FieldRef<"Job", 'String'>
     readonly jobType: FieldRef<"Job", 'JobTypeEnum'>
     readonly status: FieldRef<"Job", 'JobStatus'>
@@ -11236,7 +12559,8 @@ export namespace Prisma {
     isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    avatar: 'avatar'
+    avatar: 'avatar',
+    isOnboarded: 'isOnboarded'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -11247,6 +12571,12 @@ export namespace Prisma {
     userId: 'userId',
     companyName: 'companyName',
     companyLogoUrl: 'companyLogoUrl',
+    companySize: 'companySize',
+    address: 'address',
+    industry: 'industry',
+    foundedYear: 'foundedYear',
+    CompanyUrl: 'CompanyUrl',
+    CompanyDesc: 'CompanyDesc',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11287,6 +12617,17 @@ export namespace Prisma {
   export type EducationScalarFieldEnum = (typeof EducationScalarFieldEnum)[keyof typeof EducationScalarFieldEnum]
 
 
+  export const LinksScalarFieldEnum: {
+    id: 'id',
+    linkedln: 'linkedln',
+    Github: 'Github',
+    Portfolio: 'Portfolio',
+    otherLink: 'otherLink'
+  };
+
+  export type LinksScalarFieldEnum = (typeof LinksScalarFieldEnum)[keyof typeof LinksScalarFieldEnum]
+
+
   export const WorkExperienceScalarFieldEnum: {
     id: 'id',
     candidateId: 'candidateId',
@@ -11295,7 +12636,7 @@ export namespace Prisma {
     isCurrent: 'isCurrent',
     companyName: 'companyName',
     position: 'position',
-    description: 'description',
+    jobTitle: 'jobTitle',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11310,6 +12651,14 @@ export namespace Prisma {
     description: 'description',
     requirements: 'requirements',
     salaryRange: 'salaryRange',
+    salaryMin: 'salaryMin',
+    salaryMax: 'salaryMax',
+    salaryCurrency: 'salaryCurrency',
+    salaryPeriod: 'salaryPeriod',
+    tags: 'tags',
+    benefits: 'benefits',
+    visibility: 'visibility',
+    primaryTag: 'primaryTag',
     location: 'location',
     jobType: 'jobType',
     status: 'status',
@@ -11455,6 +12804,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Visibility'
+   */
+  export type EnumVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Visibility'>
+    
+
+
+  /**
+   * Reference to a field of type 'Visibility[]'
+   */
+  export type ListEnumVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Visibility[]'>
+    
+
+
+  /**
    * Reference to a field of type 'JobTypeEnum'
    */
   export type EnumJobTypeEnumFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobTypeEnum'>
@@ -11540,6 +12903,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     avatar?: StringNullableFilter<"User"> | string | null
+    isOnboarded?: BoolFilter<"User"> | boolean
     employer?: XOR<EmployerNullableScalarRelationFilter, EmployerWhereInput> | null
     candidate?: XOR<CandidateNullableScalarRelationFilter, CandidateWhereInput> | null
   }
@@ -11554,6 +12918,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     avatar?: SortOrderInput | SortOrder
+    isOnboarded?: SortOrder
     employer?: EmployerOrderByWithRelationInput
     candidate?: CandidateOrderByWithRelationInput
   }
@@ -11571,6 +12936,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     avatar?: StringNullableFilter<"User"> | string | null
+    isOnboarded?: BoolFilter<"User"> | boolean
     employer?: XOR<EmployerNullableScalarRelationFilter, EmployerWhereInput> | null
     candidate?: XOR<CandidateNullableScalarRelationFilter, CandidateWhereInput> | null
   }, "id" | "email">
@@ -11585,6 +12951,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     avatar?: SortOrderInput | SortOrder
+    isOnboarded?: SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -11605,6 +12972,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
+    isOnboarded?: BoolWithAggregatesFilter<"User"> | boolean
   }
 
   export type EmployerWhereInput = {
@@ -11615,6 +12983,12 @@ export namespace Prisma {
     userId?: IntFilter<"Employer"> | number
     companyName?: StringFilter<"Employer"> | string
     companyLogoUrl?: StringNullableFilter<"Employer"> | string | null
+    companySize?: StringNullableFilter<"Employer"> | string | null
+    address?: StringNullableFilter<"Employer"> | string | null
+    industry?: StringNullableFilter<"Employer"> | string | null
+    foundedYear?: StringNullableFilter<"Employer"> | string | null
+    CompanyUrl?: StringNullableFilter<"Employer"> | string | null
+    CompanyDesc?: StringNullableFilter<"Employer"> | string | null
     createdAt?: DateTimeFilter<"Employer"> | Date | string
     updatedAt?: DateTimeFilter<"Employer"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -11626,6 +13000,12 @@ export namespace Prisma {
     userId?: SortOrder
     companyName?: SortOrder
     companyLogoUrl?: SortOrderInput | SortOrder
+    companySize?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    industry?: SortOrderInput | SortOrder
+    foundedYear?: SortOrderInput | SortOrder
+    CompanyUrl?: SortOrderInput | SortOrder
+    CompanyDesc?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -11640,6 +13020,12 @@ export namespace Prisma {
     NOT?: EmployerWhereInput | EmployerWhereInput[]
     companyName?: StringFilter<"Employer"> | string
     companyLogoUrl?: StringNullableFilter<"Employer"> | string | null
+    companySize?: StringNullableFilter<"Employer"> | string | null
+    address?: StringNullableFilter<"Employer"> | string | null
+    industry?: StringNullableFilter<"Employer"> | string | null
+    foundedYear?: StringNullableFilter<"Employer"> | string | null
+    CompanyUrl?: StringNullableFilter<"Employer"> | string | null
+    CompanyDesc?: StringNullableFilter<"Employer"> | string | null
     createdAt?: DateTimeFilter<"Employer"> | Date | string
     updatedAt?: DateTimeFilter<"Employer"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -11651,6 +13037,12 @@ export namespace Prisma {
     userId?: SortOrder
     companyName?: SortOrder
     companyLogoUrl?: SortOrderInput | SortOrder
+    companySize?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    industry?: SortOrderInput | SortOrder
+    foundedYear?: SortOrderInput | SortOrder
+    CompanyUrl?: SortOrderInput | SortOrder
+    CompanyDesc?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: EmployerCountOrderByAggregateInput
@@ -11668,6 +13060,12 @@ export namespace Prisma {
     userId?: IntWithAggregatesFilter<"Employer"> | number
     companyName?: StringWithAggregatesFilter<"Employer"> | string
     companyLogoUrl?: StringNullableWithAggregatesFilter<"Employer"> | string | null
+    companySize?: StringNullableWithAggregatesFilter<"Employer"> | string | null
+    address?: StringNullableWithAggregatesFilter<"Employer"> | string | null
+    industry?: StringNullableWithAggregatesFilter<"Employer"> | string | null
+    foundedYear?: StringNullableWithAggregatesFilter<"Employer"> | string | null
+    CompanyUrl?: StringNullableWithAggregatesFilter<"Employer"> | string | null
+    CompanyDesc?: StringNullableWithAggregatesFilter<"Employer"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Employer"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Employer"> | Date | string
   }
@@ -11782,8 +13180,8 @@ export namespace Prisma {
     NOT?: EducationWhereInput | EducationWhereInput[]
     id?: IntFilter<"Education"> | number
     candidateId?: IntFilter<"Education"> | number
-    startDate?: DateTimeFilter<"Education"> | Date | string
-    endDate?: DateTimeNullableFilter<"Education"> | Date | string | null
+    startDate?: StringNullableFilter<"Education"> | string | null
+    endDate?: StringNullableFilter<"Education"> | string | null
     schoolName?: StringFilter<"Education"> | string
     degree?: StringNullableFilter<"Education"> | string | null
     fieldOfStudy?: StringNullableFilter<"Education"> | string | null
@@ -11795,7 +13193,7 @@ export namespace Prisma {
   export type EducationOrderByWithRelationInput = {
     id?: SortOrder
     candidateId?: SortOrder
-    startDate?: SortOrder
+    startDate?: SortOrderInput | SortOrder
     endDate?: SortOrderInput | SortOrder
     schoolName?: SortOrder
     degree?: SortOrderInput | SortOrder
@@ -11811,8 +13209,8 @@ export namespace Prisma {
     OR?: EducationWhereInput[]
     NOT?: EducationWhereInput | EducationWhereInput[]
     candidateId?: IntFilter<"Education"> | number
-    startDate?: DateTimeFilter<"Education"> | Date | string
-    endDate?: DateTimeNullableFilter<"Education"> | Date | string | null
+    startDate?: StringNullableFilter<"Education"> | string | null
+    endDate?: StringNullableFilter<"Education"> | string | null
     schoolName?: StringFilter<"Education"> | string
     degree?: StringNullableFilter<"Education"> | string | null
     fieldOfStudy?: StringNullableFilter<"Education"> | string | null
@@ -11824,7 +13222,7 @@ export namespace Prisma {
   export type EducationOrderByWithAggregationInput = {
     id?: SortOrder
     candidateId?: SortOrder
-    startDate?: SortOrder
+    startDate?: SortOrderInput | SortOrder
     endDate?: SortOrderInput | SortOrder
     schoolName?: SortOrder
     degree?: SortOrderInput | SortOrder
@@ -11844,13 +13242,67 @@ export namespace Prisma {
     NOT?: EducationScalarWhereWithAggregatesInput | EducationScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Education"> | number
     candidateId?: IntWithAggregatesFilter<"Education"> | number
-    startDate?: DateTimeWithAggregatesFilter<"Education"> | Date | string
-    endDate?: DateTimeNullableWithAggregatesFilter<"Education"> | Date | string | null
+    startDate?: StringNullableWithAggregatesFilter<"Education"> | string | null
+    endDate?: StringNullableWithAggregatesFilter<"Education"> | string | null
     schoolName?: StringWithAggregatesFilter<"Education"> | string
     degree?: StringNullableWithAggregatesFilter<"Education"> | string | null
     fieldOfStudy?: StringNullableWithAggregatesFilter<"Education"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Education"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Education"> | Date | string
+  }
+
+  export type LinksWhereInput = {
+    AND?: LinksWhereInput | LinksWhereInput[]
+    OR?: LinksWhereInput[]
+    NOT?: LinksWhereInput | LinksWhereInput[]
+    id?: IntFilter<"Links"> | number
+    linkedln?: StringNullableFilter<"Links"> | string | null
+    Github?: StringNullableFilter<"Links"> | string | null
+    Portfolio?: StringNullableFilter<"Links"> | string | null
+    otherLink?: StringNullableFilter<"Links"> | string | null
+  }
+
+  export type LinksOrderByWithRelationInput = {
+    id?: SortOrder
+    linkedln?: SortOrderInput | SortOrder
+    Github?: SortOrderInput | SortOrder
+    Portfolio?: SortOrderInput | SortOrder
+    otherLink?: SortOrderInput | SortOrder
+  }
+
+  export type LinksWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: LinksWhereInput | LinksWhereInput[]
+    OR?: LinksWhereInput[]
+    NOT?: LinksWhereInput | LinksWhereInput[]
+    linkedln?: StringNullableFilter<"Links"> | string | null
+    Github?: StringNullableFilter<"Links"> | string | null
+    Portfolio?: StringNullableFilter<"Links"> | string | null
+    otherLink?: StringNullableFilter<"Links"> | string | null
+  }, "id">
+
+  export type LinksOrderByWithAggregationInput = {
+    id?: SortOrder
+    linkedln?: SortOrderInput | SortOrder
+    Github?: SortOrderInput | SortOrder
+    Portfolio?: SortOrderInput | SortOrder
+    otherLink?: SortOrderInput | SortOrder
+    _count?: LinksCountOrderByAggregateInput
+    _avg?: LinksAvgOrderByAggregateInput
+    _max?: LinksMaxOrderByAggregateInput
+    _min?: LinksMinOrderByAggregateInput
+    _sum?: LinksSumOrderByAggregateInput
+  }
+
+  export type LinksScalarWhereWithAggregatesInput = {
+    AND?: LinksScalarWhereWithAggregatesInput | LinksScalarWhereWithAggregatesInput[]
+    OR?: LinksScalarWhereWithAggregatesInput[]
+    NOT?: LinksScalarWhereWithAggregatesInput | LinksScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Links"> | number
+    linkedln?: StringNullableWithAggregatesFilter<"Links"> | string | null
+    Github?: StringNullableWithAggregatesFilter<"Links"> | string | null
+    Portfolio?: StringNullableWithAggregatesFilter<"Links"> | string | null
+    otherLink?: StringNullableWithAggregatesFilter<"Links"> | string | null
   }
 
   export type WorkExperienceWhereInput = {
@@ -11864,7 +13316,7 @@ export namespace Prisma {
     isCurrent?: BoolFilter<"WorkExperience"> | boolean
     companyName?: StringFilter<"WorkExperience"> | string
     position?: StringNullableFilter<"WorkExperience"> | string | null
-    description?: StringNullableFilter<"WorkExperience"> | string | null
+    jobTitle?: StringNullableFilter<"WorkExperience"> | string | null
     createdAt?: DateTimeFilter<"WorkExperience"> | Date | string
     updatedAt?: DateTimeFilter<"WorkExperience"> | Date | string
     candidate?: XOR<CandidateScalarRelationFilter, CandidateWhereInput>
@@ -11878,7 +13330,7 @@ export namespace Prisma {
     isCurrent?: SortOrder
     companyName?: SortOrder
     position?: SortOrderInput | SortOrder
-    description?: SortOrderInput | SortOrder
+    jobTitle?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     candidate?: CandidateOrderByWithRelationInput
@@ -11895,7 +13347,7 @@ export namespace Prisma {
     isCurrent?: BoolFilter<"WorkExperience"> | boolean
     companyName?: StringFilter<"WorkExperience"> | string
     position?: StringNullableFilter<"WorkExperience"> | string | null
-    description?: StringNullableFilter<"WorkExperience"> | string | null
+    jobTitle?: StringNullableFilter<"WorkExperience"> | string | null
     createdAt?: DateTimeFilter<"WorkExperience"> | Date | string
     updatedAt?: DateTimeFilter<"WorkExperience"> | Date | string
     candidate?: XOR<CandidateScalarRelationFilter, CandidateWhereInput>
@@ -11909,7 +13361,7 @@ export namespace Prisma {
     isCurrent?: SortOrder
     companyName?: SortOrder
     position?: SortOrderInput | SortOrder
-    description?: SortOrderInput | SortOrder
+    jobTitle?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: WorkExperienceCountOrderByAggregateInput
@@ -11930,7 +13382,7 @@ export namespace Prisma {
     isCurrent?: BoolWithAggregatesFilter<"WorkExperience"> | boolean
     companyName?: StringWithAggregatesFilter<"WorkExperience"> | string
     position?: StringNullableWithAggregatesFilter<"WorkExperience"> | string | null
-    description?: StringNullableWithAggregatesFilter<"WorkExperience"> | string | null
+    jobTitle?: StringNullableWithAggregatesFilter<"WorkExperience"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"WorkExperience"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"WorkExperience"> | Date | string
   }
@@ -11945,6 +13397,14 @@ export namespace Prisma {
     description?: StringFilter<"Job"> | string
     requirements?: StringNullableFilter<"Job"> | string | null
     salaryRange?: StringNullableFilter<"Job"> | string | null
+    salaryMin?: StringNullableFilter<"Job"> | string | null
+    salaryMax?: StringNullableFilter<"Job"> | string | null
+    salaryCurrency?: StringNullableFilter<"Job"> | string | null
+    salaryPeriod?: StringNullableFilter<"Job"> | string | null
+    tags?: StringNullableFilter<"Job"> | string | null
+    benefits?: StringNullableListFilter<"Job">
+    visibility?: EnumVisibilityNullableFilter<"Job"> | $Enums.Visibility | null
+    primaryTag?: StringNullableFilter<"Job"> | string | null
     location?: StringNullableFilter<"Job"> | string | null
     jobType?: EnumJobTypeEnumFilter<"Job"> | $Enums.JobTypeEnum
     status?: EnumJobStatusFilter<"Job"> | $Enums.JobStatus
@@ -11962,6 +13422,14 @@ export namespace Prisma {
     description?: SortOrder
     requirements?: SortOrderInput | SortOrder
     salaryRange?: SortOrderInput | SortOrder
+    salaryMin?: SortOrderInput | SortOrder
+    salaryMax?: SortOrderInput | SortOrder
+    salaryCurrency?: SortOrderInput | SortOrder
+    salaryPeriod?: SortOrderInput | SortOrder
+    tags?: SortOrderInput | SortOrder
+    benefits?: SortOrder
+    visibility?: SortOrderInput | SortOrder
+    primaryTag?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
     jobType?: SortOrder
     status?: SortOrder
@@ -11982,6 +13450,14 @@ export namespace Prisma {
     description?: StringFilter<"Job"> | string
     requirements?: StringNullableFilter<"Job"> | string | null
     salaryRange?: StringNullableFilter<"Job"> | string | null
+    salaryMin?: StringNullableFilter<"Job"> | string | null
+    salaryMax?: StringNullableFilter<"Job"> | string | null
+    salaryCurrency?: StringNullableFilter<"Job"> | string | null
+    salaryPeriod?: StringNullableFilter<"Job"> | string | null
+    tags?: StringNullableFilter<"Job"> | string | null
+    benefits?: StringNullableListFilter<"Job">
+    visibility?: EnumVisibilityNullableFilter<"Job"> | $Enums.Visibility | null
+    primaryTag?: StringNullableFilter<"Job"> | string | null
     location?: StringNullableFilter<"Job"> | string | null
     jobType?: EnumJobTypeEnumFilter<"Job"> | $Enums.JobTypeEnum
     status?: EnumJobStatusFilter<"Job"> | $Enums.JobStatus
@@ -11999,6 +13475,14 @@ export namespace Prisma {
     description?: SortOrder
     requirements?: SortOrderInput | SortOrder
     salaryRange?: SortOrderInput | SortOrder
+    salaryMin?: SortOrderInput | SortOrder
+    salaryMax?: SortOrderInput | SortOrder
+    salaryCurrency?: SortOrderInput | SortOrder
+    salaryPeriod?: SortOrderInput | SortOrder
+    tags?: SortOrderInput | SortOrder
+    benefits?: SortOrder
+    visibility?: SortOrderInput | SortOrder
+    primaryTag?: SortOrderInput | SortOrder
     location?: SortOrderInput | SortOrder
     jobType?: SortOrder
     status?: SortOrder
@@ -12022,6 +13506,14 @@ export namespace Prisma {
     description?: StringWithAggregatesFilter<"Job"> | string
     requirements?: StringNullableWithAggregatesFilter<"Job"> | string | null
     salaryRange?: StringNullableWithAggregatesFilter<"Job"> | string | null
+    salaryMin?: StringNullableWithAggregatesFilter<"Job"> | string | null
+    salaryMax?: StringNullableWithAggregatesFilter<"Job"> | string | null
+    salaryCurrency?: StringNullableWithAggregatesFilter<"Job"> | string | null
+    salaryPeriod?: StringNullableWithAggregatesFilter<"Job"> | string | null
+    tags?: StringNullableWithAggregatesFilter<"Job"> | string | null
+    benefits?: StringNullableListFilter<"Job">
+    visibility?: EnumVisibilityNullableWithAggregatesFilter<"Job"> | $Enums.Visibility | null
+    primaryTag?: StringNullableWithAggregatesFilter<"Job"> | string | null
     location?: StringNullableWithAggregatesFilter<"Job"> | string | null
     jobType?: EnumJobTypeEnumWithAggregatesFilter<"Job"> | $Enums.JobTypeEnum
     status?: EnumJobStatusWithAggregatesFilter<"Job"> | $Enums.JobStatus
@@ -12188,6 +13680,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    isOnboarded?: boolean
     employer?: EmployerCreateNestedOneWithoutUserInput
     candidate?: CandidateCreateNestedOneWithoutUserInput
   }
@@ -12202,6 +13695,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    isOnboarded?: boolean
     employer?: EmployerUncheckedCreateNestedOneWithoutUserInput
     candidate?: CandidateUncheckedCreateNestedOneWithoutUserInput
   }
@@ -12215,6 +13709,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isOnboarded?: BoolFieldUpdateOperationsInput | boolean
     employer?: EmployerUpdateOneWithoutUserNestedInput
     candidate?: CandidateUpdateOneWithoutUserNestedInput
   }
@@ -12229,6 +13724,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isOnboarded?: BoolFieldUpdateOperationsInput | boolean
     employer?: EmployerUncheckedUpdateOneWithoutUserNestedInput
     candidate?: CandidateUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -12243,6 +13739,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    isOnboarded?: boolean
   }
 
   export type UserUpdateManyMutationInput = {
@@ -12254,6 +13751,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isOnboarded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -12266,11 +13764,18 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isOnboarded?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type EmployerCreateInput = {
     companyName: string
     companyLogoUrl?: string | null
+    companySize?: string | null
+    address?: string | null
+    industry?: string | null
+    foundedYear?: string | null
+    CompanyUrl?: string | null
+    CompanyDesc?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutEmployerInput
@@ -12282,6 +13787,12 @@ export namespace Prisma {
     userId: number
     companyName: string
     companyLogoUrl?: string | null
+    companySize?: string | null
+    address?: string | null
+    industry?: string | null
+    foundedYear?: string | null
+    CompanyUrl?: string | null
+    CompanyDesc?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     jobs?: JobUncheckedCreateNestedManyWithoutEmployerInput
@@ -12290,6 +13801,12 @@ export namespace Prisma {
   export type EmployerUpdateInput = {
     companyName?: StringFieldUpdateOperationsInput | string
     companyLogoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    companySize?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyDesc?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutEmployerNestedInput
@@ -12301,6 +13818,12 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     companyName?: StringFieldUpdateOperationsInput | string
     companyLogoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    companySize?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyDesc?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     jobs?: JobUncheckedUpdateManyWithoutEmployerNestedInput
@@ -12311,6 +13834,12 @@ export namespace Prisma {
     userId: number
     companyName: string
     companyLogoUrl?: string | null
+    companySize?: string | null
+    address?: string | null
+    industry?: string | null
+    foundedYear?: string | null
+    CompanyUrl?: string | null
+    CompanyDesc?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12318,6 +13847,12 @@ export namespace Prisma {
   export type EmployerUpdateManyMutationInput = {
     companyName?: StringFieldUpdateOperationsInput | string
     companyLogoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    companySize?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyDesc?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12327,6 +13862,12 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     companyName?: StringFieldUpdateOperationsInput | string
     companyLogoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    companySize?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyDesc?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12449,8 +13990,8 @@ export namespace Prisma {
   }
 
   export type EducationCreateInput = {
-    startDate: Date | string
-    endDate?: Date | string | null
+    startDate?: string | null
+    endDate?: string | null
     schoolName: string
     degree?: string | null
     fieldOfStudy?: string | null
@@ -12462,8 +14003,8 @@ export namespace Prisma {
   export type EducationUncheckedCreateInput = {
     id?: number
     candidateId: number
-    startDate: Date | string
-    endDate?: Date | string | null
+    startDate?: string | null
+    endDate?: string | null
     schoolName: string
     degree?: string | null
     fieldOfStudy?: string | null
@@ -12472,8 +14013,8 @@ export namespace Prisma {
   }
 
   export type EducationUpdateInput = {
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    endDate?: NullableStringFieldUpdateOperationsInput | string | null
     schoolName?: StringFieldUpdateOperationsInput | string
     degree?: NullableStringFieldUpdateOperationsInput | string | null
     fieldOfStudy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12485,8 +14026,8 @@ export namespace Prisma {
   export type EducationUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     candidateId?: IntFieldUpdateOperationsInput | number
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    endDate?: NullableStringFieldUpdateOperationsInput | string | null
     schoolName?: StringFieldUpdateOperationsInput | string
     degree?: NullableStringFieldUpdateOperationsInput | string | null
     fieldOfStudy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12497,8 +14038,8 @@ export namespace Prisma {
   export type EducationCreateManyInput = {
     id?: number
     candidateId: number
-    startDate: Date | string
-    endDate?: Date | string | null
+    startDate?: string | null
+    endDate?: string | null
     schoolName: string
     degree?: string | null
     fieldOfStudy?: string | null
@@ -12507,8 +14048,8 @@ export namespace Prisma {
   }
 
   export type EducationUpdateManyMutationInput = {
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    endDate?: NullableStringFieldUpdateOperationsInput | string | null
     schoolName?: StringFieldUpdateOperationsInput | string
     degree?: NullableStringFieldUpdateOperationsInput | string | null
     fieldOfStudy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12519,13 +14060,66 @@ export namespace Prisma {
   export type EducationUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     candidateId?: IntFieldUpdateOperationsInput | number
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    endDate?: NullableStringFieldUpdateOperationsInput | string | null
     schoolName?: StringFieldUpdateOperationsInput | string
     degree?: NullableStringFieldUpdateOperationsInput | string | null
     fieldOfStudy?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LinksCreateInput = {
+    linkedln?: string | null
+    Github?: string | null
+    Portfolio?: string | null
+    otherLink?: string | null
+  }
+
+  export type LinksUncheckedCreateInput = {
+    id?: number
+    linkedln?: string | null
+    Github?: string | null
+    Portfolio?: string | null
+    otherLink?: string | null
+  }
+
+  export type LinksUpdateInput = {
+    linkedln?: NullableStringFieldUpdateOperationsInput | string | null
+    Github?: NullableStringFieldUpdateOperationsInput | string | null
+    Portfolio?: NullableStringFieldUpdateOperationsInput | string | null
+    otherLink?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LinksUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    linkedln?: NullableStringFieldUpdateOperationsInput | string | null
+    Github?: NullableStringFieldUpdateOperationsInput | string | null
+    Portfolio?: NullableStringFieldUpdateOperationsInput | string | null
+    otherLink?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LinksCreateManyInput = {
+    id?: number
+    linkedln?: string | null
+    Github?: string | null
+    Portfolio?: string | null
+    otherLink?: string | null
+  }
+
+  export type LinksUpdateManyMutationInput = {
+    linkedln?: NullableStringFieldUpdateOperationsInput | string | null
+    Github?: NullableStringFieldUpdateOperationsInput | string | null
+    Portfolio?: NullableStringFieldUpdateOperationsInput | string | null
+    otherLink?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type LinksUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    linkedln?: NullableStringFieldUpdateOperationsInput | string | null
+    Github?: NullableStringFieldUpdateOperationsInput | string | null
+    Portfolio?: NullableStringFieldUpdateOperationsInput | string | null
+    otherLink?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type WorkExperienceCreateInput = {
@@ -12534,7 +14128,7 @@ export namespace Prisma {
     isCurrent?: boolean
     companyName: string
     position?: string | null
-    description?: string | null
+    jobTitle?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     candidate: CandidateCreateNestedOneWithoutWorkExperienceInput
@@ -12548,7 +14142,7 @@ export namespace Prisma {
     isCurrent?: boolean
     companyName: string
     position?: string | null
-    description?: string | null
+    jobTitle?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12559,7 +14153,7 @@ export namespace Prisma {
     isCurrent?: BoolFieldUpdateOperationsInput | boolean
     companyName?: StringFieldUpdateOperationsInput | string
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     candidate?: CandidateUpdateOneRequiredWithoutWorkExperienceNestedInput
@@ -12573,7 +14167,7 @@ export namespace Prisma {
     isCurrent?: BoolFieldUpdateOperationsInput | boolean
     companyName?: StringFieldUpdateOperationsInput | string
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12586,7 +14180,7 @@ export namespace Prisma {
     isCurrent?: boolean
     companyName: string
     position?: string | null
-    description?: string | null
+    jobTitle?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12597,7 +14191,7 @@ export namespace Prisma {
     isCurrent?: BoolFieldUpdateOperationsInput | boolean
     companyName?: StringFieldUpdateOperationsInput | string
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12610,7 +14204,7 @@ export namespace Prisma {
     isCurrent?: BoolFieldUpdateOperationsInput | boolean
     companyName?: StringFieldUpdateOperationsInput | string
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12620,6 +14214,14 @@ export namespace Prisma {
     description: string
     requirements?: string | null
     salaryRange?: string | null
+    salaryMin?: string | null
+    salaryMax?: string | null
+    salaryCurrency?: string | null
+    salaryPeriod?: string | null
+    tags?: string | null
+    benefits?: JobCreatebenefitsInput | string[]
+    visibility?: $Enums.Visibility | null
+    primaryTag?: string | null
     location?: string | null
     jobType: $Enums.JobTypeEnum
     status?: $Enums.JobStatus
@@ -12637,6 +14239,14 @@ export namespace Prisma {
     description: string
     requirements?: string | null
     salaryRange?: string | null
+    salaryMin?: string | null
+    salaryMax?: string | null
+    salaryCurrency?: string | null
+    salaryPeriod?: string | null
+    tags?: string | null
+    benefits?: JobCreatebenefitsInput | string[]
+    visibility?: $Enums.Visibility | null
+    primaryTag?: string | null
     location?: string | null
     jobType: $Enums.JobTypeEnum
     status?: $Enums.JobStatus
@@ -12651,6 +14261,14 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     salaryRange?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMin?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMax?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: JobUpdatebenefitsInput | string[]
+    visibility?: NullableEnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility | null
+    primaryTag?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     jobType?: EnumJobTypeEnumFieldUpdateOperationsInput | $Enums.JobTypeEnum
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
@@ -12668,6 +14286,14 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     salaryRange?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMin?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMax?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: JobUpdatebenefitsInput | string[]
+    visibility?: NullableEnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility | null
+    primaryTag?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     jobType?: EnumJobTypeEnumFieldUpdateOperationsInput | $Enums.JobTypeEnum
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
@@ -12684,6 +14310,14 @@ export namespace Prisma {
     description: string
     requirements?: string | null
     salaryRange?: string | null
+    salaryMin?: string | null
+    salaryMax?: string | null
+    salaryCurrency?: string | null
+    salaryPeriod?: string | null
+    tags?: string | null
+    benefits?: JobCreatebenefitsInput | string[]
+    visibility?: $Enums.Visibility | null
+    primaryTag?: string | null
     location?: string | null
     jobType: $Enums.JobTypeEnum
     status?: $Enums.JobStatus
@@ -12697,6 +14331,14 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     salaryRange?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMin?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMax?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: JobUpdatebenefitsInput | string[]
+    visibility?: NullableEnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility | null
+    primaryTag?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     jobType?: EnumJobTypeEnumFieldUpdateOperationsInput | $Enums.JobTypeEnum
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
@@ -12712,6 +14354,14 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     salaryRange?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMin?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMax?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: JobUpdatebenefitsInput | string[]
+    visibility?: NullableEnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility | null
+    primaryTag?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     jobType?: EnumJobTypeEnumFieldUpdateOperationsInput | $Enums.JobTypeEnum
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
@@ -12950,6 +14600,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     avatar?: SortOrder
+    isOnboarded?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -12966,6 +14617,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     avatar?: SortOrder
+    isOnboarded?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -12978,6 +14630,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     avatar?: SortOrder
+    isOnboarded?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -13088,6 +14741,12 @@ export namespace Prisma {
     userId?: SortOrder
     companyName?: SortOrder
     companyLogoUrl?: SortOrder
+    companySize?: SortOrder
+    address?: SortOrder
+    industry?: SortOrder
+    foundedYear?: SortOrder
+    CompanyUrl?: SortOrder
+    CompanyDesc?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13102,6 +14761,12 @@ export namespace Prisma {
     userId?: SortOrder
     companyName?: SortOrder
     companyLogoUrl?: SortOrder
+    companySize?: SortOrder
+    address?: SortOrder
+    industry?: SortOrder
+    foundedYear?: SortOrder
+    CompanyUrl?: SortOrder
+    CompanyDesc?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13111,6 +14776,12 @@ export namespace Prisma {
     userId?: SortOrder
     companyName?: SortOrder
     companyLogoUrl?: SortOrder
+    companySize?: SortOrder
+    address?: SortOrder
+    industry?: SortOrder
+    foundedYear?: SortOrder
+    CompanyUrl?: SortOrder
+    CompanyDesc?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13308,6 +14979,38 @@ export namespace Prisma {
     candidateId?: SortOrder
   }
 
+  export type LinksCountOrderByAggregateInput = {
+    id?: SortOrder
+    linkedln?: SortOrder
+    Github?: SortOrder
+    Portfolio?: SortOrder
+    otherLink?: SortOrder
+  }
+
+  export type LinksAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type LinksMaxOrderByAggregateInput = {
+    id?: SortOrder
+    linkedln?: SortOrder
+    Github?: SortOrder
+    Portfolio?: SortOrder
+    otherLink?: SortOrder
+  }
+
+  export type LinksMinOrderByAggregateInput = {
+    id?: SortOrder
+    linkedln?: SortOrder
+    Github?: SortOrder
+    Portfolio?: SortOrder
+    otherLink?: SortOrder
+  }
+
+  export type LinksSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
   export type WorkExperienceCountOrderByAggregateInput = {
     id?: SortOrder
     candidateId?: SortOrder
@@ -13316,7 +15019,7 @@ export namespace Prisma {
     isCurrent?: SortOrder
     companyName?: SortOrder
     position?: SortOrder
-    description?: SortOrder
+    jobTitle?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13334,7 +15037,7 @@ export namespace Prisma {
     isCurrent?: SortOrder
     companyName?: SortOrder
     position?: SortOrder
-    description?: SortOrder
+    jobTitle?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13347,7 +15050,7 @@ export namespace Prisma {
     isCurrent?: SortOrder
     companyName?: SortOrder
     position?: SortOrder
-    description?: SortOrder
+    jobTitle?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13355,6 +15058,21 @@ export namespace Prisma {
   export type WorkExperienceSumOrderByAggregateInput = {
     id?: SortOrder
     candidateId?: SortOrder
+  }
+
+  export type StringNullableListFilter<$PrismaModel = never> = {
+    equals?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    has?: string | StringFieldRefInput<$PrismaModel> | null
+    hasEvery?: string[] | ListStringFieldRefInput<$PrismaModel>
+    hasSome?: string[] | ListStringFieldRefInput<$PrismaModel>
+    isEmpty?: boolean
+  }
+
+  export type EnumVisibilityNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Visibility | EnumVisibilityFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Visibility[] | ListEnumVisibilityFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Visibility[] | ListEnumVisibilityFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumVisibilityNullableFilter<$PrismaModel> | $Enums.Visibility | null
   }
 
   export type EnumJobTypeEnumFilter<$PrismaModel = never> = {
@@ -13383,6 +15101,14 @@ export namespace Prisma {
     description?: SortOrder
     requirements?: SortOrder
     salaryRange?: SortOrder
+    salaryMin?: SortOrder
+    salaryMax?: SortOrder
+    salaryCurrency?: SortOrder
+    salaryPeriod?: SortOrder
+    tags?: SortOrder
+    benefits?: SortOrder
+    visibility?: SortOrder
+    primaryTag?: SortOrder
     location?: SortOrder
     jobType?: SortOrder
     status?: SortOrder
@@ -13403,6 +15129,13 @@ export namespace Prisma {
     description?: SortOrder
     requirements?: SortOrder
     salaryRange?: SortOrder
+    salaryMin?: SortOrder
+    salaryMax?: SortOrder
+    salaryCurrency?: SortOrder
+    salaryPeriod?: SortOrder
+    tags?: SortOrder
+    visibility?: SortOrder
+    primaryTag?: SortOrder
     location?: SortOrder
     jobType?: SortOrder
     status?: SortOrder
@@ -13418,6 +15151,13 @@ export namespace Prisma {
     description?: SortOrder
     requirements?: SortOrder
     salaryRange?: SortOrder
+    salaryMin?: SortOrder
+    salaryMax?: SortOrder
+    salaryCurrency?: SortOrder
+    salaryPeriod?: SortOrder
+    tags?: SortOrder
+    visibility?: SortOrder
+    primaryTag?: SortOrder
     location?: SortOrder
     jobType?: SortOrder
     status?: SortOrder
@@ -13429,6 +15169,16 @@ export namespace Prisma {
   export type JobSumOrderByAggregateInput = {
     id?: SortOrder
     employerId?: SortOrder
+  }
+
+  export type EnumVisibilityNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Visibility | EnumVisibilityFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Visibility[] | ListEnumVisibilityFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Visibility[] | ListEnumVisibilityFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumVisibilityNullableWithAggregatesFilter<$PrismaModel> | $Enums.Visibility | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumVisibilityNullableFilter<$PrismaModel>
+    _max?: NestedEnumVisibilityNullableFilter<$PrismaModel>
   }
 
   export type EnumJobTypeEnumWithAggregatesFilter<$PrismaModel = never> = {
@@ -13953,6 +15703,10 @@ export namespace Prisma {
     update?: XOR<XOR<CandidateUpdateToOneWithWhereWithoutWorkExperienceInput, CandidateUpdateWithoutWorkExperienceInput>, CandidateUncheckedUpdateWithoutWorkExperienceInput>
   }
 
+  export type JobCreatebenefitsInput = {
+    set: string[]
+  }
+
   export type EmployerCreateNestedOneWithoutJobsInput = {
     create?: XOR<EmployerCreateWithoutJobsInput, EmployerUncheckedCreateWithoutJobsInput>
     connectOrCreate?: EmployerCreateOrConnectWithoutJobsInput
@@ -13971,6 +15725,15 @@ export namespace Prisma {
     connectOrCreate?: ApplicationCreateOrConnectWithoutJobInput | ApplicationCreateOrConnectWithoutJobInput[]
     createMany?: ApplicationCreateManyJobInputEnvelope
     connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
+  }
+
+  export type JobUpdatebenefitsInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type NullableEnumVisibilityFieldUpdateOperationsInput = {
+    set?: $Enums.Visibility | null
   }
 
   export type EnumJobTypeEnumFieldUpdateOperationsInput = {
@@ -14331,6 +16094,13 @@ export namespace Prisma {
     _max?: NestedEnumGenderTypeNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumVisibilityNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.Visibility | EnumVisibilityFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Visibility[] | ListEnumVisibilityFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Visibility[] | ListEnumVisibilityFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumVisibilityNullableFilter<$PrismaModel> | $Enums.Visibility | null
+  }
+
   export type NestedEnumJobTypeEnumFilter<$PrismaModel = never> = {
     equals?: $Enums.JobTypeEnum | EnumJobTypeEnumFieldRefInput<$PrismaModel>
     in?: $Enums.JobTypeEnum[] | ListEnumJobTypeEnumFieldRefInput<$PrismaModel>
@@ -14343,6 +16113,16 @@ export namespace Prisma {
     in?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.JobStatus[] | ListEnumJobStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumJobStatusFilter<$PrismaModel> | $Enums.JobStatus
+  }
+
+  export type NestedEnumVisibilityNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Visibility | EnumVisibilityFieldRefInput<$PrismaModel> | null
+    in?: $Enums.Visibility[] | ListEnumVisibilityFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.Visibility[] | ListEnumVisibilityFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumVisibilityNullableWithAggregatesFilter<$PrismaModel> | $Enums.Visibility | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumVisibilityNullableFilter<$PrismaModel>
+    _max?: NestedEnumVisibilityNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumJobTypeEnumWithAggregatesFilter<$PrismaModel = never> = {
@@ -14402,6 +16182,12 @@ export namespace Prisma {
   export type EmployerCreateWithoutUserInput = {
     companyName: string
     companyLogoUrl?: string | null
+    companySize?: string | null
+    address?: string | null
+    industry?: string | null
+    foundedYear?: string | null
+    CompanyUrl?: string | null
+    CompanyDesc?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     jobs?: JobCreateNestedManyWithoutEmployerInput
@@ -14411,6 +16197,12 @@ export namespace Prisma {
     id?: number
     companyName: string
     companyLogoUrl?: string | null
+    companySize?: string | null
+    address?: string | null
+    industry?: string | null
+    foundedYear?: string | null
+    CompanyUrl?: string | null
+    CompanyDesc?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     jobs?: JobUncheckedCreateNestedManyWithoutEmployerInput
@@ -14475,6 +16267,12 @@ export namespace Prisma {
   export type EmployerUpdateWithoutUserInput = {
     companyName?: StringFieldUpdateOperationsInput | string
     companyLogoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    companySize?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyDesc?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     jobs?: JobUpdateManyWithoutEmployerNestedInput
@@ -14484,6 +16282,12 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     companyName?: StringFieldUpdateOperationsInput | string
     companyLogoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    companySize?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyDesc?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     jobs?: JobUncheckedUpdateManyWithoutEmployerNestedInput
@@ -14544,6 +16348,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    isOnboarded?: boolean
     candidate?: CandidateCreateNestedOneWithoutUserInput
   }
 
@@ -14557,6 +16362,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    isOnboarded?: boolean
     candidate?: CandidateUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -14570,6 +16376,14 @@ export namespace Prisma {
     description: string
     requirements?: string | null
     salaryRange?: string | null
+    salaryMin?: string | null
+    salaryMax?: string | null
+    salaryCurrency?: string | null
+    salaryPeriod?: string | null
+    tags?: string | null
+    benefits?: JobCreatebenefitsInput | string[]
+    visibility?: $Enums.Visibility | null
+    primaryTag?: string | null
     location?: string | null
     jobType: $Enums.JobTypeEnum
     status?: $Enums.JobStatus
@@ -14585,6 +16399,14 @@ export namespace Prisma {
     description: string
     requirements?: string | null
     salaryRange?: string | null
+    salaryMin?: string | null
+    salaryMax?: string | null
+    salaryCurrency?: string | null
+    salaryPeriod?: string | null
+    tags?: string | null
+    benefits?: JobCreatebenefitsInput | string[]
+    visibility?: $Enums.Visibility | null
+    primaryTag?: string | null
     location?: string | null
     jobType: $Enums.JobTypeEnum
     status?: $Enums.JobStatus
@@ -14624,6 +16446,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isOnboarded?: BoolFieldUpdateOperationsInput | boolean
     candidate?: CandidateUpdateOneWithoutUserNestedInput
   }
 
@@ -14637,6 +16460,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isOnboarded?: BoolFieldUpdateOperationsInput | boolean
     candidate?: CandidateUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -14666,6 +16490,14 @@ export namespace Prisma {
     description?: StringFilter<"Job"> | string
     requirements?: StringNullableFilter<"Job"> | string | null
     salaryRange?: StringNullableFilter<"Job"> | string | null
+    salaryMin?: StringNullableFilter<"Job"> | string | null
+    salaryMax?: StringNullableFilter<"Job"> | string | null
+    salaryCurrency?: StringNullableFilter<"Job"> | string | null
+    salaryPeriod?: StringNullableFilter<"Job"> | string | null
+    tags?: StringNullableFilter<"Job"> | string | null
+    benefits?: StringNullableListFilter<"Job">
+    visibility?: EnumVisibilityNullableFilter<"Job"> | $Enums.Visibility | null
+    primaryTag?: StringNullableFilter<"Job"> | string | null
     location?: StringNullableFilter<"Job"> | string | null
     jobType?: EnumJobTypeEnumFilter<"Job"> | $Enums.JobTypeEnum
     status?: EnumJobStatusFilter<"Job"> | $Enums.JobStatus
@@ -14683,6 +16515,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    isOnboarded?: boolean
     employer?: EmployerCreateNestedOneWithoutUserInput
   }
 
@@ -14696,6 +16529,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    isOnboarded?: boolean
     employer?: EmployerUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -14705,8 +16539,8 @@ export namespace Prisma {
   }
 
   export type EducationCreateWithoutCandidateInput = {
-    startDate: Date | string
-    endDate?: Date | string | null
+    startDate?: string | null
+    endDate?: string | null
     schoolName: string
     degree?: string | null
     fieldOfStudy?: string | null
@@ -14716,8 +16550,8 @@ export namespace Prisma {
 
   export type EducationUncheckedCreateWithoutCandidateInput = {
     id?: number
-    startDate: Date | string
-    endDate?: Date | string | null
+    startDate?: string | null
+    endDate?: string | null
     schoolName: string
     degree?: string | null
     fieldOfStudy?: string | null
@@ -14741,7 +16575,7 @@ export namespace Prisma {
     isCurrent?: boolean
     companyName: string
     position?: string | null
-    description?: string | null
+    jobTitle?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14753,7 +16587,7 @@ export namespace Prisma {
     isCurrent?: boolean
     companyName: string
     position?: string | null
-    description?: string | null
+    jobTitle?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14846,6 +16680,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isOnboarded?: BoolFieldUpdateOperationsInput | boolean
     employer?: EmployerUpdateOneWithoutUserNestedInput
   }
 
@@ -14859,6 +16694,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    isOnboarded?: BoolFieldUpdateOperationsInput | boolean
     employer?: EmployerUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -14884,8 +16720,8 @@ export namespace Prisma {
     NOT?: EducationScalarWhereInput | EducationScalarWhereInput[]
     id?: IntFilter<"Education"> | number
     candidateId?: IntFilter<"Education"> | number
-    startDate?: DateTimeFilter<"Education"> | Date | string
-    endDate?: DateTimeNullableFilter<"Education"> | Date | string | null
+    startDate?: StringNullableFilter<"Education"> | string | null
+    endDate?: StringNullableFilter<"Education"> | string | null
     schoolName?: StringFilter<"Education"> | string
     degree?: StringNullableFilter<"Education"> | string | null
     fieldOfStudy?: StringNullableFilter<"Education"> | string | null
@@ -14920,7 +16756,7 @@ export namespace Prisma {
     isCurrent?: BoolFilter<"WorkExperience"> | boolean
     companyName?: StringFilter<"WorkExperience"> | string
     position?: StringNullableFilter<"WorkExperience"> | string | null
-    description?: StringNullableFilter<"WorkExperience"> | string | null
+    jobTitle?: StringNullableFilter<"WorkExperience"> | string | null
     createdAt?: DateTimeFilter<"WorkExperience"> | Date | string
     updatedAt?: DateTimeFilter<"WorkExperience"> | Date | string
   }
@@ -15159,6 +16995,12 @@ export namespace Prisma {
   export type EmployerCreateWithoutJobsInput = {
     companyName: string
     companyLogoUrl?: string | null
+    companySize?: string | null
+    address?: string | null
+    industry?: string | null
+    foundedYear?: string | null
+    CompanyUrl?: string | null
+    CompanyDesc?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutEmployerInput
@@ -15169,6 +17011,12 @@ export namespace Prisma {
     userId: number
     companyName: string
     companyLogoUrl?: string | null
+    companySize?: string | null
+    address?: string | null
+    industry?: string | null
+    foundedYear?: string | null
+    CompanyUrl?: string | null
+    CompanyDesc?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15221,6 +17069,12 @@ export namespace Prisma {
   export type EmployerUpdateWithoutJobsInput = {
     companyName?: StringFieldUpdateOperationsInput | string
     companyLogoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    companySize?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyDesc?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutEmployerNestedInput
@@ -15231,6 +17085,12 @@ export namespace Prisma {
     userId?: IntFieldUpdateOperationsInput | number
     companyName?: StringFieldUpdateOperationsInput | string
     companyLogoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    companySize?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    industry?: NullableStringFieldUpdateOperationsInput | string | null
+    foundedYear?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    CompanyDesc?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15427,6 +17287,14 @@ export namespace Prisma {
     description: string
     requirements?: string | null
     salaryRange?: string | null
+    salaryMin?: string | null
+    salaryMax?: string | null
+    salaryCurrency?: string | null
+    salaryPeriod?: string | null
+    tags?: string | null
+    benefits?: JobCreatebenefitsInput | string[]
+    visibility?: $Enums.Visibility | null
+    primaryTag?: string | null
     location?: string | null
     jobType: $Enums.JobTypeEnum
     status?: $Enums.JobStatus
@@ -15443,6 +17311,14 @@ export namespace Prisma {
     description: string
     requirements?: string | null
     salaryRange?: string | null
+    salaryMin?: string | null
+    salaryMax?: string | null
+    salaryCurrency?: string | null
+    salaryPeriod?: string | null
+    tags?: string | null
+    benefits?: JobCreatebenefitsInput | string[]
+    visibility?: $Enums.Visibility | null
+    primaryTag?: string | null
     location?: string | null
     jobType: $Enums.JobTypeEnum
     status?: $Enums.JobStatus
@@ -15542,6 +17418,14 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     salaryRange?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMin?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMax?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: JobUpdatebenefitsInput | string[]
+    visibility?: NullableEnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility | null
+    primaryTag?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     jobType?: EnumJobTypeEnumFieldUpdateOperationsInput | $Enums.JobTypeEnum
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
@@ -15558,6 +17442,14 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     salaryRange?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMin?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMax?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: JobUpdatebenefitsInput | string[]
+    visibility?: NullableEnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility | null
+    primaryTag?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     jobType?: EnumJobTypeEnumFieldUpdateOperationsInput | $Enums.JobTypeEnum
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
@@ -15602,6 +17494,14 @@ export namespace Prisma {
     description: string
     requirements?: string | null
     salaryRange?: string | null
+    salaryMin?: string | null
+    salaryMax?: string | null
+    salaryCurrency?: string | null
+    salaryPeriod?: string | null
+    tags?: string | null
+    benefits?: JobCreatebenefitsInput | string[]
+    visibility?: $Enums.Visibility | null
+    primaryTag?: string | null
     location?: string | null
     jobType: $Enums.JobTypeEnum
     status?: $Enums.JobStatus
@@ -15615,6 +17515,14 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     salaryRange?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMin?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMax?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: JobUpdatebenefitsInput | string[]
+    visibility?: NullableEnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility | null
+    primaryTag?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     jobType?: EnumJobTypeEnumFieldUpdateOperationsInput | $Enums.JobTypeEnum
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
@@ -15630,6 +17538,14 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     salaryRange?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMin?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMax?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: JobUpdatebenefitsInput | string[]
+    visibility?: NullableEnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility | null
+    primaryTag?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     jobType?: EnumJobTypeEnumFieldUpdateOperationsInput | $Enums.JobTypeEnum
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
@@ -15645,6 +17561,14 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     requirements?: NullableStringFieldUpdateOperationsInput | string | null
     salaryRange?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMin?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryMax?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryCurrency?: NullableStringFieldUpdateOperationsInput | string | null
+    salaryPeriod?: NullableStringFieldUpdateOperationsInput | string | null
+    tags?: NullableStringFieldUpdateOperationsInput | string | null
+    benefits?: JobUpdatebenefitsInput | string[]
+    visibility?: NullableEnumVisibilityFieldUpdateOperationsInput | $Enums.Visibility | null
+    primaryTag?: NullableStringFieldUpdateOperationsInput | string | null
     location?: NullableStringFieldUpdateOperationsInput | string | null
     jobType?: EnumJobTypeEnumFieldUpdateOperationsInput | $Enums.JobTypeEnum
     status?: EnumJobStatusFieldUpdateOperationsInput | $Enums.JobStatus
@@ -15655,8 +17579,8 @@ export namespace Prisma {
 
   export type EducationCreateManyCandidateInput = {
     id?: number
-    startDate: Date | string
-    endDate?: Date | string | null
+    startDate?: string | null
+    endDate?: string | null
     schoolName: string
     degree?: string | null
     fieldOfStudy?: string | null
@@ -15671,7 +17595,7 @@ export namespace Prisma {
     isCurrent?: boolean
     companyName: string
     position?: string | null
-    description?: string | null
+    jobTitle?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15696,8 +17620,8 @@ export namespace Prisma {
   }
 
   export type EducationUpdateWithoutCandidateInput = {
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    endDate?: NullableStringFieldUpdateOperationsInput | string | null
     schoolName?: StringFieldUpdateOperationsInput | string
     degree?: NullableStringFieldUpdateOperationsInput | string | null
     fieldOfStudy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15707,8 +17631,8 @@ export namespace Prisma {
 
   export type EducationUncheckedUpdateWithoutCandidateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    endDate?: NullableStringFieldUpdateOperationsInput | string | null
     schoolName?: StringFieldUpdateOperationsInput | string
     degree?: NullableStringFieldUpdateOperationsInput | string | null
     fieldOfStudy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15718,8 +17642,8 @@ export namespace Prisma {
 
   export type EducationUncheckedUpdateManyWithoutCandidateInput = {
     id?: IntFieldUpdateOperationsInput | number
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    startDate?: NullableStringFieldUpdateOperationsInput | string | null
+    endDate?: NullableStringFieldUpdateOperationsInput | string | null
     schoolName?: StringFieldUpdateOperationsInput | string
     degree?: NullableStringFieldUpdateOperationsInput | string | null
     fieldOfStudy?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15733,7 +17657,7 @@ export namespace Prisma {
     isCurrent?: BoolFieldUpdateOperationsInput | boolean
     companyName?: StringFieldUpdateOperationsInput | string
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15745,7 +17669,7 @@ export namespace Prisma {
     isCurrent?: BoolFieldUpdateOperationsInput | boolean
     companyName?: StringFieldUpdateOperationsInput | string
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15757,7 +17681,7 @@ export namespace Prisma {
     isCurrent?: BoolFieldUpdateOperationsInput | boolean
     companyName?: StringFieldUpdateOperationsInput | string
     position?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
+    jobTitle?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

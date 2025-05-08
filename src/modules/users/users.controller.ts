@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Controller, Get, UnauthorizedException, UseGuards, Request, Patch, Body, Post, UploadedFile, UseInterceptors } from '@nestjs/common'; 
 import { UsersService } from './users.service';
 import { AuthGuard as JWTAuthGuard } from '../../core/guard/authenticated.guard';
@@ -18,7 +19,8 @@ export class UsersController {
   ) {
     return this.usersService.getUser(req.user.email);
   }
-  @Get('check-candidate')
+
+  @Get('check-isOnboarded')
   @UseGuards(JWTAuthGuard)
   async checkUserCandidateCreated(
     @Request() req: AuthenticatedRequest 
@@ -34,7 +36,13 @@ export class UsersController {
   ) {
     return this.usersService.uploadAvatar(file, req.user.email);
   }
-
+@Patch('update-onboarding')
+  @UseGuards(JWTAuthGuard)
+  async uploadOnboarding(
+    @Request() req: AuthenticatedRequest,
+  ) {
+    return this.usersService.updateIsOnboarded(req.user.email);
+  }
   @Patch('me')
   @UseGuards(JWTAuthGuard)
   async updateUserDetails(

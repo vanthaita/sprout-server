@@ -8,25 +8,39 @@ export class CreateEmployerDto {
   @IsNotEmpty()
   email: string;
 
-  @IsString()
-  @IsNotEmpty()
-  password: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // password: string;
 
-  @IsString()
-  @IsNotEmpty()
-  fullName: string;
+  // @IsString()
+  // @IsNotEmpty()
+  // fullName: string;
 
   @IsString()
   @IsNotEmpty()
   companyName: string;
 
-  @IsString()
-  @IsOptional()
-  companyNameJp?: string;
-
   @IsUrl()
   @IsOptional()
   companyLogoUrl?: string;
+
+  @IsString()
+  companySize?: string;
+
+  @IsString()
+  address?: string;
+
+  @IsString()
+  industry?: string;
+
+  @IsString()
+  foudedYear?: string;
+
+  @IsString()
+  CompanyUrl?: string;
+
+  @IsString()
+  CompanyDesc?: string;
 
   // Default value will be set in service
   userType: UserType = UserType.EMPLOYER;

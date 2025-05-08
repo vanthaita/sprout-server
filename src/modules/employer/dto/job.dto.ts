@@ -1,8 +1,8 @@
 import { 
   IsString, IsNotEmpty, IsOptional, IsEnum, 
-  IsNumber
+  IsNumber,
 } from 'class-validator';
-import { ApplicationStatus, JobStatus, JobTypeEnum } from 'generated/prisma';
+import { ApplicationStatus, JobStatus, JobTypeEnum, Visibility } from 'generated/prisma';
 
 export class CreateJobDto {
   @IsString()
@@ -20,6 +20,40 @@ export class CreateJobDto {
   @IsString()
   @IsOptional()
   salaryRange?: string;
+
+  @IsString()
+  @IsOptional()
+  salaryMin: string
+  
+  @IsString()
+  @IsOptional()
+  primaryTag?: string
+
+  @IsString()
+  @IsOptional()
+  salaryMax: string
+
+  @IsString()
+  @IsOptional()
+  salaryCurrency: string
+  
+  @IsString()
+  @IsOptional()
+  salaryPeriod: string
+  
+  @IsString()
+  @IsOptional()
+  tags: string
+  
+  @IsString()
+  @IsOptional()
+  benefits?: string[]
+  
+  @IsEnum(Visibility)
+  @IsOptional()
+  visibility?: Visibility    
+
+
 
   @IsString()
   @IsOptional()

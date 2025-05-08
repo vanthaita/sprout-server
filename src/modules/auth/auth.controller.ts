@@ -20,9 +20,7 @@ export class AuthController {
   ) {
     const googleToken = req.user?.accessToken;
     const authRes = await this.authService.authenticate(googleToken);
-
     res.cookie('access_token', authRes.access_token, { httpOnly: true });
-    res.redirect(`http://localhost:3000/profile`);
+    res.redirect(`http://localhost:3000/en/onboarding`);
   }
-  
 }

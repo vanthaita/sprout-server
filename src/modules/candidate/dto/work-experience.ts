@@ -1,5 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsString, IsOptional, IsDateString, IsNotEmpty, IsBoolean, IsEnum } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, IsOptional, IsDateString, IsNotEmpty, IsBoolean, IsEnum, IsArray, ValidateNested } from 'class-validator';
 import { JobTypeEnum } from 'generated/prisma';
 
 export class CreateWorkExperienceDto {
@@ -21,15 +22,8 @@ export class CreateWorkExperienceDto {
 
     @IsOptional()
     @IsString()
-    department?: string;
+    position?: string;
 
-    @IsOptional()
-    @IsString()
-    jobTitle?: string;
-
-    @IsOptional()
-    @IsString()
-    description?: string;
 
     @IsOptional()
     @IsEnum(JobTypeEnum) 
@@ -37,3 +31,11 @@ export class CreateWorkExperienceDto {
 }
 
 export class UpdateWorkExperienceDto extends PartialType(CreateWorkExperienceDto) {}
+
+
+export class CreateWorkExperienceListDto {
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => CreateWorkExperienceDto)
+    workExperiences: CreateWorkExperienceDto[];
+}

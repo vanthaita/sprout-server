@@ -86,19 +86,39 @@ export class UsersService {
     async checkUserProfileCreated(email: string) {
         const existingUser = await this.prismaService.user.findUnique({
             where: { email },
+            select: {
+                isOnboarded: true,
+                userType: true
+            }
         });
         if (!existingUser) {
             throw new NotFoundException('User not found');
         }
-        const existingUserCandidate = await this.prismaService.candidate.findUnique({
-            where: {
-                userId: existingUser.id
-            }
-        })
+        return {
+            isOnboarded: existingUser.isOnboarded,
+            userType: existingUser.userType,
+        };
+    }
 
-        if(existingUserCandidate) {
-            return true
+    async updateIsOnboarded(email: string) {
+        const existingUser = await this.prismaService.user.findUnique({
+            where: { email },
+            select: {
+                id: true,
+                isOnboarded: true,
+                userType: true
+            }
+        });
+        if (!existingUser) {
+            throw new NotFoundException('User not found');
         }
-        return false
+        return this.prismaService.user.update({
+            where: {
+                id: existingUser.id
+            },
+            data: {
+                isOnboarded: true
+            }
+        });
     }
 }

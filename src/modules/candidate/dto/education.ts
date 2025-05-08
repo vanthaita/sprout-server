@@ -1,5 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsString, IsOptional, IsDateString, IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsString, IsOptional, IsDateString, IsNotEmpty, IsArray, ValidateNested } from 'class-validator';
 
 export class CreateEducationDto {
     @IsNotEmpty()
@@ -24,7 +25,14 @@ export class CreateEducationDto {
 
     @IsOptional()
     @IsString()
-    degreeOrStatus?: string;
+    degree?: string;
 }
 
 export class UpdateEducationDto extends PartialType(CreateEducationDto) {}
+
+export class CreateEducationListDto {
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => CreateEducationDto)
+    educations: CreateEducationDto[];
+}

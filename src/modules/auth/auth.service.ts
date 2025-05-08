@@ -22,6 +22,7 @@ export class AuthService {
                 email: profile?.data.email,
                 fullName: profile?.data.name,
                 userType: 'CANDIDATE',
+                avatar: profile?.data.avatar,
             }
 
             user = await this.usersService.createUser(createUserDto);

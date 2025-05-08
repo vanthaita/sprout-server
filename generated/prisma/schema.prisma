@@ -65,6 +65,11 @@ enum FileTypeEnum {
   OTHER
 }
 
+enum Visibility {
+  PUBLIC
+  PRIVATE
+}
+
 model User {
   id           Int        @id @default(autoincrement())
   email        String     @unique
@@ -75,6 +80,7 @@ model User {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   avatar       String?
+  isOnboarded  Boolean    @default(false)
   employer     Employer?
   candidate    Candidate?
 }
@@ -84,6 +90,12 @@ model Employer {
   userId         Int      @unique
   companyName    String
   companyLogoUrl String?
+  companySize    String?
+  address        String?
+  industry       String?
+  foundedYear    String?
+  CompanyUrl     String?
+  CompanyDesc    String?
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   jobs           Job[]
   createdAt      DateTime @default(now())
@@ -107,21 +119,28 @@ model Candidate {
   applications    Application[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
-
-  CV CV[]
+  CV              CV[]
 }
 
 model Education {
   id           Int       @id @default(autoincrement())
   candidateId  Int
-  startDate    DateTime
-  endDate      DateTime?
+  startDate    String?
+  endDate      String?
   schoolName   String
   degree       String?
   fieldOfStudy String?
   candidate    Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+}
+
+model Links {
+  id        Int     @id @default(autoincrement())
+  linkedln  String?
+  Github    String?
+  Portfolio String?
+  otherLink String?
 }
 
 model WorkExperience {
@@ -132,27 +151,35 @@ model WorkExperience {
   isCurrent   Boolean   @default(false)
   companyName String
   position    String?
-  description String?
+  jobTitle    String?
   candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
 
 model Job {
-  id           Int           @id @default(autoincrement())
-  employerId   Int
-  title        String
-  description  String
-  requirements String?
-  salaryRange  String?
-  location     String?
-  jobType      JobTypeEnum
-  status       JobStatus     @default(PENDING)
-  postedDate   DateTime      @default(now())
-  employer     Employer      @relation(fields: [employerId], references: [id], onDelete: Cascade)
-  applications Application[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id             Int           @id @default(autoincrement())
+  employerId     Int
+  title          String
+  description    String
+  requirements   String?
+  salaryRange    String?
+  salaryMin      String?
+  salaryMax      String?
+  salaryCurrency String?
+  salaryPeriod   String?
+  tags           String?
+  benefits       String[]
+  visibility     Visibility?
+  primaryTag     String?
+  location       String?
+  jobType        JobTypeEnum
+  status         JobStatus     @default(PENDING)
+  postedDate     DateTime      @default(now())
+  employer       Employer      @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  applications   Application[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 model CV {

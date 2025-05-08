@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateCandidateDto, UpdateCandidateDto } from './dto/candidate';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateEducationDto, UpdateEducationDto } from './dto/education';
@@ -28,9 +28,19 @@ export class CandidateService {
     async createCandidateProfile(email: string, candidateProfileCreateDto: CreateCandidateDto) {
         const existingUser = await this.prismaService.user.findUnique({
             where: { email },
+            include: { candidate: true, employer: true } 
         });
+        
         if (!existingUser) {
             throw new NotFoundException('User not found');
+        }
+        
+        if (existingUser.candidate) {
+            throw new ConflictException('User already has a candidate profile');
+        }
+        
+        if (existingUser.employer) {
+            throw new ConflictException('User already has a employer profile');
         }
         
         return await this.prismaService.candidate.create({
@@ -112,15 +122,16 @@ export class CandidateService {
         };
     }
 
-    async addEducation(email: string, dto: CreateEducationDto) {
+    async addEducations(email: string, dtos: CreateEducationDto[]) {
+        if (!dtos || !Array.isArray(dtos)) {
+            throw new Error('Educations data must be provided as an array');
+        }
         const candidateId = await this.findCandidateByEmail(email);
-        return this.prismaService.education.create({
-            data: {
+        return this.prismaService.education.createMany({
+            data: dtos.map(dto => ({
                 ...dto,
-                startDate: new Date(dto.startDate),
-                endDate: dto.endDate ? new Date(dto.endDate) : null,
-                candidate: { connect: { id: candidateId } },
-            },
+                candidateId,
+            })),
         });
     }
 
@@ -134,8 +145,6 @@ export class CandidateService {
         }
 
         const dataToUpdate: Prisma.EducationUpdateInput = { ...dto };
-        if (dto.startDate) dataToUpdate.startDate = new Date(dto.startDate);
-        if (dto.endDate !== undefined) dataToUpdate.endDate = dto.endDate ? new Date(dto.endDate) : null;
 
         return this.prismaService.education.update({
             where: { id: educationId },
@@ -158,17 +167,18 @@ export class CandidateService {
         });
     }
 
-    async addWorkExperience(email: string, dto: CreateWorkExperienceDto) {
+    async addWorkExperiences(email: string, dtos: CreateWorkExperienceDto[]) {
         const candidateId = await this.findCandidateByEmail(email);
-        return this.prismaService.workExperience.create({
-            data: {
+        return this.prismaService.workExperience.createMany({
+            data: dtos.map(dto => ({
                 ...dto,
                 startDate: new Date(dto.startDate),
                 endDate: dto.endDate ? new Date(dto.endDate) : null,
-                candidate: { connect: { id: candidateId } },
-            },
+                candidateId,
+            })),
         });
     }
+
 
     async updateWorkExperience(email: string, experienceId: number, dto: UpdateWorkExperienceDto) {
         const candidateId = await this.findCandidateByEmail(email);

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateEmployerDto, EmployerResponseDto, UpdateEmployerDto } from './dto/employer.dto';
 import { CreateJobDto, JobFilterDto, JobResponseDto, UpdateJobDto } from './dto/job.dto';
@@ -12,12 +12,23 @@ export class EmployerService {
     async createEmployer(createEmployerDto: CreateEmployerDto, email: string) {
         const existingUser = await this.prismaService.user.findUnique({
             where: { email },
+            select: {
+              id: true,
+              userType: true,
+              candidate: true,
+              employer: true,
+            }
         });
-
         if (!existingUser) {
             throw new NotFoundException('User not found');
         }
-
+         if (existingUser.candidate) {
+              throw new ConflictException('User already has a candidate profile');
+          }
+          
+          if (existingUser.employer) {
+              throw new ConflictException('User already has a employer profile');
+          }
         return await this.prismaService.employer.create({
             data: {
                 ...createEmployerDto,

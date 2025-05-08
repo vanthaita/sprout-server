@@ -126,7 +126,8 @@ exports.Prisma.UserScalarFieldEnum = {
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  avatar: 'avatar'
+  avatar: 'avatar',
+  isOnboarded: 'isOnboarded'
 };
 
 exports.Prisma.EmployerScalarFieldEnum = {
@@ -134,6 +135,12 @@ exports.Prisma.EmployerScalarFieldEnum = {
   userId: 'userId',
   companyName: 'companyName',
   companyLogoUrl: 'companyLogoUrl',
+  companySize: 'companySize',
+  address: 'address',
+  industry: 'industry',
+  foundedYear: 'foundedYear',
+  CompanyUrl: 'CompanyUrl',
+  CompanyDesc: 'CompanyDesc',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -165,6 +172,14 @@ exports.Prisma.EducationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.LinksScalarFieldEnum = {
+  id: 'id',
+  linkedln: 'linkedln',
+  Github: 'Github',
+  Portfolio: 'Portfolio',
+  otherLink: 'otherLink'
+};
+
 exports.Prisma.WorkExperienceScalarFieldEnum = {
   id: 'id',
   candidateId: 'candidateId',
@@ -173,7 +188,7 @@ exports.Prisma.WorkExperienceScalarFieldEnum = {
   isCurrent: 'isCurrent',
   companyName: 'companyName',
   position: 'position',
-  description: 'description',
+  jobTitle: 'jobTitle',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -185,6 +200,14 @@ exports.Prisma.JobScalarFieldEnum = {
   description: 'description',
   requirements: 'requirements',
   salaryRange: 'salaryRange',
+  salaryMin: 'salaryMin',
+  salaryMax: 'salaryMax',
+  salaryCurrency: 'salaryCurrency',
+  salaryPeriod: 'salaryPeriod',
+  tags: 'tags',
+  benefits: 'benefits',
+  visibility: 'visibility',
+  primaryTag: 'primaryTag',
   location: 'location',
   jobType: 'jobType',
   status: 'status',
@@ -241,6 +264,11 @@ exports.GenderType = exports.$Enums.GenderType = {
   PREFER_NOT_TO_SAY: 'PREFER_NOT_TO_SAY'
 };
 
+exports.Visibility = exports.$Enums.Visibility = {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE'
+};
+
 exports.JobTypeEnum = exports.$Enums.JobTypeEnum = {
   FULL_TIME: 'FULL_TIME',
   PART_TIME: 'PART_TIME',
@@ -279,6 +307,7 @@ exports.Prisma.ModelName = {
   Employer: 'Employer',
   Candidate: 'Candidate',
   Education: 'Education',
+  Links: 'Links',
   WorkExperience: 'WorkExperience',
   Job: 'Job',
   CV: 'CV',
