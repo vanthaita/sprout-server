@@ -10,7 +10,8 @@ import {
   UseGuards,
   ParseIntPipe,
   HttpCode,
-  HttpStatus 
+  HttpStatus, 
+  Query
 } from '@nestjs/common';
 import { CandidateService } from './candidate.service';
 import { AuthGuard as JWTAuthGuard } from '../../core/guard/authenticated.guard'; 
@@ -22,18 +23,27 @@ import { CreateWorkExperienceListDto, UpdateWorkExperienceDto } from './dto/work
 import { CreateCVDto, UpdateCVDto } from './dto/cv';
 
 @Controller('candidate')
-@UseGuards(JWTAuthGuard) 
+// @UseGuards(JWTAuthGuard) 
 export class CandidateController {
     constructor(private readonly candidateService: CandidateService) {}
 
 
+    @UseGuards(JWTAuthGuard) 
     @Get('profile') 
     getCandidateProfile( 
         @Request() req: AuthenticatedRequest,
     ) {
         return this.candidateService.candidateProfileDetails(req.user.email);
     }
-
+    @Get('view-profile') 
+    getCandidateProfileByGuest( 
+        @Request() req: AuthenticatedRequest,
+        @Query('email') email: string
+    ) {
+        console.log("email: ", email);
+        return this.candidateService.candidateProfileDetails(email);
+    }
+    @UseGuards(JWTAuthGuard) 
     @Post('profile')
     createCandidateProfile(
         @Request() req: AuthenticatedRequest,

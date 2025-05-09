@@ -66,6 +66,7 @@ export class EmployerController {
   ) {
     return this.employerService.createJob(createJobDto, req.user.email);
   }
+  
   @Get('jobs')
   async getJobs(
     @Request() req: AuthenticatedRequest,

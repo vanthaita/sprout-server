@@ -5,9 +5,6 @@ import { JobFilterDto } from '../employer/dto/job.dto';
 @Controller('job')
 export class JobController {
   constructor(private readonly jobService: JobService) {}
-
-
-
   @Get()
   async getAlljob(
     @Body() filter: JobFilterDto
