@@ -1833,37 +1833,6 @@ export namespace Prisma {
 
 
   /**
-   * Count Type CVCountOutputType
-   */
-
-  export type CVCountOutputType = {
-    applications: number
-  }
-
-  export type CVCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    applications?: boolean | CVCountOutputTypeCountApplicationsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * CVCountOutputType without action
-   */
-  export type CVCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CVCountOutputType
-     */
-    select?: CVCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * CVCountOutputType without action
-   */
-  export type CVCountOutputTypeCountApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ApplicationWhereInput
-  }
-
-
-  /**
    * Models
    */
 
@@ -10444,8 +10413,6 @@ export namespace Prisma {
     isPrimary?: boolean
     uploadedAt?: boolean
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
-    applications?: boolean | CV$applicationsArgs<ExtArgs>
-    _count?: boolean | CVCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["cV"]>
 
   export type CVSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -10483,8 +10450,6 @@ export namespace Prisma {
   export type CVOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "candidateId" | "fileName" | "fileUrl" | "fileType" | "isPrimary" | "uploadedAt", ExtArgs["result"]["cV"]>
   export type CVInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
-    applications?: boolean | CV$applicationsArgs<ExtArgs>
-    _count?: boolean | CVCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CVIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
@@ -10497,7 +10462,6 @@ export namespace Prisma {
     name: "CV"
     objects: {
       candidate: Prisma.$CandidatePayload<ExtArgs>
-      applications: Prisma.$ApplicationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -10902,7 +10866,6 @@ export namespace Prisma {
   export interface Prisma__CVClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     candidate<T extends CandidateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CandidateDefaultArgs<ExtArgs>>): Prisma__CandidateClient<$Result.GetResult<Prisma.$CandidatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    applications<T extends CV$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, CV$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11335,30 +11298,6 @@ export namespace Prisma {
   }
 
   /**
-   * CV.applications
-   */
-  export type CV$applicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    where?: ApplicationWhereInput
-    orderBy?: ApplicationOrderByWithRelationInput | ApplicationOrderByWithRelationInput[]
-    cursor?: ApplicationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ApplicationScalarFieldEnum | ApplicationScalarFieldEnum[]
-  }
-
-  /**
    * CV without action
    */
   export type CVDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11393,21 +11332,18 @@ export namespace Prisma {
     id: number | null
     candidateId: number | null
     jobId: number | null
-    cvId: number | null
   }
 
   export type ApplicationSumAggregateOutputType = {
     id: number | null
     candidateId: number | null
     jobId: number | null
-    cvId: number | null
   }
 
   export type ApplicationMinAggregateOutputType = {
     id: number | null
     candidateId: number | null
     jobId: number | null
-    cvId: number | null
     applicationDate: Date | null
     status: $Enums.ApplicationStatus | null
     createdAt: Date | null
@@ -11418,7 +11354,6 @@ export namespace Prisma {
     id: number | null
     candidateId: number | null
     jobId: number | null
-    cvId: number | null
     applicationDate: Date | null
     status: $Enums.ApplicationStatus | null
     createdAt: Date | null
@@ -11429,7 +11364,6 @@ export namespace Prisma {
     id: number
     candidateId: number
     jobId: number
-    cvId: number
     applicationDate: number
     status: number
     createdAt: number
@@ -11442,21 +11376,18 @@ export namespace Prisma {
     id?: true
     candidateId?: true
     jobId?: true
-    cvId?: true
   }
 
   export type ApplicationSumAggregateInputType = {
     id?: true
     candidateId?: true
     jobId?: true
-    cvId?: true
   }
 
   export type ApplicationMinAggregateInputType = {
     id?: true
     candidateId?: true
     jobId?: true
-    cvId?: true
     applicationDate?: true
     status?: true
     createdAt?: true
@@ -11467,7 +11398,6 @@ export namespace Prisma {
     id?: true
     candidateId?: true
     jobId?: true
-    cvId?: true
     applicationDate?: true
     status?: true
     createdAt?: true
@@ -11478,7 +11408,6 @@ export namespace Prisma {
     id?: true
     candidateId?: true
     jobId?: true
-    cvId?: true
     applicationDate?: true
     status?: true
     createdAt?: true
@@ -11576,7 +11505,6 @@ export namespace Prisma {
     id: number
     candidateId: number
     jobId: number
-    cvId: number
     applicationDate: Date
     status: $Enums.ApplicationStatus
     createdAt: Date
@@ -11606,70 +11534,60 @@ export namespace Prisma {
     id?: boolean
     candidateId?: boolean
     jobId?: boolean
-    cvId?: boolean
     applicationDate?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
     job?: boolean | JobDefaultArgs<ExtArgs>
-    cv?: boolean | CVDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["application"]>
 
   export type ApplicationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     candidateId?: boolean
     jobId?: boolean
-    cvId?: boolean
     applicationDate?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
     job?: boolean | JobDefaultArgs<ExtArgs>
-    cv?: boolean | CVDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["application"]>
 
   export type ApplicationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     candidateId?: boolean
     jobId?: boolean
-    cvId?: boolean
     applicationDate?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
     job?: boolean | JobDefaultArgs<ExtArgs>
-    cv?: boolean | CVDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["application"]>
 
   export type ApplicationSelectScalar = {
     id?: boolean
     candidateId?: boolean
     jobId?: boolean
-    cvId?: boolean
     applicationDate?: boolean
     status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "candidateId" | "jobId" | "cvId" | "applicationDate" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["application"]>
+  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "candidateId" | "jobId" | "applicationDate" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["application"]>
   export type ApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
     job?: boolean | JobDefaultArgs<ExtArgs>
-    cv?: boolean | CVDefaultArgs<ExtArgs>
   }
   export type ApplicationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
     job?: boolean | JobDefaultArgs<ExtArgs>
-    cv?: boolean | CVDefaultArgs<ExtArgs>
   }
   export type ApplicationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     candidate?: boolean | CandidateDefaultArgs<ExtArgs>
     job?: boolean | JobDefaultArgs<ExtArgs>
-    cv?: boolean | CVDefaultArgs<ExtArgs>
   }
 
   export type $ApplicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11677,13 +11595,11 @@ export namespace Prisma {
     objects: {
       candidate: Prisma.$CandidatePayload<ExtArgs>
       job: Prisma.$JobPayload<ExtArgs>
-      cv: Prisma.$CVPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       candidateId: number
       jobId: number
-      cvId: number
       applicationDate: Date
       status: $Enums.ApplicationStatus
       createdAt: Date
@@ -12084,7 +12000,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     candidate<T extends CandidateDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CandidateDefaultArgs<ExtArgs>>): Prisma__CandidateClient<$Result.GetResult<Prisma.$CandidatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     job<T extends JobDefaultArgs<ExtArgs> = {}>(args?: Subset<T, JobDefaultArgs<ExtArgs>>): Prisma__JobClient<$Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    cv<T extends CVDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CVDefaultArgs<ExtArgs>>): Prisma__CVClient<$Result.GetResult<Prisma.$CVPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12117,7 +12032,6 @@ export namespace Prisma {
     readonly id: FieldRef<"Application", 'Int'>
     readonly candidateId: FieldRef<"Application", 'Int'>
     readonly jobId: FieldRef<"Application", 'Int'>
-    readonly cvId: FieldRef<"Application", 'Int'>
     readonly applicationDate: FieldRef<"Application", 'DateTime'>
     readonly status: FieldRef<"Application", 'ApplicationStatus'>
     readonly createdAt: FieldRef<"Application", 'DateTime'>
@@ -12687,7 +12601,6 @@ export namespace Prisma {
     id: 'id',
     candidateId: 'candidateId',
     jobId: 'jobId',
-    cvId: 'cvId',
     applicationDate: 'applicationDate',
     status: 'status',
     createdAt: 'createdAt',
@@ -13534,7 +13447,6 @@ export namespace Prisma {
     isPrimary?: BoolFilter<"CV"> | boolean
     uploadedAt?: DateTimeFilter<"CV"> | Date | string
     candidate?: XOR<CandidateScalarRelationFilter, CandidateWhereInput>
-    applications?: ApplicationListRelationFilter
   }
 
   export type CVOrderByWithRelationInput = {
@@ -13546,7 +13458,6 @@ export namespace Prisma {
     isPrimary?: SortOrder
     uploadedAt?: SortOrder
     candidate?: CandidateOrderByWithRelationInput
-    applications?: ApplicationOrderByRelationAggregateInput
   }
 
   export type CVWhereUniqueInput = Prisma.AtLeast<{
@@ -13561,7 +13472,6 @@ export namespace Prisma {
     isPrimary?: BoolFilter<"CV"> | boolean
     uploadedAt?: DateTimeFilter<"CV"> | Date | string
     candidate?: XOR<CandidateScalarRelationFilter, CandidateWhereInput>
-    applications?: ApplicationListRelationFilter
   }, "id">
 
   export type CVOrderByWithAggregationInput = {
@@ -13599,28 +13509,24 @@ export namespace Prisma {
     id?: IntFilter<"Application"> | number
     candidateId?: IntFilter<"Application"> | number
     jobId?: IntFilter<"Application"> | number
-    cvId?: IntFilter<"Application"> | number
     applicationDate?: DateTimeFilter<"Application"> | Date | string
     status?: EnumApplicationStatusFilter<"Application"> | $Enums.ApplicationStatus
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
     candidate?: XOR<CandidateScalarRelationFilter, CandidateWhereInput>
     job?: XOR<JobScalarRelationFilter, JobWhereInput>
-    cv?: XOR<CVScalarRelationFilter, CVWhereInput>
   }
 
   export type ApplicationOrderByWithRelationInput = {
     id?: SortOrder
     candidateId?: SortOrder
     jobId?: SortOrder
-    cvId?: SortOrder
     applicationDate?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     candidate?: CandidateOrderByWithRelationInput
     job?: JobOrderByWithRelationInput
-    cv?: CVOrderByWithRelationInput
   }
 
   export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
@@ -13631,21 +13537,18 @@ export namespace Prisma {
     NOT?: ApplicationWhereInput | ApplicationWhereInput[]
     candidateId?: IntFilter<"Application"> | number
     jobId?: IntFilter<"Application"> | number
-    cvId?: IntFilter<"Application"> | number
     applicationDate?: DateTimeFilter<"Application"> | Date | string
     status?: EnumApplicationStatusFilter<"Application"> | $Enums.ApplicationStatus
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
     candidate?: XOR<CandidateScalarRelationFilter, CandidateWhereInput>
     job?: XOR<JobScalarRelationFilter, JobWhereInput>
-    cv?: XOR<CVScalarRelationFilter, CVWhereInput>
   }, "id" | "candidateId_jobId">
 
   export type ApplicationOrderByWithAggregationInput = {
     id?: SortOrder
     candidateId?: SortOrder
     jobId?: SortOrder
-    cvId?: SortOrder
     applicationDate?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -13664,7 +13567,6 @@ export namespace Prisma {
     id?: IntWithAggregatesFilter<"Application"> | number
     candidateId?: IntWithAggregatesFilter<"Application"> | number
     jobId?: IntWithAggregatesFilter<"Application"> | number
-    cvId?: IntWithAggregatesFilter<"Application"> | number
     applicationDate?: DateTimeWithAggregatesFilter<"Application"> | Date | string
     status?: EnumApplicationStatusWithAggregatesFilter<"Application"> | $Enums.ApplicationStatus
     createdAt?: DateTimeWithAggregatesFilter<"Application"> | Date | string
@@ -14377,7 +14279,6 @@ export namespace Prisma {
     isPrimary?: boolean
     uploadedAt?: Date | string
     candidate: CandidateCreateNestedOneWithoutCVInput
-    applications?: ApplicationCreateNestedManyWithoutCvInput
   }
 
   export type CVUncheckedCreateInput = {
@@ -14388,7 +14289,6 @@ export namespace Prisma {
     fileType?: $Enums.FileTypeEnum | null
     isPrimary?: boolean
     uploadedAt?: Date | string
-    applications?: ApplicationUncheckedCreateNestedManyWithoutCvInput
   }
 
   export type CVUpdateInput = {
@@ -14398,7 +14298,6 @@ export namespace Prisma {
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     candidate?: CandidateUpdateOneRequiredWithoutCVNestedInput
-    applications?: ApplicationUpdateManyWithoutCvNestedInput
   }
 
   export type CVUncheckedUpdateInput = {
@@ -14409,7 +14308,6 @@ export namespace Prisma {
     fileType?: NullableEnumFileTypeEnumFieldUpdateOperationsInput | $Enums.FileTypeEnum | null
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    applications?: ApplicationUncheckedUpdateManyWithoutCvNestedInput
   }
 
   export type CVCreateManyInput = {
@@ -14447,14 +14345,12 @@ export namespace Prisma {
     updatedAt?: Date | string
     candidate: CandidateCreateNestedOneWithoutApplicationsInput
     job: JobCreateNestedOneWithoutApplicationsInput
-    cv: CVCreateNestedOneWithoutApplicationsInput
   }
 
   export type ApplicationUncheckedCreateInput = {
     id?: number
     candidateId: number
     jobId: number
-    cvId: number
     applicationDate?: Date | string
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
@@ -14468,14 +14364,12 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     candidate?: CandidateUpdateOneRequiredWithoutApplicationsNestedInput
     job?: JobUpdateOneRequiredWithoutApplicationsNestedInput
-    cv?: CVUpdateOneRequiredWithoutApplicationsNestedInput
   }
 
   export type ApplicationUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     candidateId?: IntFieldUpdateOperationsInput | number
     jobId?: IntFieldUpdateOperationsInput | number
-    cvId?: IntFieldUpdateOperationsInput | number
     applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14486,7 +14380,6 @@ export namespace Prisma {
     id?: number
     candidateId: number
     jobId: number
-    cvId: number
     applicationDate?: Date | string
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
@@ -14504,7 +14397,6 @@ export namespace Prisma {
     id?: IntFieldUpdateOperationsInput | number
     candidateId?: IntFieldUpdateOperationsInput | number
     jobId?: IntFieldUpdateOperationsInput | number
-    cvId?: IntFieldUpdateOperationsInput | number
     applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15270,11 +15162,6 @@ export namespace Prisma {
     isNot?: JobWhereInput
   }
 
-  export type CVScalarRelationFilter = {
-    is?: CVWhereInput
-    isNot?: CVWhereInput
-  }
-
   export type ApplicationCandidateIdJobIdCompoundUniqueInput = {
     candidateId: number
     jobId: number
@@ -15284,7 +15171,6 @@ export namespace Prisma {
     id?: SortOrder
     candidateId?: SortOrder
     jobId?: SortOrder
-    cvId?: SortOrder
     applicationDate?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -15295,14 +15181,12 @@ export namespace Prisma {
     id?: SortOrder
     candidateId?: SortOrder
     jobId?: SortOrder
-    cvId?: SortOrder
   }
 
   export type ApplicationMaxOrderByAggregateInput = {
     id?: SortOrder
     candidateId?: SortOrder
     jobId?: SortOrder
-    cvId?: SortOrder
     applicationDate?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -15313,7 +15197,6 @@ export namespace Prisma {
     id?: SortOrder
     candidateId?: SortOrder
     jobId?: SortOrder
-    cvId?: SortOrder
     applicationDate?: SortOrder
     status?: SortOrder
     createdAt?: SortOrder
@@ -15324,7 +15207,6 @@ export namespace Prisma {
     id?: SortOrder
     candidateId?: SortOrder
     jobId?: SortOrder
-    cvId?: SortOrder
   }
 
   export type EnumApplicationStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -15786,20 +15668,6 @@ export namespace Prisma {
     connect?: CandidateWhereUniqueInput
   }
 
-  export type ApplicationCreateNestedManyWithoutCvInput = {
-    create?: XOR<ApplicationCreateWithoutCvInput, ApplicationUncheckedCreateWithoutCvInput> | ApplicationCreateWithoutCvInput[] | ApplicationUncheckedCreateWithoutCvInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutCvInput | ApplicationCreateOrConnectWithoutCvInput[]
-    createMany?: ApplicationCreateManyCvInputEnvelope
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-  }
-
-  export type ApplicationUncheckedCreateNestedManyWithoutCvInput = {
-    create?: XOR<ApplicationCreateWithoutCvInput, ApplicationUncheckedCreateWithoutCvInput> | ApplicationCreateWithoutCvInput[] | ApplicationUncheckedCreateWithoutCvInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutCvInput | ApplicationCreateOrConnectWithoutCvInput[]
-    createMany?: ApplicationCreateManyCvInputEnvelope
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-  }
-
   export type NullableEnumFileTypeEnumFieldUpdateOperationsInput = {
     set?: $Enums.FileTypeEnum | null
   }
@@ -15812,34 +15680,6 @@ export namespace Prisma {
     update?: XOR<XOR<CandidateUpdateToOneWithWhereWithoutCVInput, CandidateUpdateWithoutCVInput>, CandidateUncheckedUpdateWithoutCVInput>
   }
 
-  export type ApplicationUpdateManyWithoutCvNestedInput = {
-    create?: XOR<ApplicationCreateWithoutCvInput, ApplicationUncheckedCreateWithoutCvInput> | ApplicationCreateWithoutCvInput[] | ApplicationUncheckedCreateWithoutCvInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutCvInput | ApplicationCreateOrConnectWithoutCvInput[]
-    upsert?: ApplicationUpsertWithWhereUniqueWithoutCvInput | ApplicationUpsertWithWhereUniqueWithoutCvInput[]
-    createMany?: ApplicationCreateManyCvInputEnvelope
-    set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    update?: ApplicationUpdateWithWhereUniqueWithoutCvInput | ApplicationUpdateWithWhereUniqueWithoutCvInput[]
-    updateMany?: ApplicationUpdateManyWithWhereWithoutCvInput | ApplicationUpdateManyWithWhereWithoutCvInput[]
-    deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
-  }
-
-  export type ApplicationUncheckedUpdateManyWithoutCvNestedInput = {
-    create?: XOR<ApplicationCreateWithoutCvInput, ApplicationUncheckedCreateWithoutCvInput> | ApplicationCreateWithoutCvInput[] | ApplicationUncheckedCreateWithoutCvInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutCvInput | ApplicationCreateOrConnectWithoutCvInput[]
-    upsert?: ApplicationUpsertWithWhereUniqueWithoutCvInput | ApplicationUpsertWithWhereUniqueWithoutCvInput[]
-    createMany?: ApplicationCreateManyCvInputEnvelope
-    set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    update?: ApplicationUpdateWithWhereUniqueWithoutCvInput | ApplicationUpdateWithWhereUniqueWithoutCvInput[]
-    updateMany?: ApplicationUpdateManyWithWhereWithoutCvInput | ApplicationUpdateManyWithWhereWithoutCvInput[]
-    deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
-  }
-
   export type CandidateCreateNestedOneWithoutApplicationsInput = {
     create?: XOR<CandidateCreateWithoutApplicationsInput, CandidateUncheckedCreateWithoutApplicationsInput>
     connectOrCreate?: CandidateCreateOrConnectWithoutApplicationsInput
@@ -15850,12 +15690,6 @@ export namespace Prisma {
     create?: XOR<JobCreateWithoutApplicationsInput, JobUncheckedCreateWithoutApplicationsInput>
     connectOrCreate?: JobCreateOrConnectWithoutApplicationsInput
     connect?: JobWhereUniqueInput
-  }
-
-  export type CVCreateNestedOneWithoutApplicationsInput = {
-    create?: XOR<CVCreateWithoutApplicationsInput, CVUncheckedCreateWithoutApplicationsInput>
-    connectOrCreate?: CVCreateOrConnectWithoutApplicationsInput
-    connect?: CVWhereUniqueInput
   }
 
   export type EnumApplicationStatusFieldUpdateOperationsInput = {
@@ -15876,14 +15710,6 @@ export namespace Prisma {
     upsert?: JobUpsertWithoutApplicationsInput
     connect?: JobWhereUniqueInput
     update?: XOR<XOR<JobUpdateToOneWithWhereWithoutApplicationsInput, JobUpdateWithoutApplicationsInput>, JobUncheckedUpdateWithoutApplicationsInput>
-  }
-
-  export type CVUpdateOneRequiredWithoutApplicationsNestedInput = {
-    create?: XOR<CVCreateWithoutApplicationsInput, CVUncheckedCreateWithoutApplicationsInput>
-    connectOrCreate?: CVCreateOrConnectWithoutApplicationsInput
-    upsert?: CVUpsertWithoutApplicationsInput
-    connect?: CVWhereUniqueInput
-    update?: XOR<XOR<CVUpdateToOneWithWhereWithoutApplicationsInput, CVUpdateWithoutApplicationsInput>, CVUncheckedUpdateWithoutApplicationsInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -16608,13 +16434,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     job: JobCreateNestedOneWithoutApplicationsInput
-    cv: CVCreateNestedOneWithoutApplicationsInput
   }
 
   export type ApplicationUncheckedCreateWithoutCandidateInput = {
     id?: number
     jobId: number
-    cvId: number
     applicationDate?: Date | string
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
@@ -16637,7 +16461,6 @@ export namespace Prisma {
     fileType?: $Enums.FileTypeEnum | null
     isPrimary?: boolean
     uploadedAt?: Date | string
-    applications?: ApplicationCreateNestedManyWithoutCvInput
   }
 
   export type CVUncheckedCreateWithoutCandidateInput = {
@@ -16647,7 +16470,6 @@ export namespace Prisma {
     fileType?: $Enums.FileTypeEnum | null
     isPrimary?: boolean
     uploadedAt?: Date | string
-    applications?: ApplicationUncheckedCreateNestedManyWithoutCvInput
   }
 
   export type CVCreateOrConnectWithoutCandidateInput = {
@@ -16784,7 +16606,6 @@ export namespace Prisma {
     id?: IntFilter<"Application"> | number
     candidateId?: IntFilter<"Application"> | number
     jobId?: IntFilter<"Application"> | number
-    cvId?: IntFilter<"Application"> | number
     applicationDate?: DateTimeFilter<"Application"> | Date | string
     status?: EnumApplicationStatusFilter<"Application"> | $Enums.ApplicationStatus
     createdAt?: DateTimeFilter<"Application"> | Date | string
@@ -17032,13 +16853,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     candidate: CandidateCreateNestedOneWithoutApplicationsInput
-    cv: CVCreateNestedOneWithoutApplicationsInput
   }
 
   export type ApplicationUncheckedCreateWithoutJobInput = {
     id?: number
     candidateId: number
-    cvId: number
     applicationDate?: Date | string
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
@@ -17151,35 +16970,6 @@ export namespace Prisma {
     create: XOR<CandidateCreateWithoutCVInput, CandidateUncheckedCreateWithoutCVInput>
   }
 
-  export type ApplicationCreateWithoutCvInput = {
-    applicationDate?: Date | string
-    status?: $Enums.ApplicationStatus
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    candidate: CandidateCreateNestedOneWithoutApplicationsInput
-    job: JobCreateNestedOneWithoutApplicationsInput
-  }
-
-  export type ApplicationUncheckedCreateWithoutCvInput = {
-    id?: number
-    candidateId: number
-    jobId: number
-    applicationDate?: Date | string
-    status?: $Enums.ApplicationStatus
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ApplicationCreateOrConnectWithoutCvInput = {
-    where: ApplicationWhereUniqueInput
-    create: XOR<ApplicationCreateWithoutCvInput, ApplicationUncheckedCreateWithoutCvInput>
-  }
-
-  export type ApplicationCreateManyCvInputEnvelope = {
-    data: ApplicationCreateManyCvInput | ApplicationCreateManyCvInput[]
-    skipDuplicates?: boolean
-  }
-
   export type CandidateUpsertWithoutCVInput = {
     update: XOR<CandidateUpdateWithoutCVInput, CandidateUncheckedUpdateWithoutCVInput>
     create: XOR<CandidateCreateWithoutCVInput, CandidateUncheckedCreateWithoutCVInput>
@@ -17224,22 +17014,6 @@ export namespace Prisma {
     education?: EducationUncheckedUpdateManyWithoutCandidateNestedInput
     workExperience?: WorkExperienceUncheckedUpdateManyWithoutCandidateNestedInput
     applications?: ApplicationUncheckedUpdateManyWithoutCandidateNestedInput
-  }
-
-  export type ApplicationUpsertWithWhereUniqueWithoutCvInput = {
-    where: ApplicationWhereUniqueInput
-    update: XOR<ApplicationUpdateWithoutCvInput, ApplicationUncheckedUpdateWithoutCvInput>
-    create: XOR<ApplicationCreateWithoutCvInput, ApplicationUncheckedCreateWithoutCvInput>
-  }
-
-  export type ApplicationUpdateWithWhereUniqueWithoutCvInput = {
-    where: ApplicationWhereUniqueInput
-    data: XOR<ApplicationUpdateWithoutCvInput, ApplicationUncheckedUpdateWithoutCvInput>
-  }
-
-  export type ApplicationUpdateManyWithWhereWithoutCvInput = {
-    where: ApplicationScalarWhereInput
-    data: XOR<ApplicationUpdateManyMutationInput, ApplicationUncheckedUpdateManyWithoutCvInput>
   }
 
   export type CandidateCreateWithoutApplicationsInput = {
@@ -17330,30 +17104,6 @@ export namespace Prisma {
   export type JobCreateOrConnectWithoutApplicationsInput = {
     where: JobWhereUniqueInput
     create: XOR<JobCreateWithoutApplicationsInput, JobUncheckedCreateWithoutApplicationsInput>
-  }
-
-  export type CVCreateWithoutApplicationsInput = {
-    fileName: string
-    fileUrl: string
-    fileType?: $Enums.FileTypeEnum | null
-    isPrimary?: boolean
-    uploadedAt?: Date | string
-    candidate: CandidateCreateNestedOneWithoutCVInput
-  }
-
-  export type CVUncheckedCreateWithoutApplicationsInput = {
-    id?: number
-    candidateId: number
-    fileName: string
-    fileUrl: string
-    fileType?: $Enums.FileTypeEnum | null
-    isPrimary?: boolean
-    uploadedAt?: Date | string
-  }
-
-  export type CVCreateOrConnectWithoutApplicationsInput = {
-    where: CVWhereUniqueInput
-    create: XOR<CVCreateWithoutApplicationsInput, CVUncheckedCreateWithoutApplicationsInput>
   }
 
   export type CandidateUpsertWithoutApplicationsInput = {
@@ -17456,36 +17206,6 @@ export namespace Prisma {
     postedDate?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type CVUpsertWithoutApplicationsInput = {
-    update: XOR<CVUpdateWithoutApplicationsInput, CVUncheckedUpdateWithoutApplicationsInput>
-    create: XOR<CVCreateWithoutApplicationsInput, CVUncheckedCreateWithoutApplicationsInput>
-    where?: CVWhereInput
-  }
-
-  export type CVUpdateToOneWithWhereWithoutApplicationsInput = {
-    where?: CVWhereInput
-    data: XOR<CVUpdateWithoutApplicationsInput, CVUncheckedUpdateWithoutApplicationsInput>
-  }
-
-  export type CVUpdateWithoutApplicationsInput = {
-    fileName?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
-    fileType?: NullableEnumFileTypeEnumFieldUpdateOperationsInput | $Enums.FileTypeEnum | null
-    isPrimary?: BoolFieldUpdateOperationsInput | boolean
-    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    candidate?: CandidateUpdateOneRequiredWithoutCVNestedInput
-  }
-
-  export type CVUncheckedUpdateWithoutApplicationsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    candidateId?: IntFieldUpdateOperationsInput | number
-    fileName?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
-    fileType?: NullableEnumFileTypeEnumFieldUpdateOperationsInput | $Enums.FileTypeEnum | null
-    isPrimary?: BoolFieldUpdateOperationsInput | boolean
-    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type JobCreateManyEmployerInput = {
@@ -17603,7 +17323,6 @@ export namespace Prisma {
   export type ApplicationCreateManyCandidateInput = {
     id?: number
     jobId: number
-    cvId: number
     applicationDate?: Date | string
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
@@ -17692,13 +17411,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     job?: JobUpdateOneRequiredWithoutApplicationsNestedInput
-    cv?: CVUpdateOneRequiredWithoutApplicationsNestedInput
   }
 
   export type ApplicationUncheckedUpdateWithoutCandidateInput = {
     id?: IntFieldUpdateOperationsInput | number
     jobId?: IntFieldUpdateOperationsInput | number
-    cvId?: IntFieldUpdateOperationsInput | number
     applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17708,7 +17425,6 @@ export namespace Prisma {
   export type ApplicationUncheckedUpdateManyWithoutCandidateInput = {
     id?: IntFieldUpdateOperationsInput | number
     jobId?: IntFieldUpdateOperationsInput | number
-    cvId?: IntFieldUpdateOperationsInput | number
     applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17721,7 +17437,6 @@ export namespace Prisma {
     fileType?: NullableEnumFileTypeEnumFieldUpdateOperationsInput | $Enums.FileTypeEnum | null
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    applications?: ApplicationUpdateManyWithoutCvNestedInput
   }
 
   export type CVUncheckedUpdateWithoutCandidateInput = {
@@ -17731,7 +17446,6 @@ export namespace Prisma {
     fileType?: NullableEnumFileTypeEnumFieldUpdateOperationsInput | $Enums.FileTypeEnum | null
     isPrimary?: BoolFieldUpdateOperationsInput | boolean
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    applications?: ApplicationUncheckedUpdateManyWithoutCvNestedInput
   }
 
   export type CVUncheckedUpdateManyWithoutCandidateInput = {
@@ -17746,7 +17460,6 @@ export namespace Prisma {
   export type ApplicationCreateManyJobInput = {
     id?: number
     candidateId: number
-    cvId: number
     applicationDate?: Date | string
     status?: $Enums.ApplicationStatus
     createdAt?: Date | string
@@ -17759,13 +17472,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     candidate?: CandidateUpdateOneRequiredWithoutApplicationsNestedInput
-    cv?: CVUpdateOneRequiredWithoutApplicationsNestedInput
   }
 
   export type ApplicationUncheckedUpdateWithoutJobInput = {
     id?: IntFieldUpdateOperationsInput | number
     candidateId?: IntFieldUpdateOperationsInput | number
-    cvId?: IntFieldUpdateOperationsInput | number
     applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -17775,46 +17486,6 @@ export namespace Prisma {
   export type ApplicationUncheckedUpdateManyWithoutJobInput = {
     id?: IntFieldUpdateOperationsInput | number
     candidateId?: IntFieldUpdateOperationsInput | number
-    cvId?: IntFieldUpdateOperationsInput | number
-    applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ApplicationCreateManyCvInput = {
-    id?: number
-    candidateId: number
-    jobId: number
-    applicationDate?: Date | string
-    status?: $Enums.ApplicationStatus
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ApplicationUpdateWithoutCvInput = {
-    applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    candidate?: CandidateUpdateOneRequiredWithoutApplicationsNestedInput
-    job?: JobUpdateOneRequiredWithoutApplicationsNestedInput
-  }
-
-  export type ApplicationUncheckedUpdateWithoutCvInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    candidateId?: IntFieldUpdateOperationsInput | number
-    jobId?: IntFieldUpdateOperationsInput | number
-    applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ApplicationUncheckedUpdateManyWithoutCvInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    candidateId?: IntFieldUpdateOperationsInput | number
-    jobId?: IntFieldUpdateOperationsInput | number
     applicationDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?: EnumApplicationStatusFieldUpdateOperationsInput | $Enums.ApplicationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string

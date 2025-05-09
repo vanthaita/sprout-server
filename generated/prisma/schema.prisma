@@ -183,27 +183,24 @@ model Job {
 }
 
 model CV {
-  id           Int           @id @default(autoincrement())
-  candidateId  Int
-  fileName     String
-  fileUrl      String
-  fileType     FileTypeEnum?
-  isPrimary    Boolean       @default(false)
-  uploadedAt   DateTime      @default(now())
-  candidate    Candidate     @relation(fields: [candidateId], references: [id], onDelete: Cascade)
-  applications Application[]
+  id          Int           @id @default(autoincrement())
+  candidateId Int
+  fileName    String
+  fileUrl     String
+  fileType    FileTypeEnum?
+  isPrimary   Boolean       @default(false)
+  uploadedAt  DateTime      @default(now())
+  candidate   Candidate     @relation(fields: [candidateId], references: [id], onDelete: Cascade)
 }
 
 model Application {
   id              Int               @id @default(autoincrement())
   candidateId     Int
   jobId           Int
-  cvId            Int
   applicationDate DateTime          @default(now())
   status          ApplicationStatus @default(SUBMITTED)
   candidate       Candidate         @relation(fields: [candidateId], references: [id], onDelete: Cascade)
   job             Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  cv              CV                @relation(fields: [cvId], references: [id], onDelete: Restrict)
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 

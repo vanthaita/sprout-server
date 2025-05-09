@@ -1,4 +1,4 @@
-import { ConflictException, ForbiddenException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreateCandidateDto, UpdateCandidateDto } from './dto/candidate';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateEducationDto, UpdateEducationDto } from './dto/education';
@@ -275,15 +275,6 @@ export class CandidateService {
             throw new NotFoundException(`CV record with ID ${cvId} not found or does not belong to the user.`);
         }
 
-        // Check if CV is used in any applications
-        const applications = await this.prismaService.application.findFirst({
-            where: { cvId: cvId }
-        });
-
-        if (applications) {
-            throw new ForbiddenException(`Cannot delete CV with ID ${cvId} because it is linked to one or more applications.`);
-        }
-
         try {
             return await this.prismaService.cV.delete({
                 where: { id: cvId },
@@ -300,6 +291,71 @@ export class CandidateService {
             where: {
                 candidateId: candidateId,
                 isPrimary: true
+            }
+        });
+    }
+
+    async applicationJob(email: string, jobId: number) {
+        const user = await this.prismaService.user.findUnique({
+            where: { email },
+            select: {
+                id: true,
+                candidate: {
+                    select: {
+                        id: true
+                    }
+                }
+            }
+        });
+    
+        if (!user?.candidate) {
+            throw new NotFoundException('Candidate profile not found');
+        }
+    
+        const candidateId = user.candidate.id;
+    
+        const jobExists = await this.prismaService.job.findUnique({
+            where: { id: jobId  },
+            select: { id: true }
+        });
+    
+        if (!jobExists) {
+            throw new NotFoundException('Job not found');
+        }
+    
+        const alreadyApplied = await this.prismaService.application.findFirst({
+            where: {
+                candidateId,
+                jobId: jobId
+            },
+            select: { id: true }
+        });
+    
+        if (alreadyApplied) {
+            throw new ConflictException('You have already applied for this job');
+        }
+    
+        return this.prismaService.application.create({
+            data: {
+                jobId: jobId,
+                candidateId,
+                status: 'SUBMITTED'
+            },
+            select: {
+                id: true,
+                applicationDate: true,
+                status: true,
+                job: {
+                    select: {
+                        id: true,
+                        title: true,
+                        employer: {
+                            select: {
+                                companyName: true
+                            }
+                        }
+                    }
+                }
             }
         });
     }

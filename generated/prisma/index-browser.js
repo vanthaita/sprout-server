@@ -230,7 +230,6 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   id: 'id',
   candidateId: 'candidateId',
   jobId: 'jobId',
-  cvId: 'cvId',
   applicationDate: 'applicationDate',
   status: 'status',
   createdAt: 'createdAt',

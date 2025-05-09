@@ -191,19 +191,16 @@ model CV {
   isPrimary   Boolean   @default(false)
   uploadedAt  DateTime  @default(now())
   candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
-  applications Application[]
 }
 
 model Application {
   id              Int               @id @default(autoincrement())
   candidateId     Int
   jobId           Int
-  cvId            Int
   applicationDate DateTime          @default(now())
   status          ApplicationStatus @default(SUBMITTED)
   candidate       Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
   job             Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  cv              CV        @relation(fields: [cvId], references: [id], onDelete: Restrict)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

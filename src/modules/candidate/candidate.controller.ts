@@ -159,4 +159,14 @@ export class CandidateController {
     ) {
         await this.candidateService.deleteCV(req.user.email, cvId); 
     }
+
+
+    @Post('application')
+    async applicationJob(
+        @Request() req: AuthenticatedRequest,
+        @Body() body: {jobId: number}
+    ) {
+        const {jobId} = body
+        return this.candidateService.applicationJob(req.user.email, jobId);
+    }
 }
