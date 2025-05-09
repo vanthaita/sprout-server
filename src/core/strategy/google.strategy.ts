@@ -1,10 +1,11 @@
 import { Strategy, StrategyOptionsWithRequest } from 'passport-google-oauth20';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { AuthService } from '../../modules/auth/auth.service';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor() {
+  constructor(private authService: AuthService) {
     const clientID = process.env.GOOGLE_CLIENT;
     const clientSecret = process.env.GOOGLE_SECRET;
 
@@ -28,11 +29,18 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     profile: any,
     done: (err: any, user: any, info?: any) => void,
   ) {
-    const user = {
-      email: profile.emails[0].value,
-      fullName: profile.displayName,
-      accessToken,
-    };
-    done(null, user);
+    try {
+      const authRes = await this.authService.authenticate(accessToken);
+      const user = {
+        email: profile.emails[0].value,
+        fullName: profile.displayName,
+        accessToken,
+        access_token: authRes.access_token,
+      };
+      (request.session as any).user = user;
+      done(null, user);
+    } catch (err) {
+      done(err, null);
+    }
   }
 }

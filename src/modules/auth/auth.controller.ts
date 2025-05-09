@@ -22,29 +22,61 @@ export class AuthController {
     @Request() req: AuthenticatedRequest,
     @Res() res: Response,
   ) {
-    const googleToken = req.user?.accessToken;
-    const authRes = await this.authService.authenticate(googleToken);
+    const user = (req as any).user;
+    if (!user || !user.access_token) {
+      return res.status(401).json({ message: 'Authentication failed' });
+    }
 
-    res.cookie('access_token', authRes.access_token, { httpOnly: true });
-    res.redirect(`http://localhost:3000/profile`);
+    res.cookie('access_token', user.access_token, { httpOnly: true });
+
+    try {
+      res.redirect('http://localhost:3000/profile');
+    } catch (error) {
+      return res.json({
+        message: 'Google login successful',
+        access_token: user.access_token,
+        user: {
+          email: user.email,
+          fullName: user.fullName,
+        },
+      });
+    }
   }
 
   @Post('register')
   async register(@Body() registerDto: RegisterUserDto) {
-    return this.authService.register(registerDto);
+    const user = await this.authService.register(registerDto);
+    return {
+      email: user.email,
+      fullName: user.fullName,
+    };
   }
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req: AuthenticatedRequest, @Res() res: Response) {
-    const loginRes = await this.authService.login(req.user);
-    return res.json(loginRes);
+    const loginRes = await this.authService.login((req as any).user); // Chỉ truyền 1 tham số
+    (req.session as any).user = {
+      email: loginRes.user.email,
+      fullName: loginRes.user.fullName,
+      userType: loginRes.user.userType,
+    };
+    const response = {
+      user: {
+        email: loginRes.user.email,
+        fullName: loginRes.user.fullName,
+        userType: loginRes.user.userType,
+      },
+      access_token: loginRes.access_token,
+      message: loginRes.message,
+    };
+    return res.json(response);
   }
 
   @Post('logout')
   async logout(@Request() req: AuthenticatedRequest, @Res() res: Response) {
     await this.authService.logout(req.session);
-    res.clearCookie('connect.sid');
+    res.clearCookie('sessionId');
     res.clearCookie('access_token');
     return res.json({ message: 'Logged out successfully' });
   }
@@ -52,6 +84,10 @@ export class AuthController {
   @UseGuards(AuthenticatedGuard)
   @Get('me')
   async me(@Request() req: AuthenticatedRequest) {
-    return req.user;
+    const user = (req as any).user;
+    return {
+      email: user.email,
+      fullName: user.fullName,
+    };
   }
 }

@@ -8,7 +8,14 @@ export class JwtAuthGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
-    const token = request.cookies['access_token'];
+    let token: string | undefined;
+
+    const authHeader = request.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.split(' ')[1];
+    } else {
+      token = request.cookies['access_token'];
+    }
 
     if (!token) {
       throw new UnauthorizedException('Token not provided');
@@ -23,10 +30,9 @@ export class JwtAuthGuard implements CanActivate {
         email: payload.email,
         userType: payload.userType,
       };
+      return true;
     } catch (error) {
       throw new UnauthorizedException('Invalid token');
     }
-
-    return true;
   }
 }
