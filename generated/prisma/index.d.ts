@@ -1863,6 +1863,7 @@ export namespace Prisma {
     passwordHash: string | null
     fullName: string | null
     userType: $Enums.UserType | null
+    refesh_token: string | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1876,6 +1877,7 @@ export namespace Prisma {
     passwordHash: string | null
     fullName: string | null
     userType: $Enums.UserType | null
+    refesh_token: string | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -1889,6 +1891,7 @@ export namespace Prisma {
     passwordHash: number
     fullName: number
     userType: number
+    refesh_token: number
     isActive: number
     createdAt: number
     updatedAt: number
@@ -1912,6 +1915,7 @@ export namespace Prisma {
     passwordHash?: true
     fullName?: true
     userType?: true
+    refesh_token?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -1925,6 +1929,7 @@ export namespace Prisma {
     passwordHash?: true
     fullName?: true
     userType?: true
+    refesh_token?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -1938,6 +1943,7 @@ export namespace Prisma {
     passwordHash?: true
     fullName?: true
     userType?: true
+    refesh_token?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -2038,6 +2044,7 @@ export namespace Prisma {
     passwordHash: string | null
     fullName: string
     userType: $Enums.UserType
+    refesh_token: string | null
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -2070,6 +2077,7 @@ export namespace Prisma {
     passwordHash?: boolean
     fullName?: boolean
     userType?: boolean
+    refesh_token?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2085,6 +2093,7 @@ export namespace Prisma {
     passwordHash?: boolean
     fullName?: boolean
     userType?: boolean
+    refesh_token?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2098,6 +2107,7 @@ export namespace Prisma {
     passwordHash?: boolean
     fullName?: boolean
     userType?: boolean
+    refesh_token?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2111,6 +2121,7 @@ export namespace Prisma {
     passwordHash?: boolean
     fullName?: boolean
     userType?: boolean
+    refesh_token?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -2118,7 +2129,7 @@ export namespace Prisma {
     isOnboarded?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "fullName" | "userType" | "isActive" | "createdAt" | "updatedAt" | "avatar" | "isOnboarded", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "fullName" | "userType" | "refesh_token" | "isActive" | "createdAt" | "updatedAt" | "avatar" | "isOnboarded", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employer?: boolean | User$employerArgs<ExtArgs>
     candidate?: boolean | User$candidateArgs<ExtArgs>
@@ -2138,6 +2149,7 @@ export namespace Prisma {
       passwordHash: string | null
       fullName: string
       userType: $Enums.UserType
+      refesh_token: string | null
       isActive: boolean
       createdAt: Date
       updatedAt: Date
@@ -2573,6 +2585,7 @@ export namespace Prisma {
     readonly passwordHash: FieldRef<"User", 'String'>
     readonly fullName: FieldRef<"User", 'String'>
     readonly userType: FieldRef<"User", 'UserType'>
+    readonly refesh_token: FieldRef<"User", 'String'>
     readonly isActive: FieldRef<"User", 'Boolean'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
@@ -12471,6 +12484,7 @@ export namespace Prisma {
     passwordHash: 'passwordHash',
     fullName: 'fullName',
     userType: 'userType',
+    refesh_token: 'refesh_token',
     isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
@@ -12813,6 +12827,7 @@ export namespace Prisma {
     passwordHash?: StringNullableFilter<"User"> | string | null
     fullName?: StringFilter<"User"> | string
     userType?: EnumUserTypeFilter<"User"> | $Enums.UserType
+    refesh_token?: StringNullableFilter<"User"> | string | null
     isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
@@ -12828,6 +12843,7 @@ export namespace Prisma {
     passwordHash?: SortOrderInput | SortOrder
     fullName?: SortOrder
     userType?: SortOrder
+    refesh_token?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12846,6 +12862,7 @@ export namespace Prisma {
     passwordHash?: StringNullableFilter<"User"> | string | null
     fullName?: StringFilter<"User"> | string
     userType?: EnumUserTypeFilter<"User"> | $Enums.UserType
+    refesh_token?: StringNullableFilter<"User"> | string | null
     isActive?: BoolFilter<"User"> | boolean
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
@@ -12861,6 +12878,7 @@ export namespace Prisma {
     passwordHash?: SortOrderInput | SortOrder
     fullName?: SortOrder
     userType?: SortOrder
+    refesh_token?: SortOrderInput | SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -12882,6 +12900,7 @@ export namespace Prisma {
     passwordHash?: StringNullableWithAggregatesFilter<"User"> | string | null
     fullName?: StringWithAggregatesFilter<"User"> | string
     userType?: EnumUserTypeWithAggregatesFilter<"User"> | $Enums.UserType
+    refesh_token?: StringNullableWithAggregatesFilter<"User"> | string | null
     isActive?: BoolWithAggregatesFilter<"User"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -13579,6 +13598,7 @@ export namespace Prisma {
     passwordHash?: string | null
     fullName: string
     userType?: $Enums.UserType
+    refesh_token?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13594,6 +13614,7 @@ export namespace Prisma {
     passwordHash?: string | null
     fullName: string
     userType?: $Enums.UserType
+    refesh_token?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13608,6 +13629,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     userType?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    refesh_token?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13623,6 +13645,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     userType?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    refesh_token?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13638,6 +13661,7 @@ export namespace Prisma {
     passwordHash?: string | null
     fullName: string
     userType?: $Enums.UserType
+    refesh_token?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13650,6 +13674,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     userType?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    refesh_token?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13663,6 +13688,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     userType?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    refesh_token?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14489,6 +14515,7 @@ export namespace Prisma {
     passwordHash?: SortOrder
     fullName?: SortOrder
     userType?: SortOrder
+    refesh_token?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14506,6 +14533,7 @@ export namespace Prisma {
     passwordHash?: SortOrder
     fullName?: SortOrder
     userType?: SortOrder
+    refesh_token?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14519,6 +14547,7 @@ export namespace Prisma {
     passwordHash?: SortOrder
     fullName?: SortOrder
     userType?: SortOrder
+    refesh_token?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -16171,6 +16200,7 @@ export namespace Prisma {
     passwordHash?: string | null
     fullName: string
     userType?: $Enums.UserType
+    refesh_token?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16185,6 +16215,7 @@ export namespace Prisma {
     passwordHash?: string | null
     fullName: string
     userType?: $Enums.UserType
+    refesh_token?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16269,6 +16300,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     userType?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    refesh_token?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16283,6 +16315,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     userType?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    refesh_token?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16338,6 +16371,7 @@ export namespace Prisma {
     passwordHash?: string | null
     fullName: string
     userType?: $Enums.UserType
+    refesh_token?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16352,6 +16386,7 @@ export namespace Prisma {
     passwordHash?: string | null
     fullName: string
     userType?: $Enums.UserType
+    refesh_token?: string | null
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16499,6 +16534,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     userType?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    refesh_token?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16513,6 +16549,7 @@ export namespace Prisma {
     passwordHash?: NullableStringFieldUpdateOperationsInput | string | null
     fullName?: StringFieldUpdateOperationsInput | string
     userType?: EnumUserTypeFieldUpdateOperationsInput | $Enums.UserType
+    refesh_token?: NullableStringFieldUpdateOperationsInput | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

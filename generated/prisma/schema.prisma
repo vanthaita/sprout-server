@@ -77,6 +77,7 @@ model User {
   passwordHash String?
   fullName     String
   userType     UserType   @default(NONE)
+  refesh_token String?
   isActive     Boolean    @default(true)
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt

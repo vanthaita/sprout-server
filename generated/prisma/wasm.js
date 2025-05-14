@@ -123,6 +123,7 @@ exports.Prisma.UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   fullName: 'fullName',
   userType: 'userType',
+  refesh_token: 'refesh_token',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
