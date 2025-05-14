@@ -15,6 +15,7 @@ enum UserType {
   CANDIDATE
   EMPLOYER
   ADMIN
+  NONE
 }
 
 enum GenderType {
@@ -50,12 +51,12 @@ enum JobStatus {
 }
 
 enum ApplicationStatus {
-  SUBMITTED
-  UNDER_REVIEW
-  INTERVIEWING
-  OFFER_MADE
+  APPLICATION_SUBMITTED
+  DOCUMENT_SCREENING
+  FIRST_INTERVIEW
+  SECOND_INTERVIEW
+  OFFER_STAGE
   REJECTED
-  WITHDRAWN
 }
 
 enum FileTypeEnum {
@@ -75,7 +76,7 @@ model User {
   email        String     @unique
   passwordHash String?
   fullName     String
-  userType     UserType
+  userType     UserType   @default(NONE)
   isActive     Boolean    @default(true)
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
@@ -198,7 +199,7 @@ model Application {
   candidateId     Int
   jobId           Int
   applicationDate DateTime          @default(now())
-  status          ApplicationStatus @default(SUBMITTED)
+  status          ApplicationStatus @default(APPLICATION_SUBMITTED)
   candidate       Candidate         @relation(fields: [candidateId], references: [id], onDelete: Cascade)
   job             Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
   createdAt       DateTime          @default(now())

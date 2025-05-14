@@ -253,7 +253,8 @@ exports.Prisma.NullsOrder = {
 exports.UserType = exports.$Enums.UserType = {
   CANDIDATE: 'CANDIDATE',
   EMPLOYER: 'EMPLOYER',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  NONE: 'NONE'
 };
 
 exports.GenderType = exports.$Enums.GenderType = {
@@ -293,12 +294,12 @@ exports.FileTypeEnum = exports.$Enums.FileTypeEnum = {
 };
 
 exports.ApplicationStatus = exports.$Enums.ApplicationStatus = {
-  SUBMITTED: 'SUBMITTED',
-  UNDER_REVIEW: 'UNDER_REVIEW',
-  INTERVIEWING: 'INTERVIEWING',
-  OFFER_MADE: 'OFFER_MADE',
-  REJECTED: 'REJECTED',
-  WITHDRAWN: 'WITHDRAWN'
+  APPLICATION_SUBMITTED: 'APPLICATION_SUBMITTED',
+  DOCUMENT_SCREENING: 'DOCUMENT_SCREENING',
+  FIRST_INTERVIEW: 'FIRST_INTERVIEW',
+  SECOND_INTERVIEW: 'SECOND_INTERVIEW',
+  OFFER_STAGE: 'OFFER_STAGE',
+  REJECTED: 'REJECTED'
 };
 
 exports.Prisma.ModelName = {

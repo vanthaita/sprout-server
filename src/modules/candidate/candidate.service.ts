@@ -43,7 +43,16 @@ export class CandidateService {
             throw new ConflictException('User already has a employer profile');
         }
         
-        return await this.prismaService.candidate.create({
+        return await this.prismaService.$transaction([
+            this.prismaService.user.update({
+                where: {
+                    id: existingUser.id
+                },
+                data: {
+                    isOnboarded: true
+                }
+            }),
+            this.prismaService.candidate.create({
             data: {
                 ...candidateProfileCreateDto,
                 user: {
@@ -52,7 +61,8 @@ export class CandidateService {
                     }
                 },
             }
-        });
+            })
+        ])
     }
 
     async updateCandidateProfile(email: string, candidateProfileUpdateDto: UpdateCandidateDto) {
@@ -339,7 +349,7 @@ export class CandidateService {
             data: {
                 jobId: jobId,
                 candidateId,
-                status: 'SUBMITTED'
+                status: 'APPLICATION_SUBMITTED'
             },
             select: {
                 id: true,
@@ -358,5 +368,31 @@ export class CandidateService {
                 }
             }
         });
+    }
+
+
+
+    async applicationForCandidate(email: string) {
+        const existingUser = await this.prismaService.user.findUnique({
+            where: { email },
+            include: { candidate: true } 
+        });
+        if(!existingUser) {
+            throw new NotFoundException(`User with email ${email} not found`);
+        }
+
+        if(!existingUser.candidate) {
+            throw new NotFoundException(`User with email ${email} is not a candidate`);
+        }
+
+        const applications = await this.prismaService.application.findMany({
+            where: {
+                candidateId: existingUser.candidate.id
+            },
+            include: {
+                job: true 
+            }
+        });
+        return applications;
     }
 }

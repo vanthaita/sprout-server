@@ -66,7 +66,8 @@ export namespace $Enums {
   export const UserType: {
   CANDIDATE: 'CANDIDATE',
   EMPLOYER: 'EMPLOYER',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  NONE: 'NONE'
 };
 
 export type UserType = (typeof UserType)[keyof typeof UserType]
@@ -117,12 +118,12 @@ export type JobStatus = (typeof JobStatus)[keyof typeof JobStatus]
 
 
 export const ApplicationStatus: {
-  SUBMITTED: 'SUBMITTED',
-  UNDER_REVIEW: 'UNDER_REVIEW',
-  INTERVIEWING: 'INTERVIEWING',
-  OFFER_MADE: 'OFFER_MADE',
-  REJECTED: 'REJECTED',
-  WITHDRAWN: 'WITHDRAWN'
+  APPLICATION_SUBMITTED: 'APPLICATION_SUBMITTED',
+  DOCUMENT_SCREENING: 'DOCUMENT_SCREENING',
+  FIRST_INTERVIEW: 'FIRST_INTERVIEW',
+  SECOND_INTERVIEW: 'SECOND_INTERVIEW',
+  OFFER_STAGE: 'OFFER_STAGE',
+  REJECTED: 'REJECTED'
 };
 
 export type ApplicationStatus = (typeof ApplicationStatus)[keyof typeof ApplicationStatus]
@@ -13577,7 +13578,7 @@ export namespace Prisma {
     email: string
     passwordHash?: string | null
     fullName: string
-    userType: $Enums.UserType
+    userType?: $Enums.UserType
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13592,7 +13593,7 @@ export namespace Prisma {
     email: string
     passwordHash?: string | null
     fullName: string
-    userType: $Enums.UserType
+    userType?: $Enums.UserType
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13636,7 +13637,7 @@ export namespace Prisma {
     email: string
     passwordHash?: string | null
     fullName: string
-    userType: $Enums.UserType
+    userType?: $Enums.UserType
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16169,7 +16170,7 @@ export namespace Prisma {
     email: string
     passwordHash?: string | null
     fullName: string
-    userType: $Enums.UserType
+    userType?: $Enums.UserType
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16183,7 +16184,7 @@ export namespace Prisma {
     email: string
     passwordHash?: string | null
     fullName: string
-    userType: $Enums.UserType
+    userType?: $Enums.UserType
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16336,7 +16337,7 @@ export namespace Prisma {
     email: string
     passwordHash?: string | null
     fullName: string
-    userType: $Enums.UserType
+    userType?: $Enums.UserType
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16350,7 +16351,7 @@ export namespace Prisma {
     email: string
     passwordHash?: string | null
     fullName: string
-    userType: $Enums.UserType
+    userType?: $Enums.UserType
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string

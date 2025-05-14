@@ -29,17 +29,28 @@ export class EmployerService {
           if (existingUser.employer) {
               throw new ConflictException('User already has a employer profile');
           }
-        return await this.prismaService.employer.create({
-            data: {
+        return await this.prismaService.$transaction([
+            this.prismaService.user.update({
+                where: {
+                    id: existingUser.id
+                },
+                data: {
+                    isOnboarded: true
+                }
+            }),
+            this.prismaService.employer.create({
+                data: {
                 ...createEmployerDto,
                 user: {
                     connect: {
                         id: existingUser.id
                     }
                 },
-            },
-        });
-    }
+                },
+            })
+        ]); 
+    };
+    
 
     async updateEmployer(updateEmployerDto: UpdateEmployerDto, email: string) {
         const existingUser = await this.prismaService.user.findUnique({
@@ -292,180 +303,180 @@ export class EmployerService {
 
     // Application methods
     async getApplications(filter: ApplicationFilterDto, email: string) {
-      const existingUser = await this.prismaService.user.findUnique({
-          where: { email },
-          include: { employer: true }
-      });
-  
-      if (!existingUser) throw new NotFoundException('User not found');
-      if (!existingUser.employer) throw new NotFoundException('Employer profile not found');
-  
-      const baseWhere = {
-          job: {
-              employerId: existingUser.employer.id
-          }
-      };
-  
-      const where: any = { ...baseWhere };
-      
-      if (filter.jobId) where.jobId = filter.jobId;
-      if (filter.status) where.status = filter.status;
-      // if (filter.search) {
-      //     where.OR = [
-      //         {
-      //             candidate: {
-      //                 fullName: {
-      //                     contains: filter.search,
-      //                     mode: 'insensitive'
-      //                 }
-      //             }
-      //         },
-      //         {
-      //             job: {
-      //                 title: {
-      //                     contains: filter.search,
-      //                     mode: 'insensitive'
-      //                 }
-      //             }
-      //         }
-      //     ];
-      // }
-  
-      const page = filter.page || 1;
-      const limit = filter.limit || 10;
-      const skip = (page - 1) * limit;
-  
-      const [statusCounts, uniqueCandidateCount, totalApplications] = await Promise.all([
-          this.prismaService.application.groupBy({
-              by: ['status'],
-              where: baseWhere,
-              _count: {
-                  status: true
-              }
-          }),
-          this.prismaService.application.findMany({
-              where: baseWhere,
-              select: {
-                  candidateId: true
-              },
-              distinct: ['candidateId']
-          }).then(results => results.length),
-          this.prismaService.application.count({ where })
-      ]);
-  
-      const statusCountMap = statusCounts.reduce((acc, item) => {
-          acc[item.status] = item._count.status;
-          return acc;
-      }, {} as Record<ApplicationStatus, number>);
-  
-      const [applications] = await Promise.all([
-          this.prismaService.application.findMany({
-              where,
-              skip,
-              take: limit,
-              include: {
-                  job: {
-                      select: {
-                          id: true,
-                          title: true,
-                          location: true,
-                          jobType: true
-                      }
-                  },
-                  candidate: {
-                      select: {
-                          id: true,
-                          fullName: true,
-                          profilePhotoUrl: true,
-                          phoneNumber: true,
-                          address: true,
-                          skills: true,
-                          user: {
-                              select: {
-                                  email: true
-                              }
-                          },
-                          education: {
-                              select: {
-                                  degree: true,
-                                  fieldOfStudy: true,
-                                  schoolName: true
-                              },
-                              orderBy: {
-                                  endDate: 'desc'
-                              },
-                              take: 1
-                          },
-                          workExperience: {
-                              select: {
-                                  companyName: true,
-                                  jobTitle: true,
-                                  position: true
-                              },
-                              orderBy: {
-                                  endDate: 'desc'
-                              },
-                              take: 1
-                          },
-                          CV: {
-                              where: {
-                                  isPrimary: true
-                              },
-                              select: {
-                                  fileUrl: true
-                              }
-                          }
-                      }
-                  }
-              },
-              orderBy: { applicationDate: 'desc' }
-          })
-      ]);
-  
-      const data = applications.map(app => ({
-          id: app.id,
-          status: app.status,
-          applicationDate: app.applicationDate,
-          job: {
-              id: app.job.id,
-              title: app.job.title,
-              location: app.job.location,
-              type: app.job.jobType
-          },
-          candidate: {
-              id: app.candidate.id,
-              name: app.candidate.fullName || 'Unknown',
-              email: app.candidate.user.email,
-              phone: app.candidate.phoneNumber,
-              location: app.candidate.address,
-              skills: app.candidate.skills ? app.candidate.skills.split(',') : [],
-              photoUrl: app.candidate.profilePhotoUrl,
-              education: app.candidate.education[0] || null,
-              experience: app.candidate.workExperience[0] || null,
-              cvUrl: app.candidate.CV[0]?.fileUrl || null
-          }
-      }));
-  
-      return {
-          data,
-          total: totalApplications,
-          page,
-          limit,
-          totalPages: Math.ceil(totalApplications / limit),
-          counts: {
-              totalApplications: totalApplications,
-              totalCandidates: uniqueCandidateCount,
-              byStatus: {
-                  submitted: statusCountMap.SUBMITTED || 0,
-                  underReview: statusCountMap.UNDER_REVIEW || 0,
-                  interviewing: statusCountMap.INTERVIEWING || 0,
-                  offerMade: statusCountMap.OFFER_MADE || 0,
-                  rejected: statusCountMap.REJECTED || 0,
-                  withdrawn: statusCountMap.WITHDRAWN || 0
-              }
-          }
-      };
-  }
+        const existingUser = await this.prismaService.user.findUnique({
+            where: { email },
+            include: { employer: true }
+        });
+    
+        if (!existingUser) throw new NotFoundException('User not found');
+        if (!existingUser.employer) throw new NotFoundException('Employer profile not found');
+    
+        const baseWhere = {
+            job: {
+                employerId: existingUser.employer.id
+            }
+        };
+    
+        const where: any = { ...baseWhere };
+        
+        if (filter.jobId) where.jobId = filter.jobId;
+        if (filter.status) where.status = filter.status;
+        // if (filter.search) {
+        //     where.OR = [
+        //         {
+        //             candidate: {
+        //                 fullName: {
+        //                     contains: filter.search,
+        //                     mode: 'insensitive'
+        //                 }
+        //             }
+        //         },
+        //         {
+        //             job: {
+        //                 title: {
+        //                     contains: filter.search,
+        //                     mode: 'insensitive'
+        //                 }
+        //             }
+        //         }
+        //     ];
+        // }
+    
+        const page = filter.page || 1;
+        const limit = filter.limit || 10;
+        const skip = (page - 1) * limit;
+    
+        const [statusCounts, uniqueCandidateCount, totalApplications] = await Promise.all([
+            this.prismaService.application.groupBy({
+                by: ['status'],
+                where: baseWhere,
+                _count: {
+                    status: true
+                }
+            }),
+            this.prismaService.application.findMany({
+                where: baseWhere,
+                select: {
+                    candidateId: true
+                },
+                distinct: ['candidateId']
+            }).then(results => results.length),
+            this.prismaService.application.count({ where })
+        ]);
+    
+        const statusCountMap = statusCounts.reduce((acc, item) => {
+            acc[item.status] = item._count.status;
+            return acc;
+        }, {} as Record<ApplicationStatus, number>);
+    
+        const [applications] = await Promise.all([
+            this.prismaService.application.findMany({
+                where,
+                skip,
+                take: limit,
+                include: {
+                    job: {
+                        select: {
+                            id: true,
+                            title: true,
+                            location: true,
+                            jobType: true
+                        }
+                    },
+                    candidate: {
+                        select: {
+                            id: true,
+                            fullName: true,
+                            profilePhotoUrl: true,
+                            phoneNumber: true,
+                            address: true,
+                            skills: true,
+                            user: {
+                                select: {
+                                    email: true
+                                }
+                            },
+                            education: {
+                                select: {
+                                    degree: true,
+                                    fieldOfStudy: true,
+                                    schoolName: true
+                                },
+                                orderBy: {
+                                    endDate: 'desc'
+                                },
+                                take: 1
+                            },
+                            workExperience: {
+                                select: {
+                                    companyName: true,
+                                    jobTitle: true,
+                                    position: true
+                                },
+                                orderBy: {
+                                    endDate: 'desc'
+                                },
+                                take: 1
+                            },
+                            CV: {
+                                where: {
+                                    isPrimary: true
+                                },
+                                select: {
+                                    fileUrl: true
+                                }
+                            }
+                        }
+                    }
+                },
+                orderBy: { applicationDate: 'desc' }
+            })
+        ]);
+    
+        const data = applications.map(app => ({
+            id: app.id,
+            status: app.status,
+            applicationDate: app.applicationDate,
+            job: {
+                id: app.job.id,
+                title: app.job.title,
+                location: app.job.location,
+                type: app.job.jobType
+            },
+            candidate: {
+                id: app.candidate.id,
+                name: app.candidate.fullName || 'Unknown',
+                email: app.candidate.user.email,
+                phone: app.candidate.phoneNumber,
+                location: app.candidate.address,
+                skills: app.candidate.skills ? app.candidate.skills.split(',') : [],
+                photoUrl: app.candidate.profilePhotoUrl,
+                education: app.candidate.education[0] || null,
+                experience: app.candidate.workExperience[0] || null,
+                cvUrl: app.candidate.CV[0]?.fileUrl || null
+            }
+        }));
+    
+        return {
+            data,
+            total: totalApplications,
+            page,
+            limit,
+            totalPages: Math.ceil(totalApplications / limit),
+            counts: {
+                totalApplications: totalApplications,
+                totalCandidates: uniqueCandidateCount,
+                byStatus: {
+                    submitted: statusCountMap.APPLICATION_SUBMITTED || 0,
+                    document_screening: statusCountMap.DOCUMENT_SCREENING || 0,
+                    firstInterview: statusCountMap.FIRST_INTERVIEW || 0,
+                    secondInterview: statusCountMap.SECOND_INTERVIEW || 0,
+                    offerMade: statusCountMap.OFFER_STAGE || 0,
+                    rejected: statusCountMap.REJECTED || 0,
+                }
+            }
+        };
+    }
 
     async getApplicationDetails(applicationId: number, email: string) {
       const existingUser = await this.prismaService.user.findUnique({
