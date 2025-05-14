@@ -79,6 +79,7 @@ model User {
   avatar       String?
   employer     Employer?
   candidate    Candidate?
+  googleId     String?  @unique 
 }
 
 model Employer {

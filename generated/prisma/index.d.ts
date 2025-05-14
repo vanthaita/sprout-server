@@ -1794,6 +1794,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     avatar: string | null
+    googleId: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1806,6 +1807,7 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     avatar: string | null
+    googleId: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1818,6 +1820,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     avatar: number
+    googleId: number
     _all: number
   }
 
@@ -1840,6 +1843,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     avatar?: true
+    googleId?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1852,6 +1856,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     avatar?: true
+    googleId?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1864,6 +1869,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     avatar?: true
+    googleId?: true
     _all?: true
   }
 
@@ -1963,6 +1969,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     avatar: string | null
+    googleId: string | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -1994,6 +2001,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     avatar?: boolean
+    googleId?: boolean
     employer?: boolean | User$employerArgs<ExtArgs>
     candidate?: boolean | User$candidateArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
@@ -2008,6 +2016,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     avatar?: boolean
+    googleId?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2020,6 +2029,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     avatar?: boolean
+    googleId?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2032,9 +2042,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     avatar?: boolean
+    googleId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "fullName" | "userType" | "isActive" | "createdAt" | "updatedAt" | "avatar", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "passwordHash" | "fullName" | "userType" | "isActive" | "createdAt" | "updatedAt" | "avatar" | "googleId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     employer?: boolean | User$employerArgs<ExtArgs>
     candidate?: boolean | User$candidateArgs<ExtArgs>
@@ -2058,6 +2069,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       avatar: string | null
+      googleId: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2492,6 +2504,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly avatar: FieldRef<"User", 'String'>
+    readonly googleId: FieldRef<"User", 'String'>
   }
     
 
@@ -11236,7 +11249,8 @@ export namespace Prisma {
     isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    avatar: 'avatar'
+    avatar: 'avatar',
+    googleId: 'googleId'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -11540,6 +11554,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     avatar?: StringNullableFilter<"User"> | string | null
+    googleId?: StringNullableFilter<"User"> | string | null
     employer?: XOR<EmployerNullableScalarRelationFilter, EmployerWhereInput> | null
     candidate?: XOR<CandidateNullableScalarRelationFilter, CandidateWhereInput> | null
   }
@@ -11554,6 +11569,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     avatar?: SortOrderInput | SortOrder
+    googleId?: SortOrderInput | SortOrder
     employer?: EmployerOrderByWithRelationInput
     candidate?: CandidateOrderByWithRelationInput
   }
@@ -11561,6 +11577,7 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     email?: string
+    googleId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -11573,7 +11590,7 @@ export namespace Prisma {
     avatar?: StringNullableFilter<"User"> | string | null
     employer?: XOR<EmployerNullableScalarRelationFilter, EmployerWhereInput> | null
     candidate?: XOR<CandidateNullableScalarRelationFilter, CandidateWhereInput> | null
-  }, "id" | "email">
+  }, "id" | "email" | "googleId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -11585,6 +11602,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     avatar?: SortOrderInput | SortOrder
+    googleId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -11605,6 +11623,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     avatar?: StringNullableWithAggregatesFilter<"User"> | string | null
+    googleId?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type EmployerWhereInput = {
@@ -12188,6 +12207,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    googleId?: string | null
     employer?: EmployerCreateNestedOneWithoutUserInput
     candidate?: CandidateCreateNestedOneWithoutUserInput
   }
@@ -12202,6 +12222,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    googleId?: string | null
     employer?: EmployerUncheckedCreateNestedOneWithoutUserInput
     candidate?: CandidateUncheckedCreateNestedOneWithoutUserInput
   }
@@ -12215,6 +12236,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     employer?: EmployerUpdateOneWithoutUserNestedInput
     candidate?: CandidateUpdateOneWithoutUserNestedInput
   }
@@ -12229,6 +12251,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     employer?: EmployerUncheckedUpdateOneWithoutUserNestedInput
     candidate?: CandidateUncheckedUpdateOneWithoutUserNestedInput
   }
@@ -12243,6 +12266,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    googleId?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -12254,6 +12278,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -12266,6 +12291,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type EmployerCreateInput = {
@@ -12950,6 +12976,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     avatar?: SortOrder
+    googleId?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
@@ -12966,6 +12993,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     avatar?: SortOrder
+    googleId?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -12978,6 +13006,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     avatar?: SortOrder
+    googleId?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
@@ -14544,6 +14573,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    googleId?: string | null
     candidate?: CandidateCreateNestedOneWithoutUserInput
   }
 
@@ -14557,6 +14587,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    googleId?: string | null
     candidate?: CandidateUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -14624,6 +14655,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     candidate?: CandidateUpdateOneWithoutUserNestedInput
   }
 
@@ -14637,6 +14669,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     candidate?: CandidateUncheckedUpdateOneWithoutUserNestedInput
   }
 
@@ -14683,6 +14716,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    googleId?: string | null
     employer?: EmployerCreateNestedOneWithoutUserInput
   }
 
@@ -14696,6 +14730,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     avatar?: string | null
+    googleId?: string | null
     employer?: EmployerUncheckedCreateNestedOneWithoutUserInput
   }
 
@@ -14846,6 +14881,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     employer?: EmployerUpdateOneWithoutUserNestedInput
   }
 
@@ -14859,6 +14895,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     employer?: EmployerUncheckedUpdateOneWithoutUserNestedInput
   }
 
