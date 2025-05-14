@@ -18,12 +18,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientSecret,
       callbackURL: 'http://localhost:3002/api/v1/auth/google/callback',
       scope: ['email', 'profile'],
-      passReqToCallback: true,
     } as StrategyOptionsWithRequest);
   }
 
   async validate(
-    request: any,
     accessToken: string,
     refreshToken: string,
     profile: any,
@@ -37,7 +35,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
         accessToken,
         access_token: authRes.access_token,
       };
-      (request.session as any).user = user;
       done(null, user);
     } catch (err) {
       done(err, null);

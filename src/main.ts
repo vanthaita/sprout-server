@@ -10,26 +10,11 @@ import { ConfigService } from '@nestjs/config';
 import cookieParser from 'cookie-parser';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import passport from 'passport';
-import session from 'express-session';
-import Redis from 'ioredis';
-import connectRedis from 'connect-redis';
 
 const logger = new Logger('Main');
 
 async function bootstrap() {
   try {
-    const redisClient = new Redis(process.env.REDIS_URL || 'redis://localhost:6379');
-    
-    redisClient.on('error', (err) => logger.error(`Redis Client Error: ${err.message}`));
-    redisClient.on('connect', () => logger.log('Connected to Redis successfully'));
-
-    const RedisStore = connectRedis(session);
-    const redisStore = new RedisStore({
-      client: redisClient,
-      prefix: 'sess:',
-      ttl: 86400,
-    });
-
     const app = await NestFactory.create<NestExpressApplication>(
       AppModule,
       new ExpressAdapter(),
@@ -46,34 +31,8 @@ async function bootstrap() {
 
     const configService = app.get(ConfigService);
 
-    app.use(
-      session({
-        store: redisStore,
-        secret: configService.get<string>('SESSION_SECRET') || 'strong-secret-key',
-        resave: false,
-        saveUninitialized: false,
-        rolling: true,
-        cookie: {
-          httpOnly: true,
-          secure: configService.get<string>('NODE_ENV') === 'production',
-          maxAge: 24 * 60 * 60 * 1000,
-          sameSite: 'lax',
-          domain: configService.get<string>('COOKIE_DOMAIN'),
-        },
-        name: 'sessionId',
-      }),
-    );
-
+  
     app.use(passport.initialize());
-    app.use(passport.session());
-
-    passport.serializeUser((user: any, done) => {
-      done(null, user);
-    });
-
-    passport.deserializeUser((user: any, done) => {
-      done(null, user);
-    });
 
     app.useGlobalPipes(
       new ValidationPipe({
@@ -105,14 +64,12 @@ async function bootstrap() {
     process.on('SIGTERM', async () => {
       logger.log('SIGTERM received. Shutting down gracefully...');
       await app.close();
-      redisClient.quit();
       process.exit(0);
     });
 
     process.on('SIGINT', async () => {
       logger.log('SIGINT received. Shutting down gracefully...');
       await app.close();
-      redisClient.quit();
       process.exit(0);
     });
 

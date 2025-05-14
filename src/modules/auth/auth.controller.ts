@@ -1,4 +1,4 @@
-import { Controller, Get, Res, UseGuards, Request, Post, Body } from '@nestjs/common';
+import { Controller, Get, Res, UseGuards, Request, Post, Body, NotFoundException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
@@ -28,19 +28,10 @@ export class AuthController {
     }
 
     res.cookie('access_token', user.access_token, { httpOnly: true });
-
-    try {
-      res.redirect('http://localhost:3000/profile');
-    } catch (error) {
-      return res.json({
-        message: 'Google login successful',
-        access_token: user.access_token,
-        user: {
-          email: user.email,
-          fullName: user.fullName,
-        },
+    return res.json({
+      message: 'Google login successful',
+      access_token: user.access_token,
       });
-    }
   }
 
   @Post('register')
@@ -54,40 +45,39 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Request() req: AuthenticatedRequest, @Res() res: Response) {
-    const loginRes = await this.authService.login((req as any).user); // Chỉ truyền 1 tham số
-    (req.session as any).user = {
-      email: loginRes.user.email,
-      fullName: loginRes.user.fullName,
-      userType: loginRes.user.userType,
-    };
-    const response = {
-      user: {
-        email: loginRes.user.email,
-        fullName: loginRes.user.fullName,
-        userType: loginRes.user.userType,
-      },
-      access_token: loginRes.access_token,
-      message: loginRes.message,
-    };
-    return res.json(response);
+  async login(@Request() req: AuthenticatedRequest) {
+    return this.authService.login(req.user);
   }
 
   @Post('logout')
-  async logout(@Request() req: AuthenticatedRequest, @Res() res: Response) {
-    await this.authService.logout(req.session);
-    res.clearCookie('sessionId');
+  async logout(@Res() res: Response) {
     res.clearCookie('access_token');
     return res.json({ message: 'Logged out successfully' });
   }
 
   @UseGuards(AuthenticatedGuard)
   @Get('me')
-  async me(@Request() req: AuthenticatedRequest) {
-    const user = (req as any).user;
+async me(@Request() req: AuthenticatedRequest) {
+  const user = req.user;
+  
+  // If fullName is already in the JWT payload
+  if (user.fullName) {
     return {
       email: user.email,
       fullName: user.fullName,
     };
   }
+
+  // If fullName is not in JWT, fetch from database
+  const dbUser = await this.authService.getUserById(Number(user.id));
+  
+  if (!dbUser) {
+    throw new NotFoundException('User not found');
+  }
+
+  return {
+    email: user.email,
+    fullName: dbUser.fullName,
+  };
+}
 }

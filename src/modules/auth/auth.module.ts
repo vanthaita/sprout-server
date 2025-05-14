@@ -14,7 +14,7 @@ import { AuthenticatedGuard } from '../../core/guard/authenticated.guard';
 
 @Module({
   imports: [
-    PassportModule.register({ defaultStrategy: 'jwt', session: true }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET || 'secret',
@@ -35,6 +35,6 @@ import { AuthenticatedGuard } from '../../core/guard/authenticated.guard';
     JwtAuthGuard,
     AuthenticatedGuard,
   ],
-  exports: [AuthenticatedGuard, JwtAuthGuard], // Xuất để các module khác có thể sử dụng
+  exports: [AuthenticatedGuard, JwtAuthGuard],
 })
 export class AuthModule {}

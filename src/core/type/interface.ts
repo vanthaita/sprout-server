@@ -7,5 +7,6 @@ export interface AuthenticatedRequest extends ExpressRequest {
     accessToken: string;
     email: string;
     id: string;
+    fullName?: string; 
   };
 }

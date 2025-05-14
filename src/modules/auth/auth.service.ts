@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import axios from 'axios';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
@@ -28,7 +28,7 @@ export class AuthService {
       });
     }
     
-    const payload = { sub: user.id, email: user.email, userType: user.userType };
+    const payload = { sub: user.id, email: user.email, userType: user.userType,  fullName: user.fullName };
     return {
       access_token: this.jwtService.sign(payload),
     };
@@ -63,7 +63,7 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { sub: user.id, email: user.email, userType: user.userType };
+    const payload = { sub: user.id, email: user.email, userType: user.userType, fullName: user.fullName };
     return {
       user,
       access_token: this.jwtService.sign(payload),
@@ -71,17 +71,8 @@ export class AuthService {
     };
   }
 
-  async logout(session: any) {
-    return new Promise((resolve, reject) => {
-      session.destroy((err: any) => {
-        if (err) {
-          console.error('Failed to destroy session:', err);
-          reject(new Error('Failed to destroy session'));
-        } else {
-          resolve({ message: 'Logged out successfully' });
-        }
-      });
-    });
+  async logout() {
+    return { message: 'Logged out successfully' };
   }
 
   async getProfile(token: string) {
@@ -95,4 +86,22 @@ export class AuthService {
       throw new UnauthorizedException('Invalid Google token');
     }
   }
+
+  async getUserById(id: number) {
+  const user = await this.prismaService.user.findUnique({ 
+    where: { id },
+    select: {
+      id: true,
+      email: true,
+      fullName: true,
+      userType: true
+    }
+  });
+
+  if (!user) {
+    throw new NotFoundException(`User with ID ${id} not found`);
+  }
+
+  return user;
+}
 }
