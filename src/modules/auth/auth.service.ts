@@ -3,14 +3,12 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
-import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from 'src/core/dto/user.dto';
 @Injectable()
 export class AuthService {
     constructor(
         private jwtService: JwtService,
         private usersService: UsersService,
-        private prismaService: PrismaService,
     ) {}
     
     async authenticate(token: string) {
@@ -28,8 +26,7 @@ export class AuthService {
             user = await this.usersService.createUser(createUserDto);
         }
         
-        const payload = { sub: user.id, email: user.email, userType: user.userType }
-        
+        const payload = { sub: user.id, email: user.email, userType: user.userType, isOnboarded: user.isOnboarded }
 
         return {
             access_token: this.jwtService.sign(payload)

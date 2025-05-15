@@ -32,6 +32,7 @@ import {
           id: payload.sub,
           email: payload.email,
           userType: payload.userType,
+          isOnboarded: payload.isOnboarded,
         };
       } catch (error) {
         console.log(error);

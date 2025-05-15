@@ -63,6 +63,10 @@ export class UserDto {
   @IsBoolean()
   isActive: boolean;
 
+  @Expose()
+  @IsBoolean()
+  isOnboarded: boolean;
+
   @Exclude() 
   passwordHash?: string | null;
 
