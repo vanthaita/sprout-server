@@ -1,3 +1,7 @@
-import { UserType } from "generated/prisma";
+export const UserType = {
+  CANDIDATE: 'CANDIDATE',
+  EMPLOYER: 'EMPLOYER',
+  ADMIN: 'ADMIN',
+} as const;
 
-export default UserType
+export type UserType = typeof UserType[keyof typeof UserType];

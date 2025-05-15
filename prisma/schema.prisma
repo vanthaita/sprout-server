@@ -86,6 +86,7 @@ model User {
   isOnboarded Boolean @default(false)
   employer     Employer?
   candidate    Candidate?
+  googleId     String?  @unique 
 }
 
 model Employer {

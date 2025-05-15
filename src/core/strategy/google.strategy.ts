@@ -1,32 +1,32 @@
-/* eslint-disable @typescript-eslint/require-await */
-import { Injectable } from '@nestjs/common';
+import { Strategy, StrategyOptionsWithRequest } from 'passport-google-oauth20';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy } from 'passport-google-oauth20';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { AuthService } from '../../modules/auth/auth.service';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor() {
+  constructor(private authService: AuthService) {
     super({
-      clientID: process.env.GOOGLE_CLIENT,
-      clientSecret: process.env.GOOGLE_SECRET,
-      callbackURL: `${process.env.WEB_URL}/api/v1/auth/google/callback`,
+      clientID: process.env.GOOGLE_CLIENT, 
+      clientSecret: process.env.GOOGLE_SECRET, 
+      callbackURL: `${process.env.BACKEND_URL}/api/v1/auth/google/callback`, 
       scope: ['email', 'profile'],
+      passReqToCallback: false 
     });
   }
 
-  authorizationParams(): { [key: string]: string } {
-    return {
-      access_type: 'offline',
-      prompt: 'consent',
-    };
-  }
 
-  async validate(access_token: string) {
-    console.log(access_token)
-    const user = {
-      accessToken: access_token
+  async validate(accessToken: string, refreshToken: string, profile: any) {
+    const user = await this.authService.validateOrCreateGoogleUser1({
+      email: profile.emails[0].value,
+      fullName: profile.displayName,
+      googleId: profile.id
+    });
+    
+    if (!user) {
+      throw new UnauthorizedException();
     }
-    return user || null
-  }
 
+    return user; // Trả về user object sẽ được lưu vào req.user
+  }
 }

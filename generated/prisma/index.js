@@ -306,7 +306,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\Projects\\clone\\sprout-server\\generated\\prisma",
+      "value": "D:\\2025\\2025-2\\LTWeb\\sprout-server\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -320,7 +320,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\Projects\\clone\\sprout-server\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\2025\\2025-2\\LTWeb\\sprout-server\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

@@ -12856,6 +12856,7 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: number
     email?: string
+    googleId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -12870,7 +12871,7 @@ export namespace Prisma {
     isOnboarded?: BoolFilter<"User"> | boolean
     employer?: XOR<EmployerNullableScalarRelationFilter, EmployerWhereInput> | null
     candidate?: XOR<CandidateNullableScalarRelationFilter, CandidateWhereInput> | null
-  }, "id" | "email">
+  }, "id" | "email" | "googleId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
