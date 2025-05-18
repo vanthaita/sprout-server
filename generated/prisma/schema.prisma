@@ -102,6 +102,8 @@ model Employer {
   jobs           Job[]
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
+
+  Interviews Interviews[]
 }
 
 model Candidate {
@@ -122,6 +124,8 @@ model Candidate {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   CV              CV[]
+
+  Interviews Interviews[]
 }
 
 model Education {
@@ -182,6 +186,8 @@ model Job {
   applications   Application[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
+
+  Interviews Interviews[]
 }
 
 model CV {
@@ -207,4 +213,27 @@ model Application {
   updatedAt       DateTime          @updatedAt
 
   @@unique([candidateId, jobId])
+}
+
+model Interviews {
+  id            Int       @id @default(autoincrement())
+  candidateId   Int
+  jobId         Int
+  employerId    Int
+  scheduledDate DateTime
+  duration      Int?
+  status        String    @default("SCHEDULED")
+  meetingLink   String?
+  notes         String?
+  feedback      String?
+  candidate     Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job           Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  employer      Employer  @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([candidateId])
+  @@index([jobId])
+  @@index([employerId])
+  @@index([scheduledDate])
 }

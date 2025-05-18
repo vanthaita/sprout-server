@@ -7,6 +7,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { CandidateModule } from './modules/candidate/candidate.module';
 import { EmployeeModule } from './modules/employer/employer.module';
 import { JobModule } from './modules/job/job.module';
+import { InterviewModule } from './modules/interview/interview.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { JobModule } from './modules/job/job.module';
     UsersModule,
     CandidateModule,
     EmployeeModule,
+    InterviewModule,
     JobModule,
   ],
   controllers: [],

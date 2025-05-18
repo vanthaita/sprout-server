@@ -11,6 +11,7 @@ import { ResponseInterceptor } from './core/interceptor/response.interceptor';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { ClassSerializerInterceptor } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(
@@ -23,6 +24,14 @@ async function bootstrap() {
       },
     },
   );
+  const config = new DocumentBuilder()
+    .setTitle('Sprout Career')
+    .setDescription('The Sprout Career API description')
+    .setVersion('1.0')
+    .addTag('jobs')
+    .build();
+  const documentFactory = () => SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, documentFactory);
 
   const configService = app.get(ConfigService);
 

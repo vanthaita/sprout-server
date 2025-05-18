@@ -237,6 +237,21 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.InterviewsScalarFieldEnum = {
+  id: 'id',
+  candidateId: 'candidateId',
+  jobId: 'jobId',
+  employerId: 'employerId',
+  scheduledDate: 'scheduledDate',
+  duration: 'duration',
+  status: 'status',
+  meetingLink: 'meetingLink',
+  notes: 'notes',
+  feedback: 'feedback',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -312,7 +327,8 @@ exports.Prisma.ModelName = {
   WorkExperience: 'WorkExperience',
   Job: 'Job',
   CV: 'CV',
-  Application: 'Application'
+  Application: 'Application',
+  Interviews: 'Interviews'
 };
 
 /**

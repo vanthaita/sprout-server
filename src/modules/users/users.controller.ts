@@ -6,14 +6,12 @@ import { AuthGuard as JWTAuthGuard } from '../../core/guard/authenticated.guard'
 import { UpdateUserDto, UserDto } from '../../core/dto/user.dto';
 import { AuthenticatedRequest } from '../../core/type/interface';
 import { FileInterceptor } from '@nestjs/platform-express';
-
-
+@UseGuards(JWTAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('me')
-  @UseGuards(JWTAuthGuard)
   async getUserDetails(
     @Request() req: AuthenticatedRequest 
   ) {
@@ -28,7 +26,6 @@ export class UsersController {
     return this.usersService.checkUserProfileCreated(req.user.email);
   }
   @Post('avatar')
-  @UseGuards(JWTAuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   async uploadProfileAvatar(
     @Request() req: AuthenticatedRequest,
@@ -36,15 +33,13 @@ export class UsersController {
   ) {
     return this.usersService.uploadAvatar(file, req.user.email);
   }
-@Patch('update-onboarding')
-  @UseGuards(JWTAuthGuard)
+  @Patch('update-onboarding')
   async uploadOnboarding(
     @Request() req: AuthenticatedRequest,
   ) {
     return this.usersService.updateIsOnboarded(req.user.email);
   }
   @Patch('me')
-  @UseGuards(JWTAuthGuard)
   async updateUserDetails(
     @Request() req: AuthenticatedRequest,
     @Body() updateUserDto: UpdateUserDto

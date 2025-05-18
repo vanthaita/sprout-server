@@ -20,28 +20,25 @@ import { AuthGuard as JWTAuthGuard } from '../../core/guard/authenticated.guard'
 import { AuthenticatedRequest } from '../../core/type/interface'; 
 import { CreateJobDto, JobFilterDto, UpdateJobDto } from './dto/job.dto';
 import { ApplicationFilterDto, UpdateApplicationStatusDto } from './dto/application.dto';
+import { UserType } from 'generated/prisma';
+import { Roles } from '../../core/decorator/roles.decorator';
+import { RolesGuard } from '../../core/guard/roles.guard';
 @Controller('employer')
-@UseGuards(JWTAuthGuard)
-// createJob()
-// getEmployerJobs()
-// getJobDetails()
-// updateJob()
-// deleteJob()
-// getApplications()
-// getApplicationDetails()
-// updateApplicationStatus()
+@UseGuards(JWTAuthGuard, RolesGuard)
 export class EmployerController {
   constructor(private readonly employerService: EmployerService) {}
 
+  @Roles(UserType.EMPLOYER)
   @Post()
   @HttpCode(HttpStatus.CREATED)
   async createEmployer(
     @Request() req: AuthenticatedRequest,
     @Body() createEmployerDto: CreateEmployerDto
-  ){
+  ) {
     return this.employerService.createEmployer(createEmployerDto, req.user.email);
   }
 
+  @Roles(UserType.EMPLOYER)
   @Patch()
   @HttpCode(HttpStatus.OK)
   async updateEmployer(
@@ -51,6 +48,7 @@ export class EmployerController {
     return this.employerService.updateEmployer(updateEmployerDto, req.user.email);
   }
 
+  @Roles(UserType.EMPLOYER, UserType.ADMIN)
   @Get('profile')
   @HttpCode(HttpStatus.OK)
   async getProfile(
@@ -59,6 +57,7 @@ export class EmployerController {
     return this.employerService.getProfile(req.user.email);
   }
 
+  @Roles(UserType.EMPLOYER)
   @Post('jobs')
   async createJob(
     @Request() req: AuthenticatedRequest,
@@ -67,6 +66,7 @@ export class EmployerController {
     return this.employerService.createJob(createJobDto, req.user.email);
   }
   
+  @Roles(UserType.EMPLOYER, UserType.ADMIN)
   @Get('jobs')
   async getJobs(
     @Request() req: AuthenticatedRequest,
@@ -75,14 +75,16 @@ export class EmployerController {
     return this.employerService.getEmployerJobs(filter, req.user.email);
   }
 
+  @Roles(UserType.EMPLOYER, UserType.ADMIN)
   @Get('jobs/:id')
   async getJobDetails(
     @Param('id', ParseIntPipe) jobId: number,
     @Request() req: AuthenticatedRequest,
   ) {
-    return this.employerService.getJobDetails(jobId,req.user.email);
+    return this.employerService.getJobDetails(jobId, req.user.email);
   }
 
+  @Roles(UserType.EMPLOYER)
   @Patch('jobs/:id')
   async updateJob(
     @Param('id', ParseIntPipe) jobId: number,
@@ -92,6 +94,7 @@ export class EmployerController {
     return this.employerService.updateJob(jobId, updateJobDto, req.user.email);
   }
 
+  @Roles(UserType.EMPLOYER)
   @Delete('jobs/:id')
   async deleteJob(
     @Param('id', ParseIntPipe) jobId: number,
@@ -100,6 +103,7 @@ export class EmployerController {
     return this.employerService.deleteJob(jobId, req.user.email);
   }
 
+  @Roles(UserType.EMPLOYER, UserType.ADMIN)
   @Get('applications')
   async getApplications(
     @Query() filter: ApplicationFilterDto,
@@ -108,6 +112,7 @@ export class EmployerController {
     return this.employerService.getApplications(filter, req.user.email);
   }
 
+  @Roles(UserType.EMPLOYER, UserType.ADMIN)
   @Get('applications/:id')
   async getApplicationDetails(
     @Param('id', ParseIntPipe) applicationId: number,
@@ -116,6 +121,7 @@ export class EmployerController {
     return this.employerService.getApplicationDetails(applicationId, req.user.email);
   }
 
+  @Roles(UserType.EMPLOYER)
   @Put('applications/:id/status')
   async updateApplicationStatus(
     @Param('id', ParseIntPipe) applicationId: number,

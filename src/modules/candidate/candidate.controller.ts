@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Controller,
   Post,
@@ -19,31 +20,30 @@ import { AuthenticatedRequest } from '../../core/type/interface';
 import { CreateCandidateDto, UpdateCandidateDto } from './dto/candidate';
 import { CreateEducationListDto, UpdateEducationDto } from './dto/education';
 import { CreateWorkExperienceListDto, UpdateWorkExperienceDto } from './dto/work-experience';
-// import { CreateQualificationDto, UpdateQualificationDto } from './dto/qualification';
 import { CreateCVDto, UpdateCVDto } from './dto/cv';
-
+import { RolesGuard } from '../../core/guard/roles.guard';
+import { UserType } from 'generated/prisma';
+import { Roles } from '../../core/decorator/roles.decorator';
 @Controller('candidate')
-// @UseGuards(JWTAuthGuard) 
+@UseGuards(JWTAuthGuard, RolesGuard)
 export class CandidateController {
     constructor(private readonly candidateService: CandidateService) {}
 
-
-    @UseGuards(JWTAuthGuard) 
+    @Roles(UserType.CANDIDATE, UserType.EMPLOYER, UserType.ADMIN)
     @Get('profile') 
-    getCandidateProfile( 
+    async getCandidateProfile(
         @Request() req: AuthenticatedRequest,
+        @Query('email') email?: string
     ) {
-        return this.candidateService.candidateProfileDetails(req.user.email);
+    
+        const targetEmail = email || req.user.email;
+        return this.candidateService.getCandidateProfileDetails(
+            targetEmail, 
+            req.user.email  
+        );
     }
-    @Get('view-profile') 
-    getCandidateProfileByGuest( 
-        @Request() req: AuthenticatedRequest,
-        @Query('email') email: string
-    ) {
-        console.log("email: ", email);
-        return this.candidateService.candidateProfileDetails(email);
-    }
-    @UseGuards(JWTAuthGuard) 
+
+    @Roles(UserType.CANDIDATE)
     @Post('profile')
     createCandidateProfile(
         @Request() req: AuthenticatedRequest,
@@ -52,7 +52,7 @@ export class CandidateController {
         return this.candidateService.createCandidateProfile(req.user.email, createCandidateDto);
     }
 
-    @UseGuards(JWTAuthGuard) 
+    @Roles(UserType.CANDIDATE)
     @Patch('profile') 
     updateCandidateProfile(
         @Request() req: AuthenticatedRequest,
@@ -61,18 +61,16 @@ export class CandidateController {
         return this.candidateService.updateCandidateProfile(req.user.email, updateCandidateDto);
     }
 
-
-    @UseGuards(JWTAuthGuard) 
+    @Roles(UserType.CANDIDATE)
     @Post('education')
     addEducation(
         @Request() req: AuthenticatedRequest,
         @Body() createEducationDto: CreateEducationListDto
     ) {
-        console.log(createEducationDto);
         return this.candidateService.addEducations(req.user.email, createEducationDto.educations);
     }
 
-    @UseGuards(JWTAuthGuard) 
+    @Roles(UserType.CANDIDATE)
     @Patch('education/:id')
     updateEducation(
         @Request() req: AuthenticatedRequest,
@@ -82,7 +80,7 @@ export class CandidateController {
         return this.candidateService.updateEducation(req.user.email, educationId, updateEducationDto);
     }
 
-    @UseGuards(JWTAuthGuard) 
+    @Roles(UserType.CANDIDATE)
     @Delete('education/:id')
     @HttpCode(HttpStatus.NO_CONTENT)
     deleteEducation(
@@ -92,8 +90,7 @@ export class CandidateController {
         return this.candidateService.deleteEducation(req.user.email, educationId);
     }
 
-
-    @UseGuards(JWTAuthGuard) 
+    @Roles(UserType.CANDIDATE)
     @Post('work-experience')
     addWorkExperience(
         @Request() req: AuthenticatedRequest,
@@ -102,7 +99,7 @@ export class CandidateController {
         return this.candidateService.addWorkExperiences(req.user.email, createWorkExperienceDto.workExperiences);
     }
 
-    @UseGuards(JWTAuthGuard) 
+    @Roles(UserType.CANDIDATE)
     @Patch('work-experience/:id')
     updateWorkExperience(
         @Request() req: AuthenticatedRequest,
@@ -112,7 +109,7 @@ export class CandidateController {
         return this.candidateService.updateWorkExperience(req.user.email, experienceId, updateWorkExperienceDto);
     }
 
-    @UseGuards(JWTAuthGuard) 
+    @Roles(UserType.CANDIDATE)
     @Delete('work-experience/:id')
     @HttpCode(HttpStatus.NO_CONTENT)
     deleteWorkExperience(
@@ -122,36 +119,7 @@ export class CandidateController {
         return this.candidateService.deleteWorkExperience(req.user.email, experienceId);
     }
 
-
-    //   @Post('qualification')
-    //   addQualification(
-    //       @Request() req: AuthenticatedRequest,
-    //       @Body() createQualificationDto: CreateQualificationDto
-    //   ) {
-    //       return this.candidateService.addQualification(req.user.email, createQualificationDto);
-    //   }
-
-    //   @Patch('qualification/:id')
-    //   updateQualification(
-    //       @Request() req: AuthenticatedRequest,
-    //       @Param('id', ParseIntPipe) qualificationId: number,
-    //       @Body() updateQualificationDto: UpdateQualificationDto
-    //   ) {
-    //       return this.candidateService.updateQualification(req.user.email, qualificationId, updateQualificationDto);
-    //   }
-
-    //   @Delete('qualification/:id')
-    //   @HttpCode(HttpStatus.NO_CONTENT)
-    //   deleteQualification(
-    //       @Request() req: AuthenticatedRequest,
-    //       @Param('id', ParseIntPipe) qualificationId: number,
-    //   ) {
-    //       return this.candidateService.deleteQualification(req.user.email, qualificationId);
-    //   }
-
-
-
-    @UseGuards(JWTAuthGuard) 
+    @Roles(UserType.CANDIDATE)
     @Post('cv')
     addCV(
         @Request() req: AuthenticatedRequest,
@@ -160,7 +128,7 @@ export class CandidateController {
         return this.candidateService.addCV(req.user.email, createCVDto);
     }
 
-    @UseGuards(JWTAuthGuard) 
+    @Roles(UserType.CANDIDATE)
     @Patch('cv/:id')
     updateCV(
         @Request() req: AuthenticatedRequest,
@@ -170,31 +138,31 @@ export class CandidateController {
         return this.candidateService.updateCV(req.user.email, cvId, updateCVDto);
     }
 
-    @UseGuards(JWTAuthGuard) 
+    @Roles(UserType.CANDIDATE)
     @Delete('cv/:id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    async deleteCV( 
+    async deleteCV(
         @Request() req: AuthenticatedRequest,
         @Param('id', ParseIntPipe) cvId: number,
     ) {
-        await this.candidateService.deleteCV(req.user.email, cvId); 
+        await this.candidateService.deleteCV(req.user.email, cvId);
     }
 
-    @UseGuards(JWTAuthGuard) 
+    @Roles(UserType.CANDIDATE)
     @Post('application')
     async applicationJob(
         @Request() req: AuthenticatedRequest,
         @Body() body: {jobId: number}
     ) {
-        const {jobId} = body
-        console.log(jobId, req.user);
-        return this.candidateService.applicationJob(req.user.email, jobId);
+        const {jobId} = body;
+        return this.candidateService.applyForJob(req.user.email, jobId);
     }
-    @UseGuards(JWTAuthGuard) 
+
+    @Roles(UserType.CANDIDATE)
     @Get('applications')
     async getApplicationForCandidate(
         @Request() req: AuthenticatedRequest,
     ) {
-        return this.candidateService.applicationForCandidate(req.user.email)
+        return this.candidateService.getApplicationsForCandidate(req.user.email);
     }
 }

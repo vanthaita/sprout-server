@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-oauth20';
+import { ApiHideProperty } from '@nestjs/swagger';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -14,6 +15,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
   }
 
+  @ApiHideProperty()
   authorizationParams(): { [key: string]: string } {
     return {
       access_type: 'offline',
@@ -22,11 +24,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   }
 
   async validate(access_token: string) {
-    console.log(access_token)
+    console.log(access_token);
     const user = {
-      accessToken: access_token
-    }
-    return user || null
+      accessToken: access_token,
+    };
+    return user || null;
   }
-
 }
