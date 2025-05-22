@@ -1,7 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   ConflictException,
   ForbiddenException,
+  HttpException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -21,10 +24,14 @@ import {
   UpdateWorkExperienceDto,
 } from './dto/work-experience';
 import { CreateCVDto, UpdateCVDto } from './dto/cv';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class CandidateService {
-    constructor(private readonly prismaService: PrismaService) {}
+    constructor(
+        private readonly prismaService: PrismaService, 
+        private readonly cloudinaryService: CloudinaryService
+    ) {}
 
     private async getCandidateIdByEmail(email: string): Promise<number> {
         const user = await this.prismaService.user.findUnique({
@@ -42,40 +49,72 @@ export class CandidateService {
         }
         return user.candidate.id;
     }
-
-    async createCandidateProfile(
-        email: string,
-        candidateProfileCreateDto: CreateCandidateDto,
-    ) {
-        const existingUser = await this.prismaService.user.findUnique({
-        where: { email },
-        include: { candidate: true, employer: true },
+    private async validateUserForCandidateProfile(email: string) {
+        const user = await this.prismaService.user.findUnique({
+            where: { email },
+            include: { candidate: true, employer: true },
         });
 
-        if (!existingUser) {
-        throw new NotFoundException('User not found');
+        if (!user) {
+            throw new NotFoundException('User not found');
         }
 
-        if (existingUser.candidate) {
-        throw new ConflictException('User already has a candidate profile');
+        if (user.candidate) {
+            throw new ConflictException('User already has a candidate profile');
         }
 
-        if (existingUser.employer) {
-        throw new ConflictException('User already has an employer profile');
+        if (user.employer) {
+            throw new ConflictException('User already has an employer profile');
         }
 
+        return user;
+    }
+
+    private async handleFileUpload(file: Express.Multer.File): Promise<string> {
+        try {
+            const uploadResult = await this.cloudinaryService.uploadFile(file);
+            return uploadResult.url as string;
+        } catch (error) {
+            console.error('Error uploading file to Cloudinary:', error);
+            throw new HttpException('File upload failed', HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    private prepareCandidateData(
+        createDto: CreateCandidateDto,
+        profilePhotoUrl?: string
+    ): CreateCandidateDto {
+        return {
+            ...createDto,
+            profilePhotoUrl
+        };
+    }
+
+    private createCandidateTransaction(userId: number, candidateData: CreateCandidateDto) {
         return this.prismaService.$transaction([
-        this.prismaService.user.update({
-            where: { id: existingUser.id },
-            data: { isOnboarded: true },
-        }),
-        this.prismaService.candidate.create({
-            data: {
-            ...candidateProfileCreateDto,
-            user: { connect: { id: existingUser.id } },
-            },
-        }),
+            this.prismaService.user.update({
+                where: { id: userId },
+                data: { isOnboarded: true },
+            }),
+            this.prismaService.candidate.create({
+                data: {
+                    ...candidateData,
+                    user: { connect: { id: userId } },
+                },
+            }),
         ]);
+    }
+    async createCandidateProfile(
+         email: string,
+        candidateProfileCreateDto: CreateCandidateDto,
+        candidateLogoFile?: Express.Multer.File
+    ) {
+        const user = await this.validateUserForCandidateProfile(email);
+        const profilePhotoUrl = candidateLogoFile 
+            ? await this.handleFileUpload(candidateLogoFile)
+            : undefined;
+        const candidateData = this.prepareCandidateData(candidateProfileCreateDto, profilePhotoUrl);
+        return this.createCandidateTransaction(user.id, candidateData);
     }
 
     async updateCandidateProfile(

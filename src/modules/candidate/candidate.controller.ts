@@ -12,7 +12,9 @@ import {
   ParseIntPipe,
   HttpCode,
   HttpStatus, 
-  Query
+  Query,
+  UseInterceptors,
+  UploadedFile
 } from '@nestjs/common';
 import { CandidateService } from './candidate.service';
 import { AuthGuard as JWTAuthGuard } from '../../core/guard/authenticated.guard'; 
@@ -24,6 +26,7 @@ import { CreateCVDto, UpdateCVDto } from './dto/cv';
 import { RolesGuard } from '../../core/guard/roles.guard';
 import { UserType } from 'generated/prisma';
 import { Roles } from '../../core/decorator/roles.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 @Controller('candidate')
 @UseGuards(JWTAuthGuard, RolesGuard)
 export class CandidateController {
@@ -45,13 +48,18 @@ export class CandidateController {
 
     @Roles(UserType.CANDIDATE)
     @Post('profile')
-    createCandidateProfile(
+    @UseInterceptors(FileInterceptor('candidateLogo'))
+    async createCandidateProfile(
         @Request() req: AuthenticatedRequest,
-        @Body() createCandidateDto: CreateCandidateDto
+        @Body() createCandidateDto: CreateCandidateDto,
+        @UploadedFile() candidateLogoFile?: Express.Multer.File
     ) {
-        return this.candidateService.createCandidateProfile(req.user.email, createCandidateDto);
+        return this.candidateService.createCandidateProfile(
+            req.user.email, 
+            createCandidateDto,
+            candidateLogoFile
+        );
     }
-
     @Roles(UserType.CANDIDATE)
     @Patch('profile') 
     updateCandidateProfile(

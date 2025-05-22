@@ -7,7 +7,7 @@ import { CloudinaryResponse } from './cloudinary-response';
 @Injectable()
 export class CloudinaryService {
   private readonly logger = new Logger(CloudinaryService.name);
-
+  
   async uploadFile(file: Express.Multer.File): Promise<CloudinaryResponse> {
     if (!file?.buffer) {
       this.logger.error('Invalid file provided for upload');

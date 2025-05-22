@@ -1,55 +1,87 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+import { ConflictException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateEmployerDto, EmployerResponseDto, UpdateEmployerDto } from './dto/employer.dto';
 import { CreateJobDto, JobFilterDto, JobResponseDto, UpdateJobDto } from './dto/job.dto';
 import { ApplicationFilterDto } from './dto/application.dto';
 import { ApplicationStatus } from 'generated/prisma';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class EmployerService {
-    constructor(private prismaService: PrismaService) {}
-
-    async createEmployer(createEmployerDto: CreateEmployerDto, email: string) {
-        const existingUser = await this.prismaService.user.findUnique({
-            where: { email },
-            select: {
-              id: true,
-              userType: true,
-              candidate: true,
-              employer: true,
-            }
-        });
-        if (!existingUser) {
-            throw new NotFoundException('User not found');
+    constructor(private prismaService: PrismaService,
+        private readonly cloudinaryService: CloudinaryService
+    ) {}
+     private async handleFileUpload(file: Express.Multer.File): Promise<string> {
+        try {
+            const uploadResult = await this.cloudinaryService.uploadFile(file);
+            return uploadResult.url as string;
+        } catch (error) {
+            console.error('Error uploading file to Cloudinary:', error);
+            throw new HttpException('File upload failed', HttpStatus.BAD_REQUEST);
         }
-         if (existingUser.candidate) {
-              throw new ConflictException('User already has a candidate profile');
-          }
-          
-          if (existingUser.employer) {
-              throw new ConflictException('User already has a employer profile');
-          }
-        return await this.prismaService.$transaction([
+    }
+
+    private prepareEmployerData(
+        createDto: CreateEmployerDto,
+        companyLogoUrl?: string
+    ): CreateEmployerDto {
+        return {
+            ...createDto,
+            companyLogoUrl
+        };
+    }
+
+    private async createEmployerTransaction(userId: number, employerData: CreateEmployerDto) {
+        return this.prismaService.$transaction([
             this.prismaService.user.update({
-                where: {
-                    id: existingUser.id
-                },
-                data: {
-                    isOnboarded: true
-                }
+                where: { id: userId },
+                data: { isOnboarded: true },
             }),
             this.prismaService.employer.create({
                 data: {
-                ...createEmployerDto,
-                user: {
-                    connect: {
-                        id: existingUser.id
-                    }
+                    ...employerData,
+                    user: { connect: { id: userId } },
                 },
-                },
-            })
-        ]); 
-    };
+            }),
+        ]);
+    }
+
+    async createEmployer(
+        createEmployerDto: CreateEmployerDto, 
+        email: string,
+        companyLogoFile?: Express.Multer.File
+    ) {
+        const existingUser = await this.prismaService.user.findUnique({
+            where: { email },
+            select: {
+                id: true,
+                userType: true,
+                candidate: true,
+                employer: true,
+            }
+        });
+
+        if (!existingUser) {
+            throw new NotFoundException('User not found');
+        }
+        
+        if (existingUser.candidate) {
+            throw new ConflictException('User already has a candidate profile');
+        }
+        
+        if (existingUser.employer) {
+            throw new ConflictException('User already has an employer profile');
+        }
+
+        let companyLogoUrl;
+        if (companyLogoFile) {
+            companyLogoUrl = await this.handleFileUpload(companyLogoFile);
+        }
+
+        const employerData = this.prepareEmployerData(createEmployerDto, companyLogoUrl);
+        return this.createEmployerTransaction(existingUser.id, employerData);
+    } 
     
 
     async updateEmployer(updateEmployerDto: UpdateEmployerDto, email: string) {

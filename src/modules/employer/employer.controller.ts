@@ -12,7 +12,9 @@ import {
   Param,
   Delete,
   Query,
-  Put
+  Put,
+  UseInterceptors,
+  UploadedFile
 } from '@nestjs/common';
 import { EmployerService } from './employer.service';
 import { CreateEmployerDto, UpdateEmployerDto, EmployerResponseDto } from './dto/employer.dto';
@@ -23,19 +25,25 @@ import { ApplicationFilterDto, UpdateApplicationStatusDto } from './dto/applicat
 import { UserType } from 'generated/prisma';
 import { Roles } from '../../core/decorator/roles.decorator';
 import { RolesGuard } from '../../core/guard/roles.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 @Controller('employer')
 @UseGuards(JWTAuthGuard, RolesGuard)
 export class EmployerController {
   constructor(private readonly employerService: EmployerService) {}
 
   @Roles(UserType.EMPLOYER)
-  @Post()
   @HttpCode(HttpStatus.CREATED)
+  @UseInterceptors(FileInterceptor('companyLogo'))
   async createEmployer(
-    @Request() req: AuthenticatedRequest,
-    @Body() createEmployerDto: CreateEmployerDto
+      @Request() req: AuthenticatedRequest,
+      @Body() createEmployerDto: CreateEmployerDto,
+      @UploadedFile() companyLogoFile?: Express.Multer.File
   ) {
-    return this.employerService.createEmployer(createEmployerDto, req.user.email);
+      return this.employerService.createEmployer(
+          createEmployerDto,
+          req.user.email,
+          companyLogoFile
+      );
   }
 
   @Roles(UserType.EMPLOYER)
