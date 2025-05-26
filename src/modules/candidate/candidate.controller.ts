@@ -46,9 +46,8 @@ export class CandidateController {
         );
     }
 
-    @Roles(UserType.CANDIDATE)
     @Post('profile')
-    @UseInterceptors(FileInterceptor('candidateLogo'))
+    @UseInterceptors(FileInterceptor('profilePhoto'))
     async createCandidateProfile(
         @Request() req: AuthenticatedRequest,
         @Body() createCandidateDto: CreateCandidateDto,
@@ -69,7 +68,6 @@ export class CandidateController {
         return this.candidateService.updateCandidateProfile(req.user.email, updateCandidateDto);
     }
 
-    @Roles(UserType.CANDIDATE)
     @Post('education')
     addEducation(
         @Request() req: AuthenticatedRequest,
@@ -78,7 +76,6 @@ export class CandidateController {
         return this.candidateService.addEducations(req.user.email, createEducationDto.educations);
     }
 
-    @Roles(UserType.CANDIDATE)
     @Patch('education/:id')
     updateEducation(
         @Request() req: AuthenticatedRequest,
@@ -88,7 +85,6 @@ export class CandidateController {
         return this.candidateService.updateEducation(req.user.email, educationId, updateEducationDto);
     }
 
-    @Roles(UserType.CANDIDATE)
     @Delete('education/:id')
     @HttpCode(HttpStatus.NO_CONTENT)
     deleteEducation(
@@ -98,7 +94,6 @@ export class CandidateController {
         return this.candidateService.deleteEducation(req.user.email, educationId);
     }
 
-    @Roles(UserType.CANDIDATE)
     @Post('work-experience')
     addWorkExperience(
         @Request() req: AuthenticatedRequest,
@@ -107,7 +102,6 @@ export class CandidateController {
         return this.candidateService.addWorkExperiences(req.user.email, createWorkExperienceDto.workExperiences);
     }
 
-    @Roles(UserType.CANDIDATE)
     @Patch('work-experience/:id')
     updateWorkExperience(
         @Request() req: AuthenticatedRequest,
@@ -117,7 +111,6 @@ export class CandidateController {
         return this.candidateService.updateWorkExperience(req.user.email, experienceId, updateWorkExperienceDto);
     }
 
-    @Roles(UserType.CANDIDATE)
     @Delete('work-experience/:id')
     @HttpCode(HttpStatus.NO_CONTENT)
     deleteWorkExperience(

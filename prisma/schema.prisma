@@ -208,11 +208,12 @@ model Application {
   jobId           Int
   applicationDate DateTime          @default(now())
   status          ApplicationStatus @default(APPLICATION_SUBMITTED)
-  candidate       Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
-  job             Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
+  candidate       Candidate         @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job             Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  score           Float?          
+  AIanalysis      String? 
   @@unique([candidateId, jobId])
 }
 

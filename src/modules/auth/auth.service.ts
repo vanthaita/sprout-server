@@ -62,7 +62,7 @@ export class AuthService {
       const createUserDto: CreateUserDto = {
         email: profile?.data.email,
         fullName: profile?.data.name,
-        userType: 'CANDIDATE',
+        userType: 'NONE',
         avatar: profile?.data.avatar,
       };
 

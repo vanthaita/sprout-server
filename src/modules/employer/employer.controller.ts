@@ -31,7 +31,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 export class EmployerController {
   constructor(private readonly employerService: EmployerService) {}
 
-  @Roles(UserType.EMPLOYER)
+  @Post()
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(FileInterceptor('companyLogo'))
   async createEmployer(

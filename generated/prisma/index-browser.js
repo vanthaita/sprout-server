@@ -234,7 +234,9 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   applicationDate: 'applicationDate',
   status: 'status',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  score: 'score',
+  AIanalysis: 'AIanalysis'
 };
 
 exports.Prisma.InterviewsScalarFieldEnum = {

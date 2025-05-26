@@ -6,8 +6,8 @@ import { AuthGuard as JWTAuthGuard } from '../../core/guard/authenticated.guard'
 import { UpdateUserDto, UserDto } from '../../core/dto/user.dto';
 import { AuthenticatedRequest } from '../../core/type/interface';
 import { FileInterceptor } from '@nestjs/platform-express';
-@UseGuards(JWTAuthGuard)
 @Controller('users')
+@UseGuards(JWTAuthGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -19,7 +19,6 @@ export class UsersController {
   }
 
   @Get('check-isOnboarded')
-  @UseGuards(JWTAuthGuard)
   async checkUserCandidateCreated(
     @Request() req: AuthenticatedRequest 
   ) {

@@ -38,7 +38,6 @@ export class AuthController {
     description: 'Unauthorized - Google authentication failed',
   })
   googleLogin() {
-    // Handled by Passport
   }
 
   @Get('google/callback')

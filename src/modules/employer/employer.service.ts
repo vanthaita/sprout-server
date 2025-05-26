@@ -36,7 +36,7 @@ export class EmployerService {
         return this.prismaService.$transaction([
             this.prismaService.user.update({
                 where: { id: userId },
-                data: { isOnboarded: true },
+                data: { isOnboarded: true, userType: 'EMPLOYER' },
             }),
             this.prismaService.employer.create({
                 data: {
@@ -45,6 +45,8 @@ export class EmployerService {
                 },
             }),
         ]);
+
+        
     }
 
     async createEmployer(

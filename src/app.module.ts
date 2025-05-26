@@ -8,6 +8,7 @@ import { CandidateModule } from './modules/candidate/candidate.module';
 import { EmployeeModule } from './modules/employer/employer.module';
 import { JobModule } from './modules/job/job.module';
 import { InterviewModule } from './modules/interview/interview.module';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { InterviewModule } from './modules/interview/interview.module';
     CandidateModule,
     EmployeeModule,
     InterviewModule,
+    CloudinaryModule,
     JobModule,
   ],
   controllers: [],

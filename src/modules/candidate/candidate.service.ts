@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
@@ -25,6 +26,7 @@ import {
 } from './dto/work-experience';
 import { CreateCVDto, UpdateCVDto } from './dto/cv';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { aiGenerateCvAiAnalitytic } from 'src/core/lib/gemini';
 
 @Injectable()
 export class CandidateService {
@@ -94,7 +96,7 @@ export class CandidateService {
         return this.prismaService.$transaction([
             this.prismaService.user.update({
                 where: { id: userId },
-                data: { isOnboarded: true },
+                data: { isOnboarded: true, userType: 'CANDIDATE' },
             }),
             this.prismaService.candidate.create({
                 data: {
@@ -274,14 +276,14 @@ export class CandidateService {
     async deleteEducation(email: string, educationId: number) {
         const candidateId = await this.getCandidateIdByEmail(email);
         const education = await this.prismaService.education.findFirst({
-        where: { id: educationId, candidateId },
-        select: { id: true },
+            where: { id: educationId, candidateId },
+            select: { id: true },
         });
 
         if (!education) {
-        throw new NotFoundException(
-            `Education record with ID ${educationId} not found or does not belong to the user.`,
-        );
+            throw new NotFoundException(
+                `Education record with ID ${educationId} not found or does not belong to the user.`,
+            );
         }
 
         return this.prismaService.education.delete({
@@ -295,12 +297,12 @@ export class CandidateService {
     ) {
         const candidateId = await this.getCandidateIdByEmail(email);
         return this.prismaService.workExperience.createMany({
-        data: dtos.map((dto) => ({
-            ...dto,
-            startDate: new Date(dto.startDate),
-            endDate: dto.endDate ? new Date(dto.endDate) : null,
-            candidateId,
-        })),
+            data: dtos.map((dto) => ({
+                ...dto,
+                startDate: new Date(dto.startDate),
+                endDate: dto.endDate ? new Date(dto.endDate) : null,
+                candidateId,
+            })),
         });
     }
 
@@ -311,7 +313,7 @@ export class CandidateService {
     ) {
         const candidateId = await this.getCandidateIdByEmail(email);
         const experience = await this.prismaService.workExperience.findFirst({
-        where: { id: experienceId, candidateId },
+            where: { id: experienceId, candidateId },
         });
 
         if (!experience) {
@@ -323,20 +325,20 @@ export class CandidateService {
         const dataToUpdate: Prisma.WorkExperienceUpdateInput = { ...dto };
         if (dto.startDate) dataToUpdate.startDate = new Date(dto.startDate);
         if (dto.endDate !== undefined) {
-        dataToUpdate.endDate = dto.endDate ? new Date(dto.endDate) : null;
+            dataToUpdate.endDate = dto.endDate ? new Date(dto.endDate) : null;
         }
 
         return this.prismaService.workExperience.update({
-        where: { id: experienceId },
-        data: dataToUpdate,
+            where: { id: experienceId },
+            data: dataToUpdate,
         });
     }
 
     async deleteWorkExperience(email: string, experienceId: number) {
         const candidateId = await this.getCandidateIdByEmail(email);
         const experience = await this.prismaService.workExperience.findFirst({
-        where: { id: experienceId, candidateId },
-        select: { id: true },
+            where: { id: experienceId, candidateId },
+            select: { id: true },
         });
 
         if (!experience) {
@@ -346,7 +348,7 @@ export class CandidateService {
         }
 
         return this.prismaService.workExperience.delete({
-        where: { id: experienceId },
+            where: { id: experienceId },
         });
     }
 
@@ -356,58 +358,58 @@ export class CandidateService {
         if (dto.isPrimary) {
         await this.prismaService.cV.updateMany({
             where: {
-            candidateId,
-            isPrimary: true,
+                candidateId,
+                isPrimary: true,
             },
             data: {
-            isPrimary: false,
+                isPrimary: false,
             },
         });
         }
 
         return this.prismaService.cV.create({
-        data: {
-            ...dto,
-            candidate: { connect: { id: candidateId } },
-        },
+            data: {
+                ...dto,
+                candidate: { connect: { id: candidateId } },
+            },
         });
     }
 
     async updateCV(email: string, cvId: number, dto: UpdateCVDto) {
         const candidateId = await this.getCandidateIdByEmail(email);
         const cv = await this.prismaService.cV.findFirst({
-        where: { id: cvId, candidateId },
+            where: { id: cvId, candidateId },
         });
 
         if (!cv) {
-        throw new NotFoundException(
-            `CV record with ID ${cvId} not found or does not belong to the user.`,
-        );
+            throw new NotFoundException(
+                `CV record with ID ${cvId} not found or does not belong to the user.`,
+            );
         }
 
         if (dto.isPrimary) {
         await this.prismaService.cV.updateMany({
             where: {
-            candidateId,
-            isPrimary: true,
-            NOT: { id: cvId },
+                candidateId,
+                isPrimary: true,
+                NOT: { id: cvId },
             },
             data: {
-            isPrimary: false,
+                isPrimary: false,
             },
         });
         }
 
         return this.prismaService.cV.update({
-        where: { id: cvId },
-        data: dto,
+            where: { id: cvId },
+            data: dto,
         });
     }
 
     async deleteCV(email: string, cvId: number) {
         const candidateId = await this.getCandidateIdByEmail(email);
         const cv = await this.prismaService.cV.findFirst({
-        where: { id: cvId, candidateId },
+         where: { id: cvId, candidateId },
         });
 
         if (!cv) {
@@ -417,113 +419,120 @@ export class CandidateService {
         }
 
         try {
-        return await this.prismaService.cV.delete({
-            where: { id: cvId },
-        });
+            return await this.prismaService.cV.delete({
+                where: { id: cvId },
+            });
         } catch (error) {
-        console.error('Error deleting CV:', error);
-        throw new InternalServerErrorException('Failed to delete CV.');
+            console.error('Error deleting CV:', error);
+            throw new InternalServerErrorException('Failed to delete CV.');
         }
     }
 
     async getPrimaryCV(email: string) {
         const candidateId = await this.getCandidateIdByEmail(email);
         return this.prismaService.cV.findFirst({
-        where: {
-            candidateId,
-            isPrimary: true,
-        },
+            where: {
+                candidateId,
+                isPrimary: true,
+            },
         });
     }
 
     async applyForJob(email: string, jobId: number) {
         const user = await this.prismaService.user.findUnique({
-        where: { email },
-        select: {
-            id: true,
-            candidate: {
+            where: { email },
             select: {
                 id: true,
+                candidate: true
             },
-            },
-        },
         });
 
         if (!user?.candidate) {
-        throw new NotFoundException('Candidate profile not found');
+            throw new NotFoundException('Candidate profile not found');
         }
 
         const candidateId = user.candidate.id;
 
         const jobExists = await this.prismaService.job.findUnique({
-        where: { id: jobId },
-        select: { id: true },
+            where: { id: jobId },
+            include: {
+                employer: true,
+            }
         });
 
         if (!jobExists) {
-        throw new NotFoundException('Job not found');
+            throw new NotFoundException('Job not found');
         }
 
         const alreadyApplied = await this.prismaService.application.findFirst({
-        where: {
-            candidateId,
-            jobId,
-        },
-        select: { id: true },
+            where: {
+                candidateId,
+                jobId,
+            },
+            select: { id: true },
         });
 
         if (alreadyApplied) {
-        throw new ConflictException('You have already applied for this job');
+            throw new ConflictException('You have already applied for this job');
+        }
+        const candidateProfile = user.candidate;
+        const jobInfo = jobExists;
+        const aiResponse = await aiGenerateCvAiAnalitytic(candidateProfile, jobInfo);
+    
+        if (!aiResponse) {
+            throw new Error("AI analysis failed or returned null.");
         }
 
         return this.prismaService.application.create({
-        data: {
-            jobId,
-            candidateId,
-            status: 'APPLICATION_SUBMITTED',
-        },
-        select: {
-            id: true,
-            applicationDate: true,
-            status: true,
-            job: {
+            data: {
+                jobId,
+                candidateId,
+                status: 'APPLICATION_SUBMITTED',
+                score: aiResponse.score,
+                AIanalysis: aiResponse.analytic
+            },
             select: {
                 id: true,
-                title: true,
-                employer: {
+                applicationDate: true,
+                status: true,
+                job: {
                 select: {
-                    companyName: true,
+                    id: true,
+                    title: true,
+                    employer: {
+                    select: {
+                        companyName: true,
+                    },
+                    },
                 },
                 },
             },
-            },
-        },
         });
     }
 
     async getApplicationsForCandidate(email: string) {
         const existingUser = await this.prismaService.user.findUnique({
-        where: { email },
-        include: { candidate: true },
+            where: { email },
+            include: { candidate: true },
         });
 
         if (!existingUser) {
-        throw new NotFoundException(`User with email ${email} not found`);
+            throw new NotFoundException(`User with email ${email} not found`);
         }
 
         if (!existingUser.candidate) {
-        throw new NotFoundException(
-            `User with email ${email} is not a candidate`,
-        );
+            throw new NotFoundException(
+                `User with email ${email} is not a candidate`,
+            );
         }
 
         return this.prismaService.application.findMany({
-        where: {
-            candidateId: existingUser.candidate.id,
-        },
-        include: {
-            job: true,
-        },
+            where: {
+                candidateId: existingUser.candidate.id,
+            },
+            include: {
+                job: true,
+            },
         });
     }
 }
