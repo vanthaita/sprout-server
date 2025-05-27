@@ -123,7 +123,7 @@ exports.Prisma.UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   fullName: 'fullName',
   userType: 'userType',
-  refesh_token: 'refesh_token',
+  refreshToken: 'refreshToken',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
@@ -254,6 +254,21 @@ exports.Prisma.InterviewsScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ConversationScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MessageScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  senderId: 'senderId',
+  content: 'content',
+  isRead: 'isRead',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -330,7 +345,9 @@ exports.Prisma.ModelName = {
   Job: 'Job',
   CV: 'CV',
   Application: 'Application',
-  Interviews: 'Interviews'
+  Interviews: 'Interviews',
+  Conversation: 'Conversation',
+  Message: 'Message'
 };
 
 /**

@@ -9,6 +9,7 @@ import { EmployeeModule } from './modules/employer/employer.module';
 import { JobModule } from './modules/job/job.module';
 import { InterviewModule } from './modules/interview/interview.module';
 import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
+import { AwsS3Module } from './modules/aws/aws.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
     InterviewModule,
     CloudinaryModule,
     JobModule,
+    AwsS3Module
   ],
   controllers: [],
   providers: [

@@ -5,6 +5,10 @@ import {
   UseGuards,
   Request,
   HttpStatus,
+  Post,
+  Body,
+  UnauthorizedException,
+  HttpException,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -16,7 +20,10 @@ import {
   ApiResponse,
   ApiExcludeEndpoint,
   ApiCookieAuth,
+  ApiBearerAuth,
+  ApiBody,
 } from '@nestjs/swagger';
+import { SignInDto, SignUpDto } from './dto/auth.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -58,7 +65,46 @@ export class AuthController {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
     });
-    res.redirect(`http://localhost:3000/en/onboarding`);
+    res.redirect(`${process.env.WEB_URL}`);
+  }
+
+
+  @Post('check-token')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Check if refresh token is valid and refresh access token',
+  })
+  async checkToken(@Body() body: { refresh_token: string }) {
+    const refreshToken = body.refresh_token;
+    if(!refreshToken) {
+      throw new UnauthorizedException('Refresh token not found');
+    }       
+    const { access_token } =
+      await this.authService.getAccessTokenUser(refreshToken);
+    return { message: 'Token is valid', access_token };
+  }
+
+  
+  @Post('sign-in')
+  @ApiOperation({ summary: 'User sign-in' })
+  @ApiBody({ type: SignInDto })
+  async signIn(@Body() signInDto: SignInDto) {
+    try {
+      const { access_token, refresh_token } =
+        await this.authService.signIn(signInDto);
+      return { access_token, refresh_token };
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('Login failed', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  @Post('sign-up')
+  @ApiOperation({ summary: 'User sign-up' })
+  @ApiBody({ type: SignUpDto })
+  async signUp(@Body() signUpDto: SignUpDto): Promise<any> {
+    await this.authService.signUp(signUpDto);
+    return { message: 'Sign Up successful' };
   }
 
   @Get('profile')

@@ -77,7 +77,7 @@ model User {
   passwordHash String?
   fullName     String
   userType     UserType   @default(NONE)
-  refesh_token String?
+  refreshToken String?
   isActive     Boolean    @default(true)
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
@@ -85,6 +85,10 @@ model User {
   isOnboarded  Boolean    @default(false)
   employer     Employer?
   candidate    Candidate?
+
+  Conversation Conversation[] @relation("ConversationParticipants")
+
+  Message Message[]
 }
 
 model Employer {
@@ -238,4 +242,24 @@ model Interviews {
   @@index([jobId])
   @@index([employerId])
   @@index([scheduledDate])
+}
+
+model Conversation {
+  id           Int       @id @default(autoincrement())
+  participants User[]    @relation("ConversationParticipants")
+  messages     Message[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Message {
+  id             Int      @id @default(autoincrement())
+  conversationId Int
+  senderId       Int
+  content        String
+  isRead         Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  sender       User         @relation(fields: [senderId], references: [id])
 }
