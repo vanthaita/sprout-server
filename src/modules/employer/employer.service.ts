@@ -45,8 +45,6 @@ export class EmployerService {
                 },
             }),
         ]);
-
-        
     }
 
     async createEmployer(
@@ -127,7 +125,6 @@ export class EmployerService {
         })
     }
 
-    // Job methods
     async createJob(createJobDto: CreateJobDto, email: string) {
         const existingUser = await this.prismaService.user.findUnique({
             where: { email },
@@ -335,7 +332,6 @@ export class EmployerService {
         return new JobResponseDto(updatedJob);
     }
 
-    // Application methods
     async getApplications(filter: ApplicationFilterDto, email: string) {
         const existingUser = await this.prismaService.user.findUnique({
             where: { email },
@@ -471,6 +467,8 @@ export class EmployerService {
             id: app.id,
             status: app.status,
             applicationDate: app.applicationDate,
+            score: app.score,
+            AIanalysis: app.AIanalysis,
             job: {
                 id: app.job.id,
                 title: app.job.title,

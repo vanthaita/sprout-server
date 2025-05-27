@@ -45,7 +45,7 @@ export class CandidateController {
             req.user.email  
         );
     }
-
+    
     @Post('profile')
     @UseInterceptors(FileInterceptor('profilePhoto'))
     async createCandidateProfile(

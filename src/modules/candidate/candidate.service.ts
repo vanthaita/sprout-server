@@ -464,50 +464,58 @@ export class CandidateService {
             throw new NotFoundException('Job not found');
         }
 
-        const alreadyApplied = await this.prismaService.application.findFirst({
-            where: {
-                candidateId,
-                jobId,
-            },
-            select: { id: true },
-        });
+        try {
+            const candidateProfile = user.candidate;
+            const jobInfo = jobExists;
+            const aiResponse = await aiGenerateCvAiAnalitytic(candidateProfile, jobInfo);
+        
+            if (!aiResponse) {
+                throw new Error("AI analysis failed or returned null.");
+            }
 
-        if (alreadyApplied) {
-            throw new ConflictException('You have already applied for this job');
-        }
-        const candidateProfile = user.candidate;
-        const jobInfo = jobExists;
-        const aiResponse = await aiGenerateCvAiAnalitytic(candidateProfile, jobInfo);
-    
-        if (!aiResponse) {
-            throw new Error("AI analysis failed or returned null.");
-        }
-
-        return this.prismaService.application.create({
-            data: {
-                jobId,
-                candidateId,
-                status: 'APPLICATION_SUBMITTED',
-                score: aiResponse.score,
-                AIanalysis: aiResponse.analytic
-            },
-            select: {
-                id: true,
-                applicationDate: true,
-                status: true,
-                job: {
+            return await this.prismaService.application.create({
+                data: {
+                    jobId,
+                    candidateId,
+                    status: 'APPLICATION_SUBMITTED',
+                    score: aiResponse.score,
+                    AIanalysis: aiResponse.analytic
+                },
                 select: {
                     id: true,
-                    title: true,
-                    employer: {
-                    select: {
-                        companyName: true,
-                    },
+                    applicationDate: true,
+                    status: true,
+                    job: {
+                        select: {
+                            id: true,
+                            title: true,
+                            employer: {
+                                select: {
+                                    companyName: true,
+                                },
+                            },
+                        },
                     },
                 },
-                },
-            },
-        });
+            });
+        } catch (error) {
+            if (error.code === 'P2002') {
+                const existingApplication = await this.prismaService.application.findFirst({
+                    where: {
+                        candidateId,
+                        jobId,
+                    },
+                    select: { id: true },
+                });
+
+                if (existingApplication) {
+                    throw new ConflictException('You have already applied for this job');
+                } else {
+                    throw new InternalServerErrorException('Failed to process your application');
+                }
+            }
+            throw error; 
+        }
     }
 
     async getApplicationsForCandidate(email: string) {
