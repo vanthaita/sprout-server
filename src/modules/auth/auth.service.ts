@@ -75,7 +75,7 @@ export class AuthService {
   }
 
   private async generateTokens(user: UserDto) {
-    const payload = { sub: user.id, email: user.email, role: user.userType, isOnboarded: user.isOnboarded };
+    const payload = { sub: user.id, email: user.email, userType: user.userType, isOnboarded: user.isOnboarded };
     const accessToken = this.jwtService.sign(payload, {
       expiresIn: process.env.JWT_SESSION_EXPIRATION,
     });
@@ -101,12 +101,12 @@ export class AuthService {
       });
       if (!user) throw new UnauthorizedException('Invalid user');
       const newAccessToken = this.jwtService.sign(
-        { sub: user.id, email: user.email, role: user.userType, isOnboarded: user.isOnboarded },
+        { sub: user.id, email: user.email, userType: user.userType, isOnboarded: user.isOnboarded },
         { expiresIn: process.env.JWT_SESSION_EXPIRATION },
       );
-
+      console.log("Token: ",user.userType);
       const newRefreshToken = this.jwtService.sign(
-        { sub: user.id, email: user.email, role: user.userType, isOnboarded: user.isOnboarded },
+        { sub: user.id, email: user.email, userType: user.userType, isOnboarded: user.isOnboarded },
         { 
           expiresIn: process.env.JWT_RT_SESSION_EXPIRATION || '7d' 
         }
@@ -141,7 +141,7 @@ export class AuthService {
     if (!passwordMatch) {
       throw new UnauthorizedException('Password is incorrect');
     }
-    const payload = { sub: user.id, email: user.email, role: user.userType }; 
+    const payload = { sub: user.id, email: user.email, userType: user.userType }; 
     const refreshToken = this.jwtService.sign(payload, {
       expiresIn: process.env.JWT_RT_SESSION_EXPIRATION,
     });

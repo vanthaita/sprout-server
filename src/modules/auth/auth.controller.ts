@@ -62,12 +62,10 @@ export class AuthController {
     res.cookie('access_token', authRes.access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
     });
     res.cookie('refresh_token', authRes.refresh_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
     });
     res.redirect(`${process.env.URL_REDIRECT}`);
   }
@@ -78,13 +76,24 @@ export class AuthController {
   @ApiOperation({
     summary: 'Check if refresh token is valid and refresh access token',
   })
-  async checkToken(@Body() body: { refresh_token: string }) {
+  async checkToken(
+    @Body() body: { refresh_token: string } ,
+    @Res() res: Response,
+  ) {
     const refreshToken = body.refresh_token;
     if(!refreshToken) {
       throw new UnauthorizedException('Refresh token not found');
     }       
     const { access_token, refresh_token } =
       await this.authService.getAccessTokenUser(refreshToken);
+    res.cookie('access_token', access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+    });
+    res.cookie('refresh_token', refresh_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+    });
     return { access_token, refresh_token  };
   }
 
@@ -92,11 +101,20 @@ export class AuthController {
   @Post('sign-in')
   @ApiOperation({ summary: 'User sign-in' })
   @ApiBody({ type: SignInDto })
-  async signIn(@Body() signInDto: SignInDto) {
+  async signIn(@Body() signInDto: SignInDto, 
+    @Res() res: Response,
+  ) {
     try {
       const { access_token, refresh_token } =
         await this.authService.signIn(signInDto);
-      return { access_token, refresh_token };
+    res.cookie('access_token', access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+    });
+    res.cookie('refresh_token', refresh_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+    });
     } catch (error) {
       console.error(error);
       throw new HttpException('Login failed', HttpStatus.INTERNAL_SERVER_ERROR);
