@@ -44,8 +44,7 @@ export class AuthController {
     status: HttpStatus.UNAUTHORIZED,
     description: 'Unauthorized - Google authentication failed',
   })
-  googleLogin() {
-  }
+  googleLogin() {}
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
@@ -65,7 +64,12 @@ export class AuthController {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
     });
-    res.redirect(`${process.env.WEB_URL}`);
+    res.cookie('refresh_token', authRes.refresh_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    res.redirect(`${process.env.URL_REDIRECT}`);
   }
 
 
@@ -79,9 +83,9 @@ export class AuthController {
     if(!refreshToken) {
       throw new UnauthorizedException('Refresh token not found');
     }       
-    const { access_token } =
+    const { access_token, refresh_token } =
       await this.authService.getAccessTokenUser(refreshToken);
-    return { message: 'Token is valid', access_token };
+    return { access_token, refresh_token  };
   }
 
   

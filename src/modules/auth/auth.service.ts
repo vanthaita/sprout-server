@@ -104,13 +104,26 @@ export class AuthService {
         { sub: user.id, email: user.email, role: user.userType, isOnboarded: user.isOnboarded },
         { expiresIn: process.env.JWT_SESSION_EXPIRATION },
       );
-  
-      return { access_token: newAccessToken };
+
+      const newRefreshToken = this.jwtService.sign(
+        { sub: user.id, email: user.email, role: user.userType, isOnboarded: user.isOnboarded },
+        { 
+          expiresIn: process.env.JWT_RT_SESSION_EXPIRATION || '7d' 
+        }
+      );
+      await this.prismaService.user.update({
+        where: { id: user.id },
+        data: { refreshToken: newRefreshToken },
+      });
+
+
+      return { access_token: newAccessToken, refresh_token: newRefreshToken };
     } catch (err) {
       console.error('Token error:', err.message);
       throw new UnauthorizedException('Invalid refresh token');
     }
   }
+  
   async signIn(signInDto: SignInDto) {
     const { password, email } = signInDto;
     const user = await this.prismaService.user.findUnique({
